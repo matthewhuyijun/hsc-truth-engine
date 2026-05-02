@@ -70,8 +70,8 @@ export const YEAR_MODES = [
 ] as const;
 
 export const GRAPH_MODES = [
-  { value: "hsc", label: "HSC → Scaled" },
   { value: "percentile", label: "% → Scaled" },
+  { value: "hsc", label: "HSC → Scaled" },
 ] as const;
 
 export type YearMode = "last" | "avg5";

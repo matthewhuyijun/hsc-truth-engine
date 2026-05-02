@@ -22,7 +22,7 @@ export default function ScalingGraphsPage() {
   const allCourses = useMemo(() => getAllScalingCourses(), []);
   const [selected, setSelected] = useState<string[]>([]);
   const [yearMode, setYearMode] = useState<YearMode>("last");
-  const [graphMode, setGraphMode] = useState<GraphMode>("hsc");
+  const [graphMode, setGraphMode] = useState<GraphMode>("percentile");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeIdx, setActiveIdx] = useState(0);
