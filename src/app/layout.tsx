@@ -106,6 +106,9 @@ export default function RootLayout({
                 &gt;_
               </span>
               <span>HSC Data</span>
+              <span className="rounded border border-border/50 px-1.5 py-0.5 text-[10px] font-medium text-muted uppercase tracking-wider">
+                Beta
+              </span>
             </Link>
 
             <nav className="hidden items-center gap-1 sm:flex">
@@ -137,13 +140,16 @@ export default function RootLayout({
         {/* Footer */}
         <footer className="border-t border-border/50 py-8">
           <div className="mx-auto max-w-5xl px-4">
-            <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
+            <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
               <p className="text-xs text-muted">
                 Data sourced from NESA. Not affiliated with NESA or UAC.
               </p>
-              <p className="text-xs text-muted/70">
-                Built with Next.js
-              </p>
+              <a
+                href="mailto:hscmathsguy@gmail.com"
+                className="text-xs text-muted/70 hover:text-foreground transition-colors"
+              >
+                Contact / Feedback
+              </a>
             </div>
           </div>
           </footer>
