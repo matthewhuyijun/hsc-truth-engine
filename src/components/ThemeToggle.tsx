@@ -1,42 +1,88 @@
 "use client";
 
-import { useState } from "react";
-import { Sun, Moon } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Sun, Moon, Monitor } from "lucide-react";
 
-function getInitialTheme(): "light" | "dark" {
-  if (typeof window === "undefined") return "light";
-  const stored = localStorage.getItem("theme");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  return stored === "dark" || (!stored && prefersDark) ? "dark" : "light";
+type Theme = "system" | "light" | "dark";
+
+function getStoredTheme(): Theme {
+  if (typeof window === "undefined") return "system";
+  return (localStorage.getItem("theme") as Theme) || "system";
 }
 
-export function ThemeToggle() {
-  const [theme, setTheme] = useState<"light" | "dark">(() => {
-    const initial = getInitialTheme();
-    if (typeof document !== "undefined" && initial === "dark") {
-      document.documentElement.classList.add("dark");
-    }
-    return initial;
-  });
+function getResolvedTheme(theme: Theme): "light" | "dark" {
+  if (theme === "system") {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches
+      ? "dark"
+      : "light";
+  }
+  return theme;
+}
 
-  const toggle = () => {
-    const next = theme === "light" ? "dark" : "light";
+function applyTheme(theme: Theme) {
+  const resolved = getResolvedTheme(theme);
+  if (theme === "system") {
+    localStorage.removeItem("theme");
+  } else {
+    localStorage.setItem("theme", theme);
+  }
+  if (resolved === "dark") {
+    document.documentElement.classList.add("dark");
+  } else {
+    document.documentElement.classList.remove("dark");
+  }
+}
+
+const CYCLE: Theme[] = ["light", "dark", "system"];
+
+const icons: Record<Theme, typeof Sun> = {
+  light: Sun,
+  dark: Moon,
+  system: Monitor,
+};
+
+const labels: Record<Theme, string> = {
+  light: "Light mode",
+  dark: "Dark mode",
+  system: "System theme",
+};
+
+export function ThemeToggle() {
+  const [theme, setTheme] = useState<Theme>("system");
+
+  useEffect(() => {
+    const stored = getStoredTheme();
+    setTheme(stored);
+    applyTheme(stored);
+
+    const mq = window.matchMedia("(prefers-color-scheme: dark)");
+    const listener = () => {
+      if (getStoredTheme() === "system") {
+        applyTheme("system");
+        setTheme("system");
+      }
+    };
+    mq.addEventListener("change", listener);
+    return () => mq.removeEventListener("change", listener);
+  }, []);
+
+  const cycle = () => {
+    const idx = CYCLE.indexOf(theme);
+    const next = CYCLE[(idx + 1) % CYCLE.length];
     setTheme(next);
-    localStorage.setItem("theme", next);
-    if (next === "dark") {
-      document.documentElement.classList.add("dark");
-    } else {
-      document.documentElement.classList.remove("dark");
-    }
+    applyTheme(next);
   };
+
+  const Icon = icons[theme];
 
   return (
     <button
-      onClick={toggle}
+      onClick={cycle}
       className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-hover hover:text-foreground transition-colors"
-      aria-label="Toggle theme"
+      aria-label={labels[theme]}
+      title={labels[theme]}
     >
-      {theme === "dark" ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+      <Icon className="h-4 w-4" />
     </button>
   );
 }

@@ -144,12 +144,22 @@ export default function RootLayout({
               <p className="text-xs text-muted">
                 Data sourced from NESA. Not affiliated with NESA or UAC.
               </p>
-              <a
-                href="mailto:hscmathsguy@gmail.com"
-                className="text-xs text-muted/70 hover:text-foreground transition-colors"
-              >
-                Contact / Feedback
-              </a>
+              <div className="flex items-center gap-4">
+                <a
+                  href="https://github.com/matthewhuyijun/hsc-truth-engine"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-muted/70 hover:text-foreground transition-colors"
+                >
+                  GitHub
+                </a>
+                <a
+                  href="mailto:hscmathsguy@gmail.com"
+                  className="text-xs text-muted/70 hover:text-foreground transition-colors"
+                >
+                  Contact / Feedback
+                </a>
+              </div>
             </div>
           </div>
           </footer>
