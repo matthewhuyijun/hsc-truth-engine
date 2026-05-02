@@ -20,32 +20,23 @@ function getResolvedTheme(theme: Theme): "light" | "dark" {
 }
 
 function applyTheme(theme: Theme) {
-  const resolved = getResolvedTheme(theme);
   if (theme === "system") {
     localStorage.removeItem("theme");
   } else {
     localStorage.setItem("theme", theme);
   }
-  if (resolved === "dark") {
+  if (getResolvedTheme(theme) === "dark") {
     document.documentElement.classList.add("dark");
   } else {
     document.documentElement.classList.remove("dark");
   }
 }
 
-const CYCLE: Theme[] = ["light", "dark", "system"];
-
-const icons: Record<Theme, typeof Sun> = {
-  light: Sun,
-  dark: Moon,
-  system: Monitor,
-};
-
-const labels: Record<Theme, string> = {
-  light: "Light mode",
-  dark: "Dark mode",
-  system: "System theme",
-};
+const options: { key: Theme; icon: typeof Sun; label: string }[] = [
+  { key: "light", icon: Sun, label: "Light" },
+  { key: "dark", icon: Moon, label: "Dark" },
+  { key: "system", icon: Monitor, label: "System" },
+];
 
 export function ThemeToggle() {
   const [theme, setTheme] = useState<Theme>("system");
@@ -66,23 +57,28 @@ export function ThemeToggle() {
     return () => mq.removeEventListener("change", listener);
   }, []);
 
-  const cycle = () => {
-    const idx = CYCLE.indexOf(theme);
-    const next = CYCLE[(idx + 1) % CYCLE.length];
-    setTheme(next);
-    applyTheme(next);
+  const select = (t: Theme) => {
+    setTheme(t);
+    applyTheme(t);
   };
 
-  const Icon = icons[theme];
-
   return (
-    <button
-      onClick={cycle}
-      className="inline-flex h-8 w-8 items-center justify-center rounded-md text-muted hover:bg-surface-hover hover:text-foreground transition-colors"
-      aria-label={labels[theme]}
-      title={labels[theme]}
-    >
-      <Icon className="h-4 w-4" />
-    </button>
+    <div className="flex items-center gap-0.5 rounded-md border border-border/50 bg-surface p-0.5">
+      {options.map(({ key, icon: Icon, label }) => (
+        <button
+          key={key}
+          onClick={() => select(key)}
+          className={`inline-flex h-7 w-7 items-center justify-center rounded-sm transition-colors ${
+            theme === key
+              ? "bg-background text-foreground shadow-sm"
+              : "text-muted hover:text-foreground"
+          }`}
+          aria-label={label}
+          title={label}
+        >
+          <Icon className="h-3.5 w-3.5" />
+        </button>
+      ))}
+    </div>
   );
 }
