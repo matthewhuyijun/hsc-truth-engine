@@ -1,0 +1,11 @@
+# DO NOT EDIT THIS FOLDER
+
+This is a backup of the raw scraped data from 2026-05-01.
+
+All data in this folder was extracted from:
+- NSW Government website (2017-2025 data)
+- Board of Studies Archive (2001-2016 data)
+
+Data formats vary between sources and years. See `docs/data-collection-checklist.md` for details.
+
+If you need to modify data, copy files to `data/csv/` and edit there.

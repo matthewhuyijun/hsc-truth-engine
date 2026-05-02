@@ -1,0 +1,771 @@
+{
+  "Aboriginal Studies": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Agriculture": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Ancient History": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Biology": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Business Studies": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Chemistry": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Community & Family Studies": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Dance": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Design & Technology": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Drama": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Earth & Environmental Science": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Economics": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Engineering Studies": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "English Studies Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "English Standard": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "English Advanced": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "English EAL/D": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true
+  },
+  "English Extension 1": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "English Extension 2": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Food Technology": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Geography": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Industrial Technology": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Information Processes &": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true
+  },
+  "Investigating Science": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Legal Studies": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Mathematics Standard 1 Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Mathematics Standard 2": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Mathematics": {
+    "2019": true
+  },
+  "Mathematics Extension 1": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Mathematics Extension 2": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Modern History": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "History Extension": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Music 1": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Music 2": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Music Extension": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "PDH&PE": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Physics": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Science Extension": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Society & Culture": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Software Design & Development": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true
+  },
+  "Studies of Religion I": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Studies of Religion II": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Textiles & Design": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Visual Arts": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Arabic Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Arabic Extension": {
+    "2019": true,
+    "2020": true,
+    "2025": true
+  },
+  "Chinese Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Chinese & Literature": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Chinese in Context": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2025": true
+  },
+  "French Beginners": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "French Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "French Extension": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "German Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Italian Beginners": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Italian Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Japanese Beginners": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Japanese Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Japanese Extension": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Korean Beginners": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Latin Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Spanish Beginners": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Spanish Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Vietnamese Continuers": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Automotive Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Business Services Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Construction Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Electrotechnology Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Entertainment Industry Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Hospitality Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Human Services Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Information & Digital Technology": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Metal & Engineering Exam": {
+    "2019": true,
+    "2020": true
+  },
+  "Primary Industries Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Retail Services Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Tourism, Travel & Events Exam": {
+    "2019": true,
+    "2020": true,
+    "2021": true,
+    "2025": true
+  },
+  "Mathematics Advanced": {
+    "2020": true,
+    "2021": true,
+    "2022": true,
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Latin Extension": {
+    "2020": true,
+    "2021": true,
+    "2025": true
+  },
+  "German Beginners": {
+    "2021": true,
+    "2025": true
+  },
+  "Financial Services Exam": {
+    "2021": true,
+    "2025": true
+  },
+  "English EALD": {
+    "2023": true,
+    "2024": true,
+    "2025": true
+  },
+  "Enterprise Computing": {
+    "2025": true
+  },
+  "Software Engineering": {
+    "2025": true
+  },
+  "Chinese Beginners": {
+    "2025": true
+  },
+  "Chinese Extension": {
+    "2025": true
+  },
+  "Classical Hebrew Continuers": {
+    "2025": true
+  },
+  "Classical Hebrew Extension": {
+    "2025": true
+  },
+  "Croatian Continuers": {
+    "2025": true
+  },
+  "German Extension": {
+    "2025": true
+  },
+  "Hindi Continuers": {
+    "2025": true
+  },
+  "Indonesian Beginners": {
+    "2025": true
+  },
+  "Indonesian Continuers": {
+    "2025": true
+  },
+  "Indonesian Extension": {
+    "2025": true
+  },
+  "Italian Extension": {
+    "2025": true
+  },
+  "Japanese in Context": {
+    "2025": true
+  },
+  "Khmer Continuers": {
+    "2025": true
+  },
+  "Korean Continuers": {
+    "2025": true
+  },
+  "Korean & Literature": {
+    "2025": true
+  },
+  "Korean in Context": {
+    "2025": true
+  },
+  "Macedonian Continuers": {
+    "2025": true
+  },
+  "Modern Greek Beginners": {
+    "2025": true
+  },
+  "Modern Greek Continuers": {
+    "2025": true
+  },
+  "Modern Greek Extension": {
+    "2025": true
+  },
+  "Modern Hebrew Continuers": {
+    "2025": true
+  },
+  "Persian Continuers": {
+    "2025": true
+  },
+  "Polish Continuers": {
+    "2025": true
+  },
+  "Portuguese Continuers": {
+    "2025": true
+  },
+  "Punjabi Continuers": {
+    "2025": true
+  },
+  "Russian Continuers": {
+    "2025": true
+  },
+  "Serbian Continuers": {
+    "2025": true
+  },
+  "Spanish Extension": {
+    "2025": true
+  },
+  "Turkish Continuers": {
+    "2025": true
+  }
+}

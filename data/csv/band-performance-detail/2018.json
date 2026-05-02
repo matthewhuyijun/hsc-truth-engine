@@ -1,0 +1,72 @@
+[
+  {
+    "year": 2018,
+    "course": "Aboriginal Studies 2 unit (15000)",
+    "Band 6": 9.92,
+    "Band 5": 13.92,
+    "Band 4": 20.16,
+    "Band 3": 20.96,
+    "Band 2": 26.88,
+    "Band 1": 8.16
+  },
+  {
+    "year": 2018,
+    "course": "Agriculture 2 unit (15010)",
+    "Band 6": 7.88,
+    "Band 5": 42.32,
+    "Band 4": 38.17,
+    "Band 3": 8.71,
+    "Band 2": 1.65,
+    "Band 1": 1.24
+  },
+  {
+    "year": 2018,
+    "course": "Ancient History 2 unit (15020)",
+    "Band 6": 19.04,
+    "Band 5": 38.09,
+    "Band 4": 28.57,
+    "Band 3": 14.28,
+    "Band 2": 0,
+    "Band 1": 0
+  },
+  {
+    "year": 2018,
+    "course": "Arabic Beginners 2 unit (15500)",
+    "Band 6": 8.74,
+    "Band 5": 28.32,
+    "Band 4": 33.15,
+    "Band 3": 19.65,
+    "Band 2": 6.43,
+    "Band 1": 3.67
+  },
+  {
+    "year": 2018,
+    "course": "Arabic Continuers 2 unit (15510)",
+    "Band 6": 9.22,
+    "Band 5": 33.01,
+    "Band 4": 27.7,
+    "Band 3": 18.97,
+    "Band 2": 9.14,
+    "Band 1": 1.93
+  },
+  {
+    "year": 2018,
+    "course": "Arabic Extension 1 unit (15520)",
+    "Band 6": 12.7,
+    "Band 5": 58.36,
+    "Band 4": 25.88,
+    "Band 3": 2.73,
+    "Band 2": 0.32,
+    "Band 1": 0
+  },
+  {
+    "year": 2018,
+    "course": "Armenian Continuers 2 unit (15530)",
+    "Band 6": 45.08,
+    "Band 5": 49.18,
+    "Band 4": 4.09,
+    "Band 3": 0.81,
+    "Band 2": 0.81,
+    "Band 1": 0
+  }
+]

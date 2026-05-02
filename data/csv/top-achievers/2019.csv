@@ -1,0 +1,888 @@
+﻿Course no,Course name,First name,Last name,Place,School name
+15000,Aboriginal Studies,Piper,Harrison,1,Northern Beaches Secondary College Mackellar Girls Campus
+15000,Aboriginal Studies,Alexander,Briggs,2,Cherrybrook Technology High School
+15000,Aboriginal Studies,Lua,Pellegrini,3,Loreto Normanhurst
+15000,Aboriginal Studies,Bianca Maria,Aiello,4,Northern Beaches Secondary College Mackellar Girls Campus
+15000,Aboriginal Studies,Tara Sindhe,Donaldson,5,Northern Beaches Secondary College Mackellar Girls Campus
+15010,Agriculture,Linn Charlotte,Hendriks Movig,1,Barker College
+15010,Agriculture,Megan,Seis,2,Calrossy Anglican School
+15010,Agriculture,Claire Zhilin,Hua,3,James Ruse Agricultural High School
+15010,Agriculture,Joshua,Salama,4,James Ruse Agricultural High School
+15010,Agriculture,Teagan Joyce,Colless,5,Hurlstone Agricultural High School
+15010,Agriculture,Amelia,Hickson,5,Frensham School
+15010,Agriculture,Henry,Zhu,7,James Ruse Agricultural High School
+15010,Agriculture,Grace Xiaoying,Li,8,James Ruse Agricultural High School
+15010,Agriculture,Richard Yanzhou,Huang,9,James Ruse Agricultural High School
+15010,Agriculture,Sophie,Dien,10,James Ruse Agricultural High School
+15020,Ancient History,Mairead,Stone,1,Loreto Normanhurst
+15020,Ancient History,Dominic,Grimshaw,2,Sydney Distance Education High School
+15020,Ancient History,Madeline,Jones,2,Glen Innes High School
+15020,Ancient History,Sophie Catherine,Howard,4,Loreto Kirribilli
+15020,Ancient History,Tristan,Penfold,5,Cranbrook School
+15020,Ancient History,Hayden,Fleming,6,The Scots College
+15020,Ancient History,Raquel,Bradley,7,Pacific Hills Christian School
+15020,Ancient History,Anthea,Warne,8,Mount St Patrick College
+15020,Ancient History,Nive Danae,Lembit,9,Hurlstone Agricultural High School
+15020,Ancient History,Jaime Louisa,Bell,10,Pymble Ladies' College
+15510,Arabic Continuers,Tabarak,Al-Rikaby,1,Al-Faisal College
+15510,Arabic Continuers,Abdul Hamid,Wehbe,2,Al-Faisal College
+15510,Arabic Continuers,Ibrahim,Ashry,3,Al-Faisal College
+15510,Arabic Continuers,Ann,Alloush,4,Saturday School of Community Languages Arthur Phillip HS Centre
+15510,Arabic Continuers,Aournilla,Al Mansour,5,Holy Spirit Catholic College
+15520,Arabic Extension,Chantal,Shalhoub,1,Maronite College of the Holy Family - Parramatta
+15520,Arabic Extension,Anji,Makdissi,2,Saturday School of Community Languages Liverpool Boys HS Centre
+15520,Arabic Extension,Sabah,Alnajar,3,Beverly Hills Girls High School
+15520,Arabic Extension,Mariam,Makhoul,4,Holroyd High School
+15520,Arabic Extension,Nadin Nabil Naguib,Sadek,5,Saturday School of Community Languages Birrong Girls HS Centre
+15530,Armenian Continuers,Pardy,Kozanoghli,1,Galstaun College
+15530,Armenian Continuers,Lilit,Melik-Vartanian,2,Saturday School of Community Languages Chatswood HS Centre
+26079,Automotive Examination,Robert,Ciccarelli,1,Good Samaritan Catholic College
+26079,Automotive Examination,Layne,Bradford,2,Avondale School
+26079,Automotive Examination,James,Attard,3,Good Samaritan Catholic College
+26079,Automotive Examination,Swee Young,Pang,3,Northern Sydney Institute - Hornsby College
+26079,Automotive Examination,Jack,Rumball,5,St Stanislaus' College
+26079,Automotive Examination,Arthur,Turner,5,Southern Cross Catholic Vocational College
+15030,Biology,Adam,Gottschalk,1,Sydney Grammar School
+15030,Biology,Heath,Hasemer,2,Sydney Grammar School
+15030,Biology,Mingjun,Chu,3,Moama Anglican Grammar School
+15030,Biology,Mohamed Arham,Mohamed Zakir Hussain,3,Sydney Secondary College Blackwattle Bay Campus
+15030,Biology,Haiwad,Rashtia,3,Al-Faisal College
+15030,Biology,Li Yi,Wang,6,James Ruse Agricultural High School
+15030,Biology,Christian,Farrell,7,Sydney Grammar School
+15030,Biology,Oliver Francis,Yao,8,Normanhurst Boys High School
+15030,Biology,Ibrahim,Takkoush,9,Al Noori Muslim School
+15030,Biology,Ameen,Buksh,10,Al-Faisal College
+15030,Biology,Ayoub,Bahmed,11,Al Noori Muslim School
+15030,Biology,Fatima,Bazzi,12,Georges River College Oatley Senior Campus
+15030,Biology,Emma Louisa,Cree,12,Wenona School
+15030,Biology,Rachel,Hansen,12,St Luke's Grammar School
+15030,Biology,Bridget,Lunn,12,Moruya High School
+15030,Biology,Emily,Stewart,12,Covenant Christian School
+15030,Biology,Naomi,Sunny,12,Penrith High School
+15030,Biology,Luca John,Borserio,18,Merewether High School
+15030,Biology,Wen Jing,Chen,18,James Ruse Agricultural High School
+15030,Biology,James Jing,Zhao,18,James Ruse Agricultural High School
+26199,Business Services Examination,Lucy,Murphy,1,Kooringal High School
+26199,Business Services Examination,Jia Yu,Ng,2,Macarthur Girls High School
+26199,Business Services Examination,Hasna,Doueihi,3,Catherine McAuley Westmead
+26199,Business Services Examination,Isabella Esther,Gavros,3,Marist Sisters' College Woolwich
+26199,Business Services Examination,Winston,Fok,5,Cecil Hills High School
+26199,Business Services Examination,Elizabeth Rose,Standaloft,6,Kirrawee High School
+26199,Business Services Examination,Felicity,Olivares,7,Cecil Hills High School
+26199,Business Services Examination,Sarah,Arnold,8,McCarthy Catholic College (Emu Plains)
+26199,Business Services Examination,Maggie Hui,Sun,8,East Hills Girls Technology High School
+26199,Business Services Examination,Alisha,Green,10,Marsden High School
+26199,Business Services Examination,Caitlyne Rose,Halabi,10,Cerdon College
+26199,Business Services Examination,Grace,Hatem,10,Clancy Catholic College
+26199,Business Services Examination,Stephanie Christine,Kelly,10,St Francis Xavier's College
+15040,Business Studies,James,Mirabito,1,Davidson High School
+15040,Business Studies,William Talbot,Sanderson,2,Knox Grammar School
+15040,Business Studies,Anastacia,Filer,3,Emmaus Catholic College
+15040,Business Studies,Jack Ryan,Tafe,4,Knox Grammar School
+15040,Business Studies,Kyra,Todd,5,St Peter's Catholic College
+15040,Business Studies,Alexandra,Soliman,6,Mount St Benedict College
+15040,Business Studies,Linn Charlotte,Hendriks Movig,7,Barker College
+15040,Business Studies,Alli-Rose,Becirevic,8,Cherrybrook Technology High School
+15040,Business Studies,Tristan Bailey,Maher,9,Caringbah High School
+15040,Business Studies,Ashley Mary,Doueihi,10,St Patrick's Marist College
+15040,Business Studies,Matthew Jude,Mikhael,10,Barker College
+15040,Business Studies,Annabelle,Shaw,10,Abbotsleigh
+15040,Business Studies,Anchal,Sachdeva,13,Our Lady of Mercy College Parramatta
+15040,Business Studies,Perry John,Slater,14,Barker College
+15040,Business Studies,Matthew Colin,Croker,15,St Ignatius' College
+15040,Business Studies,Chelsea,Du Buisson-Perrine,15,Clancy Catholic College
+15040,Business Studies,Prithi,Sakthi Sivabalan,17,Penrith High School
+15040,Business Studies,Reem,El-Ayoubi,18,Al Noori Muslim School
+15040,Business Studies,Panayiotis Peter,Litsas,19,St Patrick's Marist College
+15040,Business Studies,Joshua,Karabulut,20,St Pius X College
+15050,Chemistry,Louise,Godhard,1,SCEGGS Darlinghurst
+15050,Chemistry,Ronan,Davis,2,Sydney Grammar School
+15050,Chemistry,Louisa,Leone,3,Bethany College
+15050,Chemistry,Ian Phuc Long,Ngo,3,Hurlstone Agricultural High School
+15050,Chemistry,Jessica Wenjie,Qiao,3,Meriden School
+15050,Chemistry,Li Yi,Wang,6,James Ruse Agricultural High School
+15050,Chemistry,Heath,Hasemer,7,Sydney Grammar School
+15050,Chemistry,Joshua,Han,8,The King's School
+15050,Chemistry,Danushan,Dayaparan,9,James Ruse Agricultural High School
+15050,Chemistry,Matthew Wei Shun,Shu,9,James Ruse Agricultural High School
+15050,Chemistry,Jocelin Shing-Yan,Hon,11,James Ruse Agricultural High School
+15050,Chemistry,Andrew,Zhou,11,Normanhurst Boys High School
+15050,Chemistry,Zachary Galen,Slonim,13,Knox Grammar School
+15050,Chemistry,Anirudh,Joshi,14,Sydney Boys High School
+15050,Chemistry,Emilie Guang-Rui,Wu,15,James Ruse Agricultural High School
+15050,Chemistry,Monik,Soni,16,Girraween High School
+15050,Chemistry,Kevin Si Yu,Fang,17,North Sydney Boys High School
+15050,Chemistry,Wenquan,Lu,17,Barker College
+15050,Chemistry,Mina,Saweris,17,St Mary and St Mina's Coptic Orthodox College
+15050,Chemistry,Claire,Xue,17,Danebank - An Anglican School For Girls
+15050,Chemistry,Christina,Li,21,Sydney Girls High School
+15050,Chemistry,Jadon Ryan,Yang,21,Sydney Boys High School
+15565,Chinese and Literature,Ping,Huang,1,Reddam House
+15565,Chinese and Literature,Chenyang,Lin,2,Reddam House
+15565,Chinese and Literature,Yuming,Zheng,3,Reddam House
+15565,Chinese and Literature,Wenquan,Lu,4,Saturday School of Community Languages Chatswood HS Centre
+15565,Chinese and Literature,Yangjun,Yue,5,Reddam House
+15540,Chinese Beginners,John,McKinnon,1,St Pius X College
+15540,Chinese Beginners,Lauren,Nobel,2,NSW School of Languages
+15540,Chinese Beginners,Emily,Lewis Dando,3,NSW School of Languages
+15540,Chinese Beginners,Youngseo,Kim,4,Macquarie Grammar School
+15540,Chinese Beginners,Catherine,Nobel,5,NSW School of Languages
+15550,Chinese Continuers,Jesse,Caminer,1,Cranbrook School
+15550,Chinese Continuers,Peter,Taurian,2,Sydney Grammar School
+15550,Chinese Continuers,Paul,Lapinski,3,The King's School
+15550,Chinese Continuers,Liam John,Pidcock,3,Newington College
+15550,Chinese Continuers,Jackson,Read,3,Cranbrook School
+15550,Chinese Continuers,Kimika,Uehara,3,Kincoppal - Rose Bay School of the Sacred Heart
+15570,Chinese Extension,Anna-Sophia,Zahar,1,NSW School of Languages
+15570,Chinese Extension,Peter,Taurian,2,Sydney Grammar School
+15570,Chinese Extension,Liam Gu,Fitzgerald,3,Barker College
+15570,Chinese Extension,Nathan,Chan,4,Sydney Grammar School
+15570,Chinese Extension,Jay,Ong,5,Sydney Grammar School
+15557,Chinese in Context,Linda,Peng,1,Ravenswood School for Girls
+15557,Chinese in Context,Dikai,Yan,2,Australian International School Hong Kong
+15557,Chinese in Context,Qiyu,Xue,3,Sydney Girls High School
+15557,Chinese in Context,Wanying,Meng,4,Sydney Girls High School
+15557,Chinese in Context,Ryo,Ge,5,Saturday School of Community Languages Strathfield GHS Centre
+15580,Classical Greek Continuers,Sebastian Joseph,Braham,1,St Ignatius' College
+15580,Classical Greek Continuers,Naomi,Stephens,2,North Sydney Girls High School
+15580,Classical Greek Continuers,Anthony,Maros,3,Sydney Grammar School
+15580,Classical Greek Continuers,Benjamin,Schwartz,4,Sydney Grammar School
+15580,Classical Greek Continuers,Isabella,Natale,5,Pymble Ladies' College
+15590,Classical Greek Extension,Sebastian Joseph,Braham,1,St Ignatius' College
+15590,Classical Greek Extension,Anthony,Maros,2,Sydney Grammar School
+15590,Classical Greek Extension,Benjamin,Schwartz,3,Sydney Grammar School
+15590,Classical Greek Extension,Isabella,Natale,4,Pymble Ladies' College
+15590,Classical Greek Extension,Darren,Mok,5,Sydney Grammar School
+15600,Classical Hebrew Continuers,Talia,Shulkin,1,Moriah College
+15600,Classical Hebrew Continuers,Shmuel,Smith,2,Moriah College
+15600,Classical Hebrew Continuers,Sabrina,Zulman,3,Moriah College
+15600,Classical Hebrew Continuers,Leila,Freedman,4,Moriah College
+15600,Classical Hebrew Continuers,Sarah,Miller,5,Moriah College
+15610,Classical Hebrew Extension,Talia,Shulkin,1,Moriah College
+15610,Classical Hebrew Extension,Sabrina,Zulman,2,Moriah College
+15610,Classical Hebrew Extension,Shmuel,Smith,3,Moriah College
+15610,Classical Hebrew Extension,Chana Liba,Gershowitz,4,Kesser Torah College
+15610,Classical Hebrew Extension,David,Smith,5,Moriah College
+15060,Community and Family Studies,Samantha,Moodley,1,Emmaus Catholic College
+15060,Community and Family Studies,Phoebe,Gilbane,2,Cheltenham Girls High School
+15060,Community and Family Studies,Emily Jia,Liao,2,Meriden School
+15060,Community and Family Studies,Gabrielle Emily,Dolphin,4,Blacktown Girls High School
+15060,Community and Family Studies,McKenna Cherie,Dimmock,5,Springwood High School
+15060,Community and Family Studies,Anastacia,Filer,5,Emmaus Catholic College
+15060,Community and Family Studies,Alexis,Jeffs,5,Warners Bay High School
+15060,Community and Family Studies,Matiese Layla,Trisley,5,Macksville High School
+15060,Community and Family Studies,Amy,Withford,5,Asquith Girls High School
+15060,Community and Family Studies,Sarah,Hatton,10,Gilroy Catholic College
+26299,Construction Examination,Daniel,Hart,1,St Columba Anglican School
+26299,Construction Examination,Cameron,Ryan,2,Northern Sydney Institute - Hornsby College
+26299,Construction Examination,Jarryd,Zappia,3,St Gregory's College Campbelltown
+26299,Construction Examination,Tori Amber,McCombe,4,Hastings Secondary College Westport Campus
+26299,Construction Examination,Franco,Scarcella,4,William Carey Christian School
+26299,Construction Examination,Luke,Gabriel,6,"St Patrick's College, Strathfield"
+26299,Construction Examination,Marcus,D'Alessio,7,St Mary's Cathedral College
+26299,Construction Examination,Amy,Gardiman,7,St Patrick's College Sutherland
+26299,Construction Examination,Andrew,Stuart,7,St Mary's Cathedral College
+26299,Construction Examination,James McIlveen,Cooper,10,"St Patrick's College, Strathfield"
+26299,Construction Examination,Benjamin,Isaac,10,St Edward's Christian Brothers' College
+26299,Construction Examination,Jessica Louise,Pickering,10,Hastings Secondary College Westport Campus
+15620,Croatian Continuers,William,Chmelar,1,Saturday School of Community Languages Liverpool Boys HS Centre
+15070,Dance,Eleanor Lee,Edstrom,1,Cherrybrook Technology High School
+15070,Dance,Briana Patricia,Rourke,2,Northern Beaches Secondary College Mackellar Girls Campus
+15070,Dance,Riona,Chapman,3,Stella Maris College
+15070,Dance,Jemima,Belger,4,Brigidine College St Ives
+15070,Dance,Mia,Giladi,4,Pittwater House Schools
+15080,Design and Technology,Seamus,Connon,1,Marcellin College
+15080,Design and Technology,Henry,Walker,2,Cranbrook School
+15080,Design and Technology,Stella,Durrant,3,Santa Sabina College
+15080,Design and Technology,Rosie Catherine Devenish,Meares,4,Abbotsleigh
+15080,Design and Technology,Jolie,Fang,5,Riverside Girls High School
+15080,Design and Technology,Jacquelyn,Reimer,5,Kincoppal - Rose Bay School of the Sacred Heart
+15080,Design and Technology,Jasmin,Yip,7,St Catherine's School
+15080,Design and Technology,Alessia,Aspite,8,Santa Sabina College
+15080,Design and Technology,Kiara,Allison,9,St Patrick's College Sutherland
+15080,Design and Technology,Lucy,Davies,9,Hunters Hill High School
+15080,Design and Technology,Catherine,Hettler,9,Stella Maris College
+15090,Drama,Laura,Charlton,1,Smiths Hill High School
+15090,Drama,Zara,Lowe,1,Ascham School
+15090,Drama,William John,Studdert,1,Knox Grammar School
+15090,Drama,Cleo,Baldwin,4,St Catherine's School
+15090,Drama,Hamish,Lewis,5,Hunter School of Performing Arts
+15090,Drama,Sarah,Lowry,6,Brigidine College St Ives
+15090,Drama,Peter,North,6,Cranbrook School
+15090,Drama,Joseph,Haynes,8,Cranbrook School
+15090,Drama,Axel,Koeppenkastrop,8,Cranbrook School
+15090,Drama,Noah,Learmonth,8,Cranbrook School
+15640,Dutch Continuers,Antonia,Hendriks,1,Outside Tutor
+15640,Dutch Continuers,Annemijn,Flokstra,2,Outside Tutor
+15640,Dutch Continuers,Rose Elizabeth,Bakker,3,Outside Tutor
+15100,Earth and Environmental Science,James,Bagnall,1,Mount St Patrick College
+15100,Earth and Environmental Science,James,Keogh,2,Mount St Patrick College
+15100,Earth and Environmental Science,Catherine,Clarkson,3,Roseville College
+15100,Earth and Environmental Science,Jemima,Huggett,4,Moss Vale High School
+15100,Earth and Environmental Science,Mina,Kearns,5,St Ives High School
+15100,Earth and Environmental Science,Anthony,Manns,5,Chatswood High School
+15100,Earth and Environmental Science,William,Potter,5,Colo High School
+15100,Earth and Environmental Science,Joshua Francis Peter,Wadeson,5,Brisbane Water Secondary College Woy Woy Campus
+15100,Earth and Environmental Science,Jamie,Barnacoat,9,Carlingford High School
+15100,Earth and Environmental Science,Matthew,Drielsma,9,Cranbrook School
+15110,Economics,Andre,Thomas,1,St Euphemia College
+15110,Economics,Henry,Xu,2,Sydney Grammar School
+15110,Economics,Patrick,Nah,3,Baulkham Hills High School
+15110,Economics,Supreeth,Bharadwaj,4,Baulkham Hills High School
+15110,Economics,Kyra,Todd,5,St Peter's Catholic College
+15110,Economics,Hortin,Zeng,6,Knox Grammar School
+15110,Economics,Max,Davis,7,Sydney Grammar School
+15110,Economics,John,Wang,8,Sydney Grammar School
+15110,Economics,Coby,Simmons,9,Moriah College
+15110,Economics,Nathan Yi Peng,Guo,10,Knox Grammar School
+26399,Electrotechnology Examination,Adam,Smallman,1,Northern Sydney Institute - Northern Beaches Campus
+26399,Electrotechnology Examination,Martin,Rudgley,2,Western Institute - Bathurst Campus
+26399,Electrotechnology Examination,Callum,Davies,3,Holy Spirit College
+26399,Electrotechnology Examination,James,Attard,4,Good Samaritan Catholic College
+15120,Engineering Studies,Tim,Zhang,1,North Sydney Boys High School
+15120,Engineering Studies,Matthew,Georgievski,2,Lismore Diocese Online Education Unit
+15120,Engineering Studies,Adam,Robey,2,Sydney Technical High School
+15120,Engineering Studies,James,Punch,4,Merewether High School
+15120,Engineering Studies,Nicholas William Rattigan,Leonard,5,St Ignatius' College
+15120,Engineering Studies,Mackenzie William,Gilligan,6,Merewether High School
+15120,Engineering Studies,Alexander,Cronin,7,North Sydney Boys High School
+15120,Engineering Studies,Darby John,Thompson,7,Caringbah High School
+15120,Engineering Studies,Dominic,Manno,9,Lismore Diocese Online Education Unit
+15120,Engineering Studies,Stephen George,Allagiannis,10,St Euphemia College
+15120,Engineering Studies,Martyn Andrew,Cox,10,Merewether High School
+15120,Engineering Studies,Benjamin,Crimp,10,Northern Beaches Secondary College Manly Campus
+15120,Engineering Studies,Charles Alexander,Sargent,10,Knox Grammar School
+15140,English Advanced,Jesse,Caminer,1,Cranbrook School
+15140,English Advanced,Saachi,Brajkovic,2,Ascham School
+15140,English Advanced,Hamish,Lewis,2,Hunter School of Performing Arts
+15140,English Advanced,Grace,Mahon,2,Smiths Hill High School
+15140,English Advanced,Andre,Thomas,2,St Euphemia College
+15140,English Advanced,Melvern Ted,Kurniawan,6,Castle Hill High School
+15140,English Advanced,Imogen,Senior,6,Frensham School
+15140,English Advanced,Marko,Beocanin,8,Normanhurst Boys High School
+15140,English Advanced,Mina,Saweris,8,St Mary and St Mina's Coptic Orthodox College
+15140,English Advanced,Aisha,Abdu,10,James Ruse Agricultural High School
+15140,English Advanced,Lauren Xuan,Wang,11,James Ruse Agricultural High School
+15140,English Advanced,Flora Jennifer,Lee,12,James Ruse Agricultural High School
+15140,English Advanced,Luke,Harris,13,Waverley College
+15140,English Advanced,Saleha,Sehgol,13,Baulkham Hills High School
+15140,English Advanced,Jaemin,Kim,15,Cranbrook School
+15140,English Advanced,Marco,Emery,16,Waverley College
+15140,English Advanced,Kevin Si Yu,Fang,16,North Sydney Boys High School
+15140,English Advanced,Dominic,Grimshaw,16,Conservatorium High School
+15140,English Advanced,Marcus,Bombardiere,19,St Gregory's College Campbelltown
+15140,English Advanced,Raquel,Bradley,20,Pacific Hills Christian School
+15140,English Advanced,Keenan,Fitzsimons,20,Parramatta Marist High School
+15140,English Advanced,Joseph,Negrine,20,The Scots College
+15140,English Advanced,Tsz Yee,Pang,20,Menai High School
+15140,English Advanced,Isabella,Turner,20,Barrenjoey High School
+15155,English EAL/D,Jiaqi,Xue,1,Meriden School
+15155,English EAL/D,Yuming,Zheng,1,Reddam House
+15155,English EAL/D,Yiheng,Wu,3,Reddam House
+15155,English EAL/D,Xinyu,Wei,4,Meriden School
+15155,English EAL/D,Ye,Zhao,5,Presbyterian Ladies' College Sydney
+15155,English EAL/D,Ziyi,Que,6,Presbyterian Ladies' College Sydney
+15155,English EAL/D,Thuy Linh,Nguyen,7,Cabramatta High School
+15155,English EAL/D,Enxi,Lin,8,Burwood Girls High School
+15155,English EAL/D,Tingxuan,Lyu,9,Presbyterian Ladies' College Sydney
+15155,English EAL/D,Xinran,Zhu,10,Randwick Girls High School
+15160,English Extension 1,Renee,Giang,1,Sydney Girls High School
+15160,English Extension 1,Saleha,Sehgol,2,Baulkham Hills High School
+15160,English Extension 1,Jesse,Caminer,3,Cranbrook School
+15160,English Extension 1,Matthew Stuart,Rich,4,Sydney Grammar School
+15160,English Extension 1,Morgan,Reidy,5,Macarthur Anglican School
+15160,English Extension 1,Luca Stefano,Lopes,6,Marist College Kogarah
+15160,English Extension 1,Jeremy,Haddad,7,Australian International School Singapore
+15160,English Extension 1,Farah,Alameddine,8,Birrong Girls High School
+15160,English Extension 1,Blaize,Farah,8,St Mary's Cathedral College
+15160,English Extension 1,Himaja Manishi,Dave,10,Crestwood High School
+15170,English Extension 2,Jesse,Caminer,1,Cranbrook School
+15170,English Extension 2,Ana-Sofia,Petrovic,2,International Grammar School
+15170,English Extension 2,Mia Alice,Pasilow Lockett,3,Newtown High School of Performing Arts
+15170,English Extension 2,Jasmin,Pike,4,Northern Beaches Christian School
+15170,English Extension 2,Margot,Lee,5,SCEGGS Darlinghurst
+15170,English Extension 2,Matthew Stuart,Rich,6,Sydney Grammar School
+15170,English Extension 2,Amie Vy Paik,Doan,7,Hornsby Girls High School
+15170,English Extension 2,Reuben,Gliksten,8,Sydney Grammar School
+15170,English Extension 2,Aisha,Abdu,9,James Ruse Agricultural High School
+15170,English Extension 2,Jessica,McCrindle,10,Pacific Hills Christian School
+15130,English Standard,Melanie Kate,Laurie,1,Killarney Heights High School
+15130,English Standard,Reign Philip Emmanuel,Limantono,2,SHORE - Sydney Church of England Grammar School
+15130,English Standard,Benjamin Lachlan James,Tuckfield,3,St Ignatius' College
+15130,English Standard,Yun-Fang,Cho,4,Brigidine College Randwick
+15130,English Standard,Imran,Issa,5,Alpha Omega Senior College
+15130,English Standard,Stella Rose,Stewart,6,Willoughby Girls High School
+15130,English Standard,Kubra,Sacan,7,"Amity College, Prestons"
+15130,English Standard,Sofie,Katakouzinos,8,Brigidine College Randwick
+15130,English Standard,Isabella Rose,Russo,9,St Ursula's College
+15130,English Standard,Kate,Argy,10,St Clare's College
+15130,English Standard,Charlotte,Dudman,11,Asquith Girls High School
+15130,English Standard,Erin,LaRue,11,John Therry Catholic High School
+15130,English Standard,Ellie Louise,Loughman,11,Caroline Chisholm College
+15130,English Standard,Grace,O'Shana,11,Mary MacKillop Catholic College
+15130,English Standard,Christiane,Wilson,11,Woolooware High School
+15130,English Standard,Ivy,Maglis,16,Elderslie High School
+15130,English Standard,Sunhwa,Song,16,Killara High School
+15130,English Standard,Ahmed,Al Yassin,18,Alpha Omega Senior College
+15130,English Standard,Sarah Grace,Wadeisha,19,Northern Beaches Secondary College Freshwater Senior Campus
+15130,English Standard,Victoria,Morton,20,St Ursula's College
+26499,Entertainment Industry Examination,Lucy,Atkins,1,Oakhill College Castle Hill
+26499,Entertainment Industry Examination,Liesl,Heiss,2,St Ursula's College
+26499,Entertainment Industry Examination,Matthew Alan,Rigby,3,St Philip's Christian College - Waratah
+26499,Entertainment Industry Examination,Cain,Davey,4,Kooringal High School
+26499,Entertainment Industry Examination,Caitlyn,Hajje,5,Mount St Benedict College
+15660,Filipino Continuers,Ma Ysabelle,Perez,2,Saturday School of Community Languages Bankstown Girls HS Centre
+15660,Filipino Continuers,Raizelle,Nana,3,Saturday School of Community Languages Bankstown Girls HS Centre
+27299,Financial Services Examination,Bagavathy,Menon,1,Northern Sydney Institute - Hornsby College
+15180,Food Technology,Imogen,Croucher,1,St George Christian School
+15180,Food Technology,Jasmin,Yip,2,St Catherine's School
+15180,Food Technology,Tahlia,Engelbrecht,3,Broughton Anglican College
+15180,Food Technology,Janani,Viswanathan,3,Pymble Ladies' College
+15180,Food Technology,Olivia,Tunks,5,Tara Anglican School for Girls
+15180,Food Technology,Lachlan,Camilleri,6,St Dominic's College
+15180,Food Technology,Isobel,Funnell,6,Brigidine College Randwick
+15180,Food Technology,Ainsley,Mallett,6,Loreto Normanhurst
+15180,Food Technology,Jacinta,Chalhoub,9,St Charbel's College
+15180,Food Technology,Ariana,Frater,9,Pymble Ladies' College
+15180,Food Technology,Samarah Danae,Vella,9,Bede Polding College
+15670,French Beginners,Iban Mikel,Elhorga,1,"St Patrick's College, Strathfield"
+15670,French Beginners,Olivia Phoebe Klausen,Russell,1,Gosford High School
+15670,French Beginners,Jeremy Martin,Ellis,3,"St Patrick's College, Strathfield"
+15670,French Beginners,Alice,Compton,4,Loreto Normanhurst
+15670,French Beginners,Eleanor Rose,Searle,4,NSW School of Languages
+15680,French Continuers,Yitong,Huang,1,Sydney Girls High School
+15680,French Continuers,Emily,Sacks,2,Ascham School
+15680,French Continuers,Lara,Elphinstone,3,Ascham School
+15680,French Continuers,Frances,Wu,4,Caringbah High School
+15680,French Continuers,Sanya,Kulshreshtha,5,Hornsby Girls High School
+15690,French Extension,Adam,Gottschalk,1,Sydney Grammar School
+15690,French Extension,Harris,Ledvinka,2,Sydney Girls High School
+15690,French Extension,Emmanuelle,Dunn Lewis,3,SCEGGS Darlinghurst
+15690,French Extension,Alia,Ardon,4,Sydney Secondary College Blackwattle Bay Campus
+15690,French Extension,Ana-Sofia,Petrovic,5,International Grammar School
+15190,Geography,Lachlan,Tran,1,Sydney Grammar School
+15190,Geography,Yu Jeung,Thai,2,Sydney Grammar School
+15190,Geography,Cole,Finney,3,Sydney Grammar School
+15190,Geography,Nixon Lok,Huynh,4,Normanhurst Boys High School
+15190,Geography,James,Marchant,5,Sydney Grammar School
+15190,Geography,Joel,Aaron,6,Emanuel School
+15190,Geography,Krishnan,Nayanar,7,Sydney Grammar School
+15190,Geography,William,Waters,8,Sydney Grammar School
+15190,Geography,Eric,Zeng,9,Normanhurst Boys High School
+15190,Geography,Aaron,Deng,10,Normanhurst Boys High School
+15700,German Beginners,Jacinta Mary Robertson,Smith,1,Dubbo School of Distance Education
+15700,German Beginners,Saskia,Dorsman,2,Dubbo School of Distance Education
+15700,German Beginners,Miya,Chesterman,3,Dubbo School of Distance Education
+15700,German Beginners,Stephen Roderick,Perry,4,Northern Beaches Secondary College Freshwater Senior Campus
+15700,German Beginners,Genevieve Lucia Coleman,Ward,5,NSW School of Languages
+15710,German Continuers,Samarth,Shrivastava,1,North Sydney Boys High School
+15710,German Continuers,Liêm,Grimes,2,Sydney Grammar School
+15710,German Continuers,Matthew James,Barrett,3,SHORE - Sydney Church of England Grammar School
+15710,German Continuers,Mia,Achhorner,4,NSW School of Languages
+15710,German Continuers,Peter,Taurian,5,Sydney Grammar School
+15720,German Extension,Samarth,Shrivastava,1,North Sydney Boys High School
+15720,German Extension,Max,Chen,2,North Sydney Boys High School
+15720,German Extension,Nina,Rewitzer,3,International Grammar School
+15720,German Extension,Niels,Rogge,4,Smiths Hill High School
+15720,German Extension,Eli,Narev,5,Sydney Grammar School
+15730,Hindi Continuers,Yashvi,Luthra,1,Saturday School of Community Languages The Hills Sports HS Centre
+15730,Hindi Continuers,Stuti,Doshi,2,Outside Tutor
+15730,Hindi Continuers,Ekaagra,Kesarwani,3,Saturday School of Community Languages The Hills Sports HS Centre
+15730,Hindi Continuers,Riddhi,Gupta,4,Saturday School of Community Languages The Hills Sports HS Centre
+15730,Hindi Continuers,Gaurish,Sharma,5,Saturday School of Community Languages The Hills Sports HS Centre
+15280,History Extension,Saachi,Brajkovic,1,Ascham School
+15280,History Extension,Dominic,Grimshaw,2,Conservatorium High School
+15280,History Extension,Tilda Elaine Harmston,Stafford,3,Meriden School
+15280,History Extension,Edward,Ford,4,St Mary's Cathedral College
+15280,History Extension,Grace Helen,McInerney,5,Abbotsleigh
+15280,History Extension,Anna,Hanselmann,6,Loreto Normanhurst
+15280,History Extension,Anna Elisabeth Grace,Hobson,7,Kirrawee High School
+15280,History Extension,Ayra,Kassam,7,Pymble Ladies' College
+15280,History Extension,Madeleine Sophie,Kan,9,Kincoppal - Rose Bay School of the Sacred Heart
+15280,History Extension,Matthew,Sgroi-Smith,10,St Andrew's Cathedral School
+26579,Hospitality Examination,Meg,Arnold,1,St Philip's Christian College - Waratah
+26579,Hospitality Examination,Christabel,Chang,1,Brigidine College Randwick
+26579,Hospitality Examination,Kiera,Bainsfair,3,Charlton Christian College
+26579,Hospitality Examination,Tara Marie,Mapstone,4,The Forest High School
+26579,Hospitality Examination,Olivia,Christodoulou,5,Danebank - An Anglican School For Girls
+26579,Hospitality Examination,Vivienne,Hatzigiakoumis,5,St Spyridon College
+26579,Hospitality Examination,Will Graham,Fitzgibbons,7,Lindisfarne Anglican Grammar School
+26579,Hospitality Examination,Gemma,Williams,8,Oakhill College Castle Hill
+26579,Hospitality Examination,Sachini,Bandara,9,Kooringal High School
+26579,Hospitality Examination,Lauren Elizabeth,Donoghoe,9,Kotara High School
+27199,Human Services Examination,Gemma,Garner,1,Western Institute - Bathurst Campus
+27199,Human Services Examination,Alexandra,Quinn,1,Broughton Anglican College
+27199,Human Services Examination,Jasmine,Maxwell,3,Birrong Girls High School
+27199,Human Services Examination,Annabelle,Petrovski,3,Western Sydney Institute - Nepean Campus
+15740,Hungarian Continuers,Eszter,Duzs,1,Saturday School of Community Languages Bankstown Girls HS Centre
+15740,Hungarian Continuers,Dora,Hegedus,2,Outside Tutor
+15740,Hungarian Continuers,Jazmin,Sebo,3,Saturday School of Community Languages Bankstown Girls HS Centre
+15740,Hungarian Continuers,Anna Nelli,Zimmer,4,Saturday School of Community Languages Bankstown Girls HS Centre
+15775,Indonesian and Literature,Fatimah Talib,Hashim,1,NSW School of Languages
+15775,Indonesian and Literature,Vita,Purwanto,1,NSW School of Languages
+15750,Indonesian Beginners,Kiera,Taylor,1,NSW School of Languages
+15750,Indonesian Beginners,Shequina,Pereira,2,NSW School of Languages
+15750,Indonesian Beginners,Mia Ana,Ardianto,3,NSW School of Languages
+15750,Indonesian Beginners,Biak,Nei Zing,4,Coffs Harbour Christian Community School
+15750,Indonesian Beginners,Taliah Maree,Simbolon,5,NSW School of Languages
+15760,Indonesian Continuers,Li Hoong,Seow,1,Ryde Secondary College
+15760,Indonesian Continuers,Ivana Nathania,Tambun,2,Ryde Secondary College
+15760,Indonesian Continuers,Esther Soo-Bin,You,3,Ryde Secondary College
+15760,Indonesian Continuers,May Anita,Chen,4,Ryde Secondary College
+15760,Indonesian Continuers,Isaiah Peter,Kezelos,5,Macarthur Anglican School
+15780,Indonesian Extension,Isaiah Peter,Kezelos,1,Macarthur Anglican School
+15780,Indonesian Extension,Gabrielle,Giannakos,2,MLC School
+15780,Indonesian Extension,Lara Juliette,Lindsay,3,Macarthur Anglican School
+15780,Indonesian Extension,Jack,Soepono,4,The Scots College
+15767,Indonesian in Context,Angela,Santoso,1,NSW School of Languages
+15767,Indonesian in Context,Daleescha,Rivai,2,NSW School of Languages
+15767,Indonesian in Context,Audrey,Lusiana,3,NSW School of Languages
+15200,Industrial Technology,James,Keogh,1,Mount St Patrick College
+15200,Industrial Technology,Hannah,Batchelor,2,Arndell Anglican College
+15200,Industrial Technology,Milad,Elisha,3,Patrician Brothers' College Fairfield
+15200,Industrial Technology,Akshkumar Alpeshkumar,Patel,4,Mitchell High School
+15200,Industrial Technology,Sepehr,Saryazdi,4,Model Farms High School
+15200,Industrial Technology,Zoe Elizabeth,Lindhout,6,MLC School
+15200,Industrial Technology,Leon,Ni,7,"De La Salle College, Revesby Heights"
+15200,Industrial Technology,Liam,Jarrett,8,Wyong Christian Community School
+15200,Industrial Technology,Samuel,Rodrigues,8,Rosebank College
+15200,Industrial Technology,Maximilian,Davis,10,Mount St Patrick College
+27379,Information and Digital Technology Examination,Patrick,Grimson,1,Kildare Catholic College
+27379,Information and Digital Technology Examination,Zoe,Fenton-Smith,2,Northern Sydney Institute - Hornsby College
+27379,Information and Digital Technology Examination,Peter,Froon,3,Kildare Catholic College
+27379,Information and Digital Technology Examination,Jonas,Weinrabe,4,Coffs Harbour Senior College
+27379,Information and Digital Technology Examination,David Anthony,Dawson,5,Xavier College
+27379,Information and Digital Technology Examination,Ashlen,Farrelly,5,Coffs Harbour Senior College
+27379,Information and Digital Technology Examination,Jack Alexander,Wason,5,Dubbo School of Distance Education
+15210,Information Processes and Technology,Viktoria,Kovacs,1,Cheltenham Girls High School
+15210,Information Processes and Technology,Nicholas,Lawrence-Palmer,1,Concord High School
+15210,Information Processes and Technology,Anna,Wu,3,Sydney Girls High School
+15210,Information Processes and Technology,Madeleine,Scott,4,SCEGGS Darlinghurst
+15210,Information Processes and Technology,Damian Bailey,Sue,5,"St Patrick's College, Strathfield"
+15210,Information Processes and Technology,Tharen,Candi,6,Trinity Grammar School
+15210,Information Processes and Technology,Brendan Charles,Vuong,6,Reddam House
+15210,Information Processes and Technology,Michael,Zheng,6,North Sydney Boys High School
+15210,Information Processes and Technology,Gordon,Yang,9,North Sydney Boys High School
+15210,Information Processes and Technology,Krista,Chen,10,Sydney Girls High School
+15215,Investigating Science,Benjamin,Yan,1,Smiths Hill High School
+15215,Investigating Science,Sophia,Carmody,2,Pymble Ladies' College
+15215,Investigating Science,Emma,Wilson,2,Carlingford High School
+15215,Investigating Science,Mali,Woods,2,Fort Street High School
+15215,Investigating Science,Annika,Oakley,5,Smiths Hill High School
+15215,Investigating Science,Weijia,Yi,6,Normanhurst Boys High School
+15215,Investigating Science,Liam Patrick,Flew,7,Gosford High School
+15215,Investigating Science,Natalia Stefanie,Burgess,8,Coleambally Central School
+15215,Investigating Science,Yve,Nichols-Evans,8,Gosford High School
+15215,Investigating Science,Jared,Belo,10,Carlingford High School
+15790,Italian Beginners,Alejandra,Paredez Paredes,1,Trinity Catholic College Lismore
+15790,Italian Beginners,Isabella,Pereira,2,Freeman Catholic College
+15790,Italian Beginners,Hannah,Robinson,3,Smiths Hill High School
+15790,Italian Beginners,Christian,Kairis,4,Smiths Hill High School
+15790,Italian Beginners,Angela Amy,Della-Franca,5,Kincoppal - Rose Bay School of the Sacred Heart
+15800,Italian Continuers,Rebecca Sue,Walker,1,Monte Sant' Angelo Mercy College
+15800,Italian Continuers,Aarya,Bhatia,2,Sydney Grammar School
+15800,Italian Continuers,Elisa,Papagianopoulos,3,NSW School of Languages
+15800,Italian Continuers,Christian,Farrell,4,Sydney Grammar School
+15800,Italian Continuers,Jeremy Martin,Ellis,5,"St Patrick's College, Strathfield"
+15810,Italian Extension,Christian,Farrell,1,Sydney Grammar School
+15810,Italian Extension,Ana-Sofia,Petrovic,2,International Grammar School
+15810,Italian Extension,Marc Antony,Salamone,3,"St Patrick's College, Strathfield"
+15810,Italian Extension,Rebecca Sue,Walker,4,Monte Sant' Angelo Mercy College
+15810,Italian Extension,Jeremy Martin,Ellis,5,"St Patrick's College, Strathfield"
+15845,Japanese and Literature,Hinata,Suzuki,1,Saturday School of Community Languages Chatswood HS Centre
+15845,Japanese and Literature,Mana,Tanabe,2,Saturday School of Community Languages Chatswood HS Centre
+15845,Japanese and Literature,Yu,Kogure,3,Saturday School of Community Languages Chatswood HS Centre
+15845,Japanese and Literature,Natsuki,Kawanami,4,Saturday School of Community Languages Chatswood HS Centre
+15820,Japanese Beginners,Da Eun,Choi,1,Strathfield Girls High School
+15820,Japanese Beginners,Joy,Anugerah,2,NSW School of Languages
+15820,Japanese Beginners,Wonjeong,Yoo,3,Strathfield Girls High School
+15820,Japanese Beginners,Soeun,Lee,4,Strathfield Girls High School
+15820,Japanese Beginners,Aleesha,Bunrith,5,Lismore Diocese Online Education Unit
+15820,Japanese Beginners,Amanda,Yu,5,MLC School
+15830,Japanese Continuers,Haotian,Li,1,Epping Boys High School
+15830,Japanese Continuers,Hyea Won,Yoo,2,Baulkham Hills High School
+15830,Japanese Continuers,Ha Jin,Lee,3,Baulkham Hills High School
+15830,Japanese Continuers,Victoria,Kristensen,4,Northern Beaches Secondary College Manly Campus
+15830,Japanese Continuers,Yejin,Lee,5,Pymble Ladies' College
+15830,Japanese Continuers,Craig,Xu,5,Knox Grammar School
+15830,Japanese Continuers,Shelly,Zhang,5,Baulkham Hills High School
+15850,Japanese Extension,Jiarui,Shen,1,NSW School of Languages
+15850,Japanese Extension,Amee,Wu,2,North Sydney Girls High School
+15850,Japanese Extension,Kimaya,Gadre,3,Strathfield Girls High School
+15850,Japanese Extension,Shelly,Zhang,4,Baulkham Hills High School
+15850,Japanese Extension,Vanessa Tingxuan,Li,5,NSW School of Languages
+15837,Japanese in Context,Ashley,Jacobsson,1,Saturday School of Community Languages Chatswood HS Centre
+15837,Japanese in Context,Hiroi,Migita,2,NSW School of Languages
+15837,Japanese in Context,Yuta,Sugimoto,3,Saturday School of Community Languages Chatswood HS Centre
+15837,Japanese in Context,Shion,Kendrick,4,Saturday School of Community Languages Chatswood HS Centre
+15860,Khmer Continuers,Rithysak ,Yous ,1,Saturday School of Community Languages Liverpool Girls HS Centre
+15860,Khmer Continuers,Socheata,Som,2,Saturday School of Community Languages Liverpool Girls HS Centre
+15860,Khmer Continuers,Raksmey,Sovan,3,Saturday School of Community Languages Liverpool Girls HS Centre
+15895,Korean and Literature,Yoolree,Kim,1,Saturday School of Community Languages Chatswood HS Centre
+15895,Korean and Literature,Jaehyeon,Jeon,2,Saturday School of Community Languages Chatswood HS Centre
+15895,Korean and Literature,Haeun,Jang,3,Saturday School of Community Languages Strathfield GHS Centre
+15895,Korean and Literature,Jeongwoo,Kim,4,Saturday School of Community Languages Strathfield GHS Centre
+15895,Korean and Literature,Yoobin,Oh,5,Saturday School of Community Languages Chatswood HS Centre
+15870,Korean Beginners,Jacqueline,Fenn,1,NSW School of Languages
+15870,Korean Beginners,Christy,Li,2,Baulkham Hills High School
+15870,Korean Beginners,Darcey,Thompson,3,Baulkham Hills High School
+15870,Korean Beginners,Tina Yaran,Huang,4,Hurlstone Agricultural High School
+15870,Korean Beginners,Maya,Rusli,5,NSW School of Languages
+15880,Korean Continuers,Emily,Cheng,1,NSW School of Languages
+15880,Korean Continuers,Bonnie Jia-Lin,Cheng,2,Burwood Girls High School
+15880,Korean Continuers,Lucy,Chhuo,3,NSW School of Languages
+15887,Korean in Context,Ryan Minseong,Kwon,1,Saturday School of Community Languages Strathfield GHS Centre
+15887,Korean in Context,Grace Yeongbin,Lee,2,Saturday School of Community Languages The Hills Sports HS Centre
+15887,Korean in Context,Dongwoo,Noh,3,Homebush Boys High School
+15887,Korean in Context,Mary,Chung,4,Saturday School of Community Languages Strathfield GHS Centre
+15887,Korean in Context,Junghyun,Heo,5,Saturday School of Community Languages Strathfield GHS Centre
+15900,Latin Continuers,Maja,Vasic,1,St George Girls High School
+15900,Latin Continuers,Catherine,Nguyen,2,Sydney Girls High School
+15900,Latin Continuers,Louise,Godhard,3,SCEGGS Darlinghurst
+15900,Latin Continuers,Joshua Jun,Lin,4,SHORE - Sydney Church of England Grammar School
+15900,Latin Continuers,Sophie,Mok,4,Pymble Ladies' College
+15900,Latin Continuers,Peter,Taurian,4,Sydney Grammar School
+15910,Latin Extension,Catherine,Nguyen,1,Sydney Girls High School
+15910,Latin Extension,Louise,Godhard,2,SCEGGS Darlinghurst
+15910,Latin Extension,Joshua Jun,Lin,3,SHORE - Sydney Church of England Grammar School
+15910,Latin Extension,Bruce,Chen,4,James Ruse Agricultural High School
+15910,Latin Extension,Peter,Taurian,5,Sydney Grammar School
+15220,Legal Studies,Michael Christian Koudoun,Glover,1,Knox Grammar School
+15220,Legal Studies,Zair,Ahmed,2,Baulkham Hills High School
+15220,Legal Studies,Andre,Thomas,3,St Euphemia College
+15220,Legal Studies,Julia,Lo Russo,4,Bethany College
+15220,Legal Studies,Samarah Danae,Vella,5,Bede Polding College
+15220,Legal Studies,Saleha,Sehgol,6,Baulkham Hills High School
+15220,Legal Studies,Georgia,Greentree,7,Davidson High School
+15220,Legal Studies,Jack,Temelkovski,8,St Philip's Christian College - Waratah
+15220,Legal Studies,Murphy,Pietranski,9,Reddam House
+15220,Legal Studies,Ella-Rose,Liasides,10,Georges River College Oatley Senior Campus
+15220,Legal Studies,Abdul Rahman,Bhatti,11,Green Valley Islamic College
+15220,Legal Studies,Corey,Baker,12,MacKillop College Port Macquarie
+15220,Legal Studies,Ryan Chi-Yan,Ng,13,Knox Grammar School
+15220,Legal Studies,William,Lam,14,Northern Beaches Secondary College Manly Campus
+15220,Legal Studies,Henry John,Rourke,15,Knox Grammar School
+15220,Legal Studies,Lachlan,Bamford,16,St Augustine's College Sydney
+15220,Legal Studies,Charlotte,Marks,17,Roseville College
+15220,Legal Studies,Finn Spencer,Vercoe,18,Barker College
+15220,Legal Studies,Ambert Yu Hao,Tran,19,Sefton High School
+15220,Legal Studies,Tianning,Zhang,19,North Sydney Boys High School
+15940,Macedonian Continuers,Viktoria,Gosarevska,1,Saturday School of Community Languages Kogarah HS Centre
+15940,Macedonian Continuers,Ana,Nikolovska,2,Saturday School of Community Languages Kogarah HS Centre
+15240,Mathematics,Jason,Chen,1,North Sydney Boys High School
+15240,Mathematics,Patrick,Fang,1,Gosford High School
+15240,Mathematics,Kya Alexander,Lamarra,1,Trinity Catholic College Goulburn
+15240,Mathematics,Jason Zhihao,Lin,1,Knox Grammar School
+15240,Mathematics,Natasha June-Ann,Ong,1,Kincoppal - Rose Bay School of the Sacred Heart
+15240,Mathematics,Guo En,Shao,1,Sydney Boys High School
+15240,Mathematics,Samarth,Shrivastava,1,North Sydney Boys High School
+15240,Mathematics,Niranjanan,Sriganeshwaran,1,Normanhurst Boys High School
+15240,Mathematics,Justin Hwi Min,Kim,9,Knox Grammar School
+15240,Mathematics,Timothy Kar Wai,Leong,10,Knox Grammar School
+15240,Mathematics,Anna Shu Qi,Jin,11,Meriden School
+15240,Mathematics,Bryan,Eng,12,Canley Vale High School
+15240,Mathematics,Felicity,Charls,13,Fort Street High School
+15240,Mathematics,Yen Hsing,Chen,13,Bonnyrigg High School
+15240,Mathematics,Eunice Wah Yan,Cheng,13,James Ruse Agricultural High School
+15240,Mathematics,Anthea,Condous,13,St Spyridon College
+15240,Mathematics,Louis,Donovan,13,Bulli High School
+15240,Mathematics,Isobel,Funnell,13,Brigidine College Randwick
+15240,Mathematics,Edric,Hu,13,The Scots College
+15240,Mathematics,Donghyeon,Lee,13,The King's School
+15240,Mathematics,Alison,Ma,13,Sydney Girls High School
+15240,Mathematics,Rebekah,Nehme,13,Catherine McAuley Westmead
+15240,Mathematics,Angela Yang,Pan,13,Hornsby Girls High School
+15240,Mathematics,Oreoluwa,Segun-Beloved,13,Trinity Anglican College - Albury
+15240,Mathematics,Thomas,Smelt,13,St Aloysius' College
+15240,Mathematics,Maja,Vasic,13,St George Girls High School
+15240,Mathematics,Yuhan,Zhou,13,Santa Sabina College
+15250,Mathematics Extension 1,Kim,Zheng,1,James Ruse Agricultural High School
+15250,Mathematics Extension 1,Joanna,Lin,2,North Sydney Girls High School
+15250,Mathematics Extension 1,Laura,Hardy,3,Turramurra High School
+15250,Mathematics Extension 1,Chris,Kwon,4,Homebush Boys High School
+15250,Mathematics Extension 1,Catherine,Shen,5,Conservatorium High School
+15250,Mathematics Extension 1,Peter,Nikas,6,St Spyridon College
+15250,Mathematics Extension 1,Kevin Si Yu,Fang,7,North Sydney Boys High School
+15250,Mathematics Extension 1,Ran,Shi,7,North Sydney Boys High School
+15250,Mathematics Extension 1,Dania,Al Rifai,9,Al-Faisal College
+15250,Mathematics Extension 1,Wenquan,Lu,10,Barker College
+15260,Mathematics Extension 2,Jocelin Shing-Yan,Hon,1,James Ruse Agricultural High School
+15260,Mathematics Extension 2,Francis Nhat-Phu,Nguyen,2,Sydney Boys High School
+15260,Mathematics Extension 2,Bruce,Chen,3,James Ruse Agricultural High School
+15260,Mathematics Extension 2,Nikki,Fang,4,Sydney Girls High School
+15260,Mathematics Extension 2,Louisa,Leone,5,Bethany College
+15260,Mathematics Extension 2,Eagan,Jiang,6,James Ruse Agricultural High School
+15260,Mathematics Extension 2,Kim,Zheng,7,James Ruse Agricultural High School
+15260,Mathematics Extension 2,Haowen,Gao,8,Knox Grammar School
+15260,Mathematics Extension 2,Martin Si-Khanh,Tran,9,Hurlstone Agricultural High School
+15260,Mathematics Extension 2,Emilie Guang-Rui,Wu,10,James Ruse Agricultural High School
+15232,Mathematics Standard 1 Examination,Amelia Annie Kay,Smith,1,Wyndham College
+15232,Mathematics Standard 1 Examination,Eden,Cole,2,Gilroy Catholic College
+15232,Mathematics Standard 1 Examination,Eliza,Justins,2,Chatswood High School
+15232,Mathematics Standard 1 Examination,Aaron,Nguyen,2,La Salle Catholic College
+15232,Mathematics Standard 1 Examination,William,Lipscombe,5,Menai High School
+15232,Mathematics Standard 1 Examination,Kiara,Kriss,6,St Mary Star of the Sea College
+15232,Mathematics Standard 1 Examination,Sarah,Bayly,7,Warners Bay High School
+15232,Mathematics Standard 1 Examination,Charmaine,Clemente,7,Our Lady of the Sacred Heart College
+15232,Mathematics Standard 1 Examination,Makenna,Cordery,7,Gilroy Catholic College
+15232,Mathematics Standard 1 Examination,Zahra Hazel,Kemp-Tollefsen,7,Burwood Girls High School
+15236,Mathematics Standard 2,Brendan Mark,Mitchell,1,St Patrick's Marist College
+15236,Mathematics Standard 2,Finn Spencer,Vercoe,1,Barker College
+15236,Mathematics Standard 2,Abdulazeez,Kheir,3,Al-Faisal College
+15236,Mathematics Standard 2,Tallulah-Rose,Adams,4,Wenona School
+15236,Mathematics Standard 2,Ali,Alsaad,5,Alpha Omega Senior College
+15236,Mathematics Standard 2,Leah,Flanagan,5,Presbyterian Ladies' College Sydney
+15236,Mathematics Standard 2,Tiffany Vivienne,Lee Walker,5,Macarthur Anglican School
+15236,Mathematics Standard 2,Othman,Loraichi,5,Al-Faisal College
+15236,Mathematics Standard 2,Samarah Danae,Vella,5,Bede Polding College
+15236,Mathematics Standard 2,Anthea Katherine,Kasses,10,Reddam House
+15236,Mathematics Standard 2,Tasha,Lapidge,10,Reddam House
+15236,Mathematics Standard 2,Husein,Swaid,10,Al-Faisal College
+15236,Mathematics Standard 2,Lily,O'Brien,13,Mount St Benedict College
+15236,Mathematics Standard 2,Ibrahim,Ashry,14,Al-Faisal College
+15236,Mathematics Standard 2,Leonie,Cannon,14,Illawarra Institute - Wollongong Campus
+15236,Mathematics Standard 2,William,Eisenhuth,14,Oakhill College Castle Hill
+15236,Mathematics Standard 2,Joseph,Lyons,14,Waverley College
+15236,Mathematics Standard 2,Jeremy Keiran,Skinner,14,Caringbah High School
+15236,Mathematics Standard 2,Ryan,Costin,19,St Luke's Grammar School
+15236,Mathematics Standard 2,Samuel Joseph,McKay,19,Knox Grammar School
+26799,Metal and Engineering Examination,Jamie,Austin,1,Canowindra High School
+15970,Modern Greek Beginners,Stella,Kretzas,1,NSW School of Languages
+15970,Modern Greek Beginners,Christopher,Katsikas,2,NSW School of Languages
+15970,Modern Greek Beginners,Evelyn,Hatziioannou,3,NSW School of Languages
+15970,Modern Greek Beginners,Antonia,Tsoukalas,4,NSW School of Languages
+15970,Modern Greek Beginners,Alessandro,Jafari,5,NSW School of Languages
+15980,Modern Greek Continuers,Savina-Ipapanti,Ellina,1,Saturday School of Community Languages St George Girls HS Centre
+15980,Modern Greek Continuers,Denise,Angelopoulos,2,NSW School of Languages
+15980,Modern Greek Continuers,Georgia,Kalogianni,3,NSW School of Languages
+15980,Modern Greek Continuers,Zoe-Vasilia,Fountotos,4,All Saints Grammar
+15980,Modern Greek Continuers,Konstantina,Koliopanos,4,St Spyridon College
+15990,Modern Greek Extension,Savina-Ipapanti,Ellina,1,Saturday School of Community Languages St George Girls HS Centre
+15990,Modern Greek Extension,Zoe-Vasilia,Fountotos,2,All Saints Grammar
+15990,Modern Greek Extension,Ypapanti Savvina,Michailou,3,Moorefield Girls High School
+15990,Modern Greek Extension,Vicki,Patapis,4,NSW School of Languages
+15990,Modern Greek Extension,Styliani,Katsoulis,5,Saturday School of Community Languages The Hills Sports HS Centre
+16000,Modern Hebrew Continuers,Bar,Shulman,1,Masada College
+16000,Modern Hebrew Continuers,Ran,Ashkenazi,2,Masada College
+16000,Modern Hebrew Continuers,Shani,Ieremias,3,Masada College
+16000,Modern Hebrew Continuers,Jonathan,Freund,4,Reddam House
+16000,Modern Hebrew Continuers,Bar,Peretz,5,Outside Tutor
+15270,Modern History,Hortin,Zeng,1,Knox Grammar School
+15270,Modern History,Bar,Shulman,2,Masada College
+15270,Modern History,Seohyeong,Lim,3,Ashfield Boys High School
+15270,Modern History,Man Ching Melvin,Chan,4,Sydney Boys High School
+15270,Modern History,Katherine Sandra,Willetts,5,Meriden School
+15270,Modern History,Rayan,Osman,6,"Amity College, Prestons"
+15270,Modern History,Stella,Ktenas,7,St Spyridon College
+15270,Modern History,David,Palmerlee,8,Sydney Grammar School
+15270,Modern History,Luke Costa,Sheridan,9,St Patrick's Marist College
+15270,Modern History,Julie,Nguyen,10,Sydney Girls High School
+15270,Modern History,Zoe,Gross,11,Reddam House
+15270,Modern History,Annabelle,Duke,12,Tara Anglican School for Girls
+15270,Modern History,Charles Anthony,Ransom,13,"St Patrick's College, Strathfield"
+15270,Modern History,Tilda Elaine Harmston,Stafford,14,Meriden School
+15270,Modern History,Ayra,Kassam,15,Pymble Ladies' College
+15270,Modern History,Mairead,Stone,16,Loreto Normanhurst
+15270,Modern History,Alexandra,McKinnon,17,Northern Beaches Secondary College Manly Campus
+15270,Modern History,Austin Stuart,Thomson,18,Knox Grammar School
+15270,Modern History,Harry,Stanton,19,St Aloysius' College
+15270,Modern History,Ryan Chi-Yan,Ng,20,Knox Grammar School
+15290,Music 1,Gabrielle,Shaw,1,Mater Dei Catholic College
+15290,Music 1,Andrew Vladislav,Bidny,2,St Patrick's Marist College
+15290,Music 1,Tanaya,Kumar,3,Loreto Normanhurst
+15290,Music 1,Perry Jackson,McIntyre,3,St Philip's Christian College - Waratah
+15290,Music 1,Simone,Ogg,3,Mount St Patrick College
+15290,Music 1,Danika Jean,Rojas,3,William Clarke College
+15290,Music 1,Hugo,Hayman,7,Cranbrook School
+15290,Music 1,Isaiah Peter,Kezelos,7,Macarthur Anglican School
+15290,Music 1,Hannah Kate,Millar,7,Sylvania High School
+15290,Music 1,Mia,Gillard,10,Narara Valley High School
+15290,Music 1,Heath,Lancaster,10,St Paul's College
+15300,Music 2,Stella Dora,Leonardi,1,Abbotsleigh
+15300,Music 2,Maia,Hopf,2,Northern Beaches Secondary College Manly Campus
+15300,Music 2,Elden,Loomes,2,Northern Beaches Secondary College Manly Campus
+15300,Music 2,Harry Sebastian Christopher,Wagstaff,2,Knox Grammar School
+15300,Music 2,Peter Philip Gerry,Koch,5,Knox Grammar School
+15300,Music 2,Katherine,Wang,5,Sydney Girls High School
+15310,Music Extension,Isaac,Davis,1,Conservatorium High School
+15310,Music Extension,Katherine,Wang,2,Sydney Girls High School
+15310,Music Extension,Jared,Adams,3,Sydney Grammar School
+15310,Music Extension,Emily,Scarlis,4,Kambala
+15310,Music Extension,Shimeng,Chen,5,Pymble Ladies' College
+15310,Music Extension,Simone,Wei,5,Sydney Girls High School
+16015,Persian Continuers,Paniz,Sangi,1,Saturday School of Community Languages Arthur Phillip HS Centre
+16015,Persian Continuers,Mohammad,Nabiei,2,Outside Tutor
+16015,Persian Continuers,Maedeh,Ghamoush Ramandi,3,Saturday School of Community Languages Arthur Phillip HS Centre
+16015,Persian Continuers,Saiedeh Shiva,Hossaini,4,Saturday School of Community Languages Arthur Phillip HS Centre
+16015,Persian Continuers,Ali,Sahebi Hagh,5,Outside Tutor
+15320,"Personal Development, Health and Physical Education",Emma Cate,Scroope,1,Loreto Kirribilli
+15320,"Personal Development, Health and Physical Education",Cecilia,Ryan,2,Mount St Patrick College
+15320,"Personal Development, Health and Physical Education",Megan,Moshovelis,3,Northern Beaches Secondary College Manly Campus
+15320,"Personal Development, Health and Physical Education",Kara Liang Yun,Wong,4,North Sydney Girls High School
+15320,"Personal Development, Health and Physical Education",Abhinayeni,Kuhasri,5,James Ruse Agricultural High School
+15320,"Personal Development, Health and Physical Education",Gemma,Hinton,6,Fort Street High School
+15320,"Personal Development, Health and Physical Education",Sally,Guthrie,7,Pymble Ladies' College
+15320,"Personal Development, Health and Physical Education",Anagha,Kanive-Hariharan,8,James Ruse Agricultural High School
+15320,"Personal Development, Health and Physical Education",Rayan,Osman,9,"Amity College, Prestons"
+15320,"Personal Development, Health and Physical Education",Kahlia,Rae,10,Asquith Girls High School
+15320,"Personal Development, Health and Physical Education",Annabelle,Hickson,11,Frensham School
+15320,"Personal Development, Health and Physical Education",Noah,Rubin,11,Moriah College
+15320,"Personal Development, Health and Physical Education",Astrid Elyse,Smith,11,Macksville High School
+15320,"Personal Development, Health and Physical Education",Jimmy,Arfanis,14,Aquinas Catholic College
+15320,"Personal Development, Health and Physical Education",Emma,Dinneen,15,Stella Maris College
+15320,"Personal Development, Health and Physical Education",Joshua,Haydon,15,St Dominic's College
+15320,"Personal Development, Health and Physical Education",Bhumika Sree,Gowda,17,Girraween High School
+15320,"Personal Development, Health and Physical Education",Gulcan,Uzuntepe,18,"Amity College, Prestons"
+15320,"Personal Development, Health and Physical Education",Luca Paul Mendes,Lamond,19,The Scots School Albury
+15320,"Personal Development, Health and Physical Education",Saskia,Newman,20,Pymble Ladies' College
+15330,Physics,Wenquan,Lu,1,Barker College
+15330,Physics,Jadon Ryan,Yang,2,Sydney Boys High School
+15330,Physics,David,Lee,3,James Ruse Agricultural High School
+15330,Physics,Kim,Zheng,3,James Ruse Agricultural High School
+15330,Physics,Joanna,Lin,5,North Sydney Girls High School
+15330,Physics,Jessica Wenjie,Qiao,5,Meriden School
+15330,Physics,Bob,Chen,7,James Ruse Agricultural High School
+15330,Physics,Luke,Harris,8,Waverley College
+15330,Physics,Daniel Ross,Monteiro,8,Cherrybrook Technology High School
+15330,Physics,Matthew Wei Shun,Shu,8,James Ruse Agricultural High School
+15330,Physics,Zachary Galen,Slonim,8,Knox Grammar School
+16020,Polish Continuers,Natalia,Grodek,1,Saturday School of Community Languages Chatswood HS Centre
+16020,Polish Continuers,Paulina,Siewicz,2,Saturday School of Community Languages Liverpool Girls HS Centre
+16020,Polish Continuers,Amelie,Gnatek,3,Saturday School of Community Languages Chatswood HS Centre
+16020,Polish Continuers,John,Hefka,4,Saturday School of Community Languages Ashfield Boys HS Centre
+16020,Polish Continuers,Maria,Liszka,5,Saturday School of Community Languages Ashfield Boys HS Centre
+16030,Portuguese Continuers,Lara Beatriz,Santos Soares Braga,1,Saturday School of Community Languages Dulwich Centre
+16030,Portuguese Continuers,Dikai,Yan,2,Outside Tutor
+16030,Portuguese Continuers,Laura,Cafe,3,Outside Tutor
+16030,Portuguese Continuers,Brenda,Carvalho Santos,4,Saturday School of Community Languages Dulwich Centre
+16030,Portuguese Continuers,Daniel,Van Sluys Erlich,5,NSW School of Languages
+26899,Primary Industries Examination,Safina,Ireland,1,Calrossy Anglican School
+26899,Primary Industries Examination,Tessa,Mitchell,2,Calrossy Anglican School
+26899,Primary Industries Examination,Megan,Seis,2,Calrossy Anglican School
+26899,Primary Industries Examination,Mekaela Mei Shan,Hockey,4,Hurlstone Agricultural High School
+26899,Primary Industries Examination,Danielle Laura,Mannes,5,Coleambally Central School
+16035,Punjabi Continuers,Jasmeet,Kaur,1,Saturday School of Community Languages The Hills Sports HS Centre
+16035,Punjabi Continuers,Jashanpreet Kaur,Bola,2,Saturday School of Community Languages The Hills Sports HS Centre
+16035,Punjabi Continuers,Komal,Saini,3,Saturday School of Community Languages The Hills Sports HS Centre
+16035,Punjabi Continuers,Nikita,Nikita,4,Saturday School of Community Languages The Hills Sports HS Centre
+16035,Punjabi Continuers,Ravneet,Kaur,5,Saturday School of Community Languages The Hills Sports HS Centre
+26999,Retail Services Examination,Tamra,Degotardi,1,Xavier Catholic College Ballina
+26999,Retail Services Examination,Ellie Louise,Waight,1,Dungog High School
+26999,Retail Services Examination,Lily Maree,Lean,3,Dungog High School
+26999,Retail Services Examination,Joanne,Dalima,4,Sydney Secondary College Blackwattle Bay Campus
+26999,Retail Services Examination,Georgia Evangeline,Allen,5,Canley Vale High School
+26999,Retail Services Examination,Rachel,Amos,5,Mount View High School
+26999,Retail Services Examination,Samira,Ismail,5,Birrong Girls High School
+16045,Russian Continuers,Tamila,Eshchenko,1,NSW School of Languages
+16045,Russian Continuers,Daryna,Mardar,2,NSW School of Languages
+16045,Russian Continuers,Lubava,Dmitrieva,3,NSW School of Languages
+16045,Russian Continuers,Lolita,Eshba,4,NSW School of Languages
+16045,Russian Continuers,Donatella,Rikkone,5,NSW School of Languages
+15345,Science Extension,Eunice Wah Yan,Cheng,1,James Ruse Agricultural High School
+15345,Science Extension,Yve,Nichols-Evans,2,Gosford High School
+15345,Science Extension,Lachlan Stephen,Keane,3,Newcastle Grammar School
+15345,Science Extension,Nicholas,Fakira,4,Barker College
+15345,Science Extension,Daniel Ross,Monteiro,5,Cherrybrook Technology High School
+16050,Serbian Continuers,Milica,Pupovac,1,Saturday School of Community Languages Liverpool Girls HS Centre
+16050,Serbian Continuers,Stefan,Vujanic,2,Saturday School of Community Languages Liverpool Girls HS Centre
+16050,Serbian Continuers,Tanja,Basrak,3,Saturday School of Community Languages Smiths Hill HS Centre
+16050,Serbian Continuers,Anja,Petkovic,3,Saturday School of Community Languages Dulwich Centre
+16050,Serbian Continuers,Igor,Milic,5,Saturday School of Community Languages Liverpool Girls HS Centre
+15350,Society and Culture,Emma,Gaston,1,Port Hacking High School
+15350,Society and Culture,Muir,McLennan,1,Arndell Anglican College
+15350,Society and Culture,Sanjana,Janardhan,3,Macarthur Girls High School
+15350,Society and Culture,Nidhi,Nair,4,Macarthur Girls High School
+15350,Society and Culture,Lara,Hather,5,Northern Beaches Secondary College Manly Campus
+15350,Society and Culture,Paris,Spennato,6,Emanuel School
+15350,Society and Culture,Mariam,Arsalah,7,Willoughby Girls High School
+15350,Society and Culture,Eun Sol - Josephine,Lee,8,Willoughby Girls High School
+15350,Society and Culture,Tess,Guo,9,Willoughby Girls High School
+15350,Society and Culture,Zahra Louise,Kumarasinhe,10,Willoughby Girls High School
+15360,Software Design and Development,Jason,Liu,1,James Ruse Agricultural High School
+15360,Software Design and Development,Haowen,Gao,2,Knox Grammar School
+15360,Software Design and Development,Eric Rickard,Holmstrom,2,Sydney Boys High School
+15360,Software Design and Development,Dawei,Wu,4,Sydney Boys High School
+15360,Software Design and Development,Trent John,Muskens,5,Knox Grammar School
+15360,Software Design and Development,Reid,Wang,6,James Ruse Agricultural High School
+15360,Software Design and Development,Arielle,Gravning,7,James Ruse Agricultural High School
+15360,Software Design and Development,Kyle,Phabmixay,8,Girraween High School
+15360,Software Design and Development,Peter Benjamin,Tyas,9,St George Christian School
+15360,Software Design and Development,Benjamin James,Daniell,10,Canberra Grammar School
+16070,Spanish Beginners,Shenani Angeleeca,Koren,1,Hornsby Girls High School
+16070,Spanish Beginners,Meha,Batra,2,Hornsby Girls High School
+16070,Spanish Beginners,Pooja,Vyas,3,Hornsby Girls High School
+16070,Spanish Beginners,Charlotte,Foster,4,Wenona School
+16070,Spanish Beginners,Ariana,Ricci,5,NSW School of Languages
+16080,Spanish Continuers,Simon,Peyrachon,1,NSW School of Languages
+16080,Spanish Continuers,Alida,Ondo Akeng,2,NSW School of Languages
+16080,Spanish Continuers,Mathilde,Hinchcliffe,3,St Catherine's School
+16080,Spanish Continuers,Maria Victoria,Ciccone,4,NSW School of Languages
+16080,Spanish Continuers,Connor,Ziade,5,Saturday School of Community Languages Chatswood HS Centre
+16090,Spanish Extension,Shirley,Nagamine,1,Saturday School of Community Languages The Hills Sports HS Centre
+16090,Spanish Extension,Oscar Santiago,Novoa Chala,2,Saturday School of Community Languages Ashfield Boys HS Centre
+16090,Spanish Extension,Matilde Cecilia,Carbonell Iturra,3,Saturday School of Community Languages Liverpool Girls HS Centre
+16090,Spanish Extension,Salvador Elias,Arce,4,Saturday School of Community Languages The Hills Sports HS Centre
+16090,Spanish Extension,Ingrid,Holtheuer,5,NSW School of Languages
+15370,Studies of Religion I,Elliot,Hyland,1,St Stanislaus' College
+15370,Studies of Religion I,Natalie,Martinez,2,Loreto Normanhurst
+15370,Studies of Religion I,Sophie Caitlin,Vernicos,2,William Clarke College
+15370,Studies of Religion I,Palvi,Bothra,4,St Scholastica's College Glebe Point
+15370,Studies of Religion I,Greer,Pollard,5,Loreto Normanhurst
+15370,Studies of Religion I,Nash,Hawkins,6,Parramatta Marist High School
+15370,Studies of Religion I,Samuel,Moses,7,Marist College Eastwood
+15370,Studies of Religion I,Emma,Robinson,8,Freeman Catholic College
+15370,Studies of Religion I,Alyssa,Simone,9,St Ursula's College
+15370,Studies of Religion I,Jessica Maree,Pelley,10,St Francis Xavier's College
+15380,Studies of Religion II,Abdul Rahman,Bhatti,1,Green Valley Islamic College
+15380,Studies of Religion II,Son Hoang,Nguyen,2,Sydney Boys High School
+15380,Studies of Religion II,Lachlan,Manastirovski,3,Waverley College
+15380,Studies of Religion II,Adam,Simic,4,Sydney Boys High School
+15380,Studies of Religion II,Julia,Lo Russo,5,Bethany College
+15380,Studies of Religion II,Christopher Marc,Farag,6,"St Patrick's College, Strathfield"
+15380,Studies of Religion II,Nicholas,Davies,7,St Joseph's College
+15380,Studies of Religion II,Luke Costa,Sheridan,8,St Patrick's Marist College
+15380,Studies of Religion II,Daniella,El-Azzi,9,St Charbel's College
+15380,Studies of Religion II,Lawrence,De Pellegrin,10,"St Patrick's College, Strathfield"
+15380,Studies of Religion II,Harry,Whitaker,10,Waverley College
+16100,Swedish Continuers,Amanda Christina,Matejka,1,Outside Tutor
+16100,Swedish Continuers,Ebba Karin,Horvath,2,Davidson High School
+16100,Swedish Continuers,Jacobina Victoria,Jansson,3,Outside Tutor
+16100,Swedish Continuers,Lukas,Hannam,4,Outside Tutor
+16110,Tamil Continuers,Digana,Satheesh,1,Outside Tutor
+16110,Tamil Continuers,Anjala,Ranjith,2,Outside Tutor
+16110,Tamil Continuers,Thanaja,Arunmoleythevar,3,Outside Tutor
+16110,Tamil Continuers,Mariyam Suha,Mohamed Ashad,4,Outside Tutor
+16110,Tamil Continuers,Jenifer,Surenthirakumar,5,Outside Tutor
+15390,Textiles and Design,Lilli Rose,Mosco-Klipin,1,Bishop Druitt College
+15390,Textiles and Design,Tanisha,Dasmohapatra,2,Hornsby Girls High School
+15390,Textiles and Design,Natalie,Winiarski,2,Mount St Benedict College
+15390,Textiles and Design,Elizabeth,Tong,4,Hornsby Girls High School
+15390,Textiles and Design,Mia Rosa Rigmor,Honigstock,5,Newtown High School of Performing Arts
+15390,Textiles and Design,Stella,Li,5,North Sydney Girls High School
+15390,Textiles and Design,Ella,Ward,5,Brigidine College St Ives
+15390,Textiles and Design,Erin,Dalton,8,Woolgoolga High School
+15390,Textiles and Design,Charlotte,Collier,9,Wenona School
+15390,Textiles and Design,Matilda,Swann,9,MLC School
+27499,"Tourism, Travel and Events Examination",Olivia,Deppeler-Howe,1,Northern Sydney Institute - Ryde College
+27499,"Tourism, Travel and Events Examination",Kiera Alyssa,Parnell,2,Sydney Institute - Sutherland College-Loftus Campus
+27499,"Tourism, Travel and Events Examination",Grace Robyn,Buono,3,Northern Sydney Institute - Northern Beaches Campus
+16120,Turkish Continuers,Irem,Toplu,1,"Amity College, Prestons"
+16120,Turkish Continuers,Aleyna,Yilmaz,2,Saturday School of Community Languages Arthur Phillip HS Centre
+16120,Turkish Continuers,Pelin,Ozen,3,"Amity College, Prestons"
+16120,Turkish Continuers,Sheyma,Altun,4,"Amity College, Prestons"
+16120,Turkish Continuers,Ayse Gul,Mermi,5,"Amity College, Prestons"
+16140,Vietnamese Continuers,Thuy Linh,Nguyen,1,Cabramatta High School
+16140,Vietnamese Continuers,Tieu Ngoc,Truong,2,Cabramatta High School
+16140,Vietnamese Continuers,Nguyen Kieu Oanh,Le,3,Bonnyrigg High School
+16140,Vietnamese Continuers,Bao Thinh,Tran,4,Cabramatta High School
+16140,Vietnamese Continuers,Huong Ly,Hoang,5,Saturday School of Community Languages Dulwich Centre
+15400,Visual Arts,Adam,Gottschalk,1,Sydney Grammar School
+15400,Visual Arts,Amie Vy Paik,Doan,2,Hornsby Girls High School
+15400,Visual Arts,Claire,Shi,2,Presbyterian Ladies' College Sydney
+15400,Visual Arts,Skye,Holmwood,4,Oxley College
+15400,Visual Arts,Moe,Iwasawa,4,Northern Beaches Secondary College Manly Campus
+15400,Visual Arts,Sophie,Zhang,4,North Sydney Girls High School
+15400,Visual Arts,Keke,Luo,7,Sydney Grammar School
+15400,Visual Arts,Joshua,Khoury,8,Sydney Grammar School
+15400,Visual Arts,Josephine,Collins,9,Hornsby Girls High School
+15400,Visual Arts,Eli,Narev,10,Sydney Grammar School
