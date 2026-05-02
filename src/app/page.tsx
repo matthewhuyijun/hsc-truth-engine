@@ -98,21 +98,20 @@ export default function HomePage() {
           </span>
           <div className="mt-8 space-y-5 text-foreground/85 leading-relaxed">
             <p>
-              This project exists because of teachers who gave more than they were paid for. Staying late to mark
-              quizzes, writing feedback from home, choosing a profession that does not reflect their talent in their
-              paycheque — yet somehow never running out of patience or belief in their students. If you had a teacher
-              like that, you know exactly what I mean.
+              This project was built with respect for the teachers who made the HSC what it is — the ones who
+              stayed back, wrote detailed feedback, and treated their students' results like they mattered. If you
+              had one, you get it.
             </p>
             <p>
-              It is for every student who showed up and tried. Your Band 6 is recorded here. Your state rank is on
-              this site. The late nights, the early mornings, the grind — none of it is forgotten.
+              It's also for every student who cared enough to grind. The late nights, the early mornings — none of
+              that disappears. If you earned a place on this list, it stays. If you're class of 2025 like me, maybe
+              that pushes you to leave your name here too.
             </p>
             <p>
-              The HSC is rare. No connections required. No background checks. Just show up, do the work, and the
-              system does the rest. It might be the last chapter of life that is this simple, this fair, this real.
-              All the data on this site compares you against others — but at the end of the day, the only thing you
-              can control is yourself. Improving on who you were yesterday is the one thing nobody else can give you,
-              and the one thing you can actually be proud of.
+              The HSC has no prerequisites. No connections, no background checks, no shortcuts — just turn up and do
+              the work. It's a system that rewards effort, and that's worth acknowledging. This site compares you
+              against thousands of others, but the only thing you control is yourself. Getting better than you were
+              yesterday: that's the actual win.
             </p>
             <p className="pt-2 text-muted">
               — Matthew
