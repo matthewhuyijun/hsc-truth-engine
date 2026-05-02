@@ -419,7 +419,7 @@ export default function InsightsPage() {
           </p>
           <a 
             href="/calculator"
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 font-medium text-white shadow-lg shadow-accent/25 transition-all hover:bg-accent/90 hover:shadow-accent/40"
+            className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 font-medium text-background shadow-lg shadow-accent/25 transition-all hover:bg-accent/90 hover:shadow-accent/40"
           >
             <Calculator className="h-4 w-4" />
             Open Calculator
