@@ -213,7 +213,7 @@ export default function InsightsPage() {
       {/* ===== HERO ===== */}
       <section className="relative overflow-hidden border-b border-border">
         
-        <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
+        <div className="relative mx-auto max-w-5xl px-4 py-16 sm:py-24">
           <div className="flex items-center gap-2 mb-6">
             <Terminal className="h-5 w-5 text-accent" />
             <span className="text-sm font-mono font-medium text-accent uppercase tracking-wider">HSC Data</span>
@@ -241,7 +241,7 @@ export default function InsightsPage() {
 
       {/* ===== THREE MYTHS ===== */}
       <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl px-4">
           <div className="flex items-center gap-3 mb-12">
             <AlertTriangle className="h-6 w-6 text-rose-500" />
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">Myths That Refuse to Die</h2>
@@ -294,7 +294,7 @@ export default function InsightsPage() {
 
       {/* ===== TIMELINE: NESA ===== */}
       <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-5xl px-4">
           <div className="flex items-center gap-3 mb-4">
             <TrendingUp className="h-6 w-6 text-accent" />
             <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">The Complete Pipeline</h2>
@@ -408,7 +408,7 @@ export default function InsightsPage() {
 
       {/* ===== FOOTER CTA ===== */}
       <section className="border-t border-border py-16 bg-surface">
-        <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
+        <div className="mx-auto max-w-5xl px-4 text-center">
           <BarChart3 className="h-10 w-10 text-accent mx-auto mb-6" />
           <h2 className="text-2xl font-bold tracking-tight mb-4">
             Want to run the numbers yourself?
