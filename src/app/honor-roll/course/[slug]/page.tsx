@@ -101,7 +101,7 @@ function CourseDetailSkeleton() {
   return (
     <div className="min-h-screen">
       <section className="border-b border-border">
-        <div className="mx-auto max-w-5xl px-4 pt-6 pb-4">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-4">
           <div className="flex items-center gap-2">
             <div className="h-5 w-20 bg-surface rounded animate-pulse" />
             <div className="h-3 w-3 bg-surface rounded animate-pulse" />
@@ -110,7 +110,7 @@ function CourseDetailSkeleton() {
             <div className="h-5 w-40 bg-surface rounded animate-pulse" />
           </div>
         </div>
-        <div className="mx-auto max-w-5xl px-4 pb-10">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10">
           <div className="space-y-3">
             <div className="h-9 w-64 bg-surface rounded animate-pulse" />
             <div className="h-4 w-48 bg-surface rounded animate-pulse" />
@@ -119,7 +119,7 @@ function CourseDetailSkeleton() {
       </section>
 
       <section className="sticky top-14 z-10 border-b border-border bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto max-w-5xl px-4 py-2">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
           <div className="flex items-center gap-1 overflow-x-auto">
             {Array.from({ length: 10 }).map((_, i) => (
               <div key={i} className="h-7 w-14 bg-surface rounded animate-pulse flex-shrink-0" />
@@ -128,7 +128,7 @@ function CourseDetailSkeleton() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 py-8">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {Array.from({ length: 4 }).map((_, i) => (
             <div key={i} className="rounded-lg border border-border bg-surface p-5">
@@ -139,7 +139,7 @@ function CourseDetailSkeleton() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 py-8 border-t border-border">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-8 border-t border-border">
         <div className="h-6 w-48 bg-surface rounded animate-pulse mb-4" />
         <div className="rounded-xl border border-border bg-surface overflow-hidden">
           <div className="grid grid-cols-12 gap-4 border-b border-border px-6 py-3 text-xs font-medium text-muted">
@@ -362,12 +362,12 @@ function CourseDetailContent({
           <YearTabBar currentYear={currentYear} onSelect={handleYearSelect} />
 
           {isAllYears ? (
-            <div className="mx-auto max-w-5xl divide-y divide-border">
+            <div className="mx-auto max-w-7xl divide-y divide-border">
               <YearBreakdownSection courseData={courseData} courseCode={resolvedParams.slug} />
               <TopSchoolsOverTimeSection courseCode={resolvedParams.slug} />
             </div>
           ) : (
-            <div className="mx-auto max-w-5xl divide-y divide-border">
+            <div className="mx-auto max-w-7xl divide-y divide-border">
               {courseStats && (
                 <CourseEnrollmentSection courseStats={courseStats} year={currentYear} />
               )}
@@ -411,7 +411,7 @@ function HeaderSection({
 
   return (
     <section className="border-b border-border">
-      <div className="mx-auto max-w-5xl px-4 pt-6 pb-4">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-4">
         <div className="flex items-center gap-2 text-base text-muted/70">
           <Link href="/honor-roll" className="hover:text-foreground transition-colors">
             Honor Roll
@@ -429,7 +429,7 @@ function HeaderSection({
           </span>
         </div>
       </div>
-      <div className="mx-auto max-w-5xl px-4 pb-10">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pb-10">
         {loading ? (
           <div className="space-y-3">
             <div className="h-9 w-64 bg-surface rounded" />
@@ -526,7 +526,7 @@ function YearTabBar({
 }) {
   return (
     <section className="sticky top-14 z-10 border-b border-border bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto max-w-5xl px-4 py-2">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
         <div className="flex items-center gap-1 overflow-x-auto">
           <button
             onClick={() => onSelect(ALL_YEARS)}
@@ -1124,7 +1124,7 @@ function CourseEnrollmentSection({
 function Footer() {
   return (
     <section className="py-16">
-      <div className="mx-auto max-w-5xl px-4">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <p className="text-xs text-muted">
           Data sourced from NESA official publications. Not affiliated with NESA or UAC.
         </p>

@@ -43,7 +43,7 @@ function HonorRollSkeleton() {
   return (
     <div className="min-h-screen">
       <section className="border-b border-border">
-        <div className="mx-auto max-w-5xl px-4 py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center gap-3 mb-3">
             <div className="h-5 w-5 bg-surface rounded animate-pulse" />
             <div className="h-4 w-36 bg-surface rounded animate-pulse" />
@@ -54,7 +54,7 @@ function HonorRollSkeleton() {
       </section>
 
       <section className="sticky top-14 z-10 border-b border-border bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto max-w-5xl px-4 py-3">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <div className="h-9 w-40 bg-surface rounded-lg animate-pulse" />
@@ -66,7 +66,7 @@ function HonorRollSkeleton() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 py-6">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         <div className="rounded-xl border border-border bg-surface overflow-hidden">
           <div className="grid grid-cols-12 gap-4 border-b border-border px-6 py-3 text-xs font-medium text-muted">
             <div className="col-span-1">#</div>
@@ -206,7 +206,7 @@ function HonorRollContent() {
   return (
     <div className="min-h-screen">
       <section className="border-b border-border">
-        <div className="mx-auto max-w-5xl px-4 py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
           <div className="flex items-center gap-3 mb-3">
             <Award className="h-5 w-5 text-muted" />
             <span className="text-xs font-medium uppercase tracking-wider text-muted">
@@ -223,7 +223,7 @@ function HonorRollContent() {
       </section>
 
       <section className="sticky top-14 z-10 border-b border-border bg-background/95 backdrop-blur-sm">
-        <div className="mx-auto max-w-5xl px-4 py-3">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-3">
               <div className="flex rounded-lg border border-border overflow-hidden">
@@ -282,7 +282,7 @@ function HonorRollContent() {
         </div>
       </section>
 
-      <section className="mx-auto max-w-5xl px-4 py-6">
+      <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
         <div className="rounded-xl border border-border bg-surface overflow-hidden">
           {tab === 'schools' ? (
             <>

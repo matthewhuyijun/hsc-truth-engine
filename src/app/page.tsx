@@ -27,7 +27,7 @@ export default function HomePage() {
     <div className="h-[calc(100vh-3.5rem)] overflow-y-auto snap-y snap-mandatory scroll-smooth">
       {/* Hero */}
       <section className="snap-start min-h-screen flex items-center relative border-b border-border">
-        <div className="mx-auto max-w-5xl px-4 py-24 sm:py-32 w-full">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-24 sm:py-32 w-full">
           <span className="text-xs font-medium uppercase tracking-wider text-muted">
             HSC Data
           </span>
@@ -60,7 +60,7 @@ export default function HomePage() {
 
       {/* Modules */}
       <section className="snap-start min-h-screen flex items-center border-b border-border">
-        <div className="mx-auto max-w-5xl px-4 w-full">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <span className="text-xs font-medium uppercase tracking-wider text-muted">
             Three Tools
           </span>
@@ -122,7 +122,7 @@ export default function HomePage() {
 
       {/* Source */}
       <section className="snap-start min-h-screen flex items-center">
-        <div className="mx-auto max-w-5xl px-4 w-full">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <span className="text-xs font-medium uppercase tracking-wider text-muted">
             Data Sources
           </span>

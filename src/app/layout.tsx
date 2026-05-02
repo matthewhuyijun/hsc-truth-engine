@@ -139,7 +139,7 @@ export default function RootLayout({
 
         {/* Footer */}
         <footer className="border-t border-border/50 py-8">
-          <div className="mx-auto max-w-5xl px-4">
+          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
               <p className="text-xs text-muted">
                 Data sourced from NESA. Not affiliated with NESA or UAC.
