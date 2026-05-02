@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useRef, useCallback } from "react";
 import {
   LineChart,
   Line,
@@ -11,6 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { Download } from "lucide-react";
 import type { CourseCurve, YearMode, GraphMode } from "@/lib/scaling";
 
 const LINE_COLORS = [
@@ -93,9 +94,57 @@ function CustomTooltip({ active, payload, label }: any) {
   );
 }
 
+function downloadGraph(svgElement: SVGSVGElement) {
+  const clone = svgElement.cloneNode(true) as SVGSVGElement;
+  const bbox = svgElement.getBoundingClientRect();
+  const w = bbox.width || 800;
+  const h = bbox.height || 500;
+  clone.setAttribute("width", String(w));
+  clone.setAttribute("height", String(h));
+
+  // Set white background
+  const bg = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+  bg.setAttribute("width", "100%");
+  bg.setAttribute("height", "100%");
+  bg.setAttribute("fill", "white");
+  clone.insertBefore(bg, clone.firstChild);
+
+  const svgData = new XMLSerializer().serializeToString(clone);
+  const canvas = document.createElement("canvas");
+  canvas.width = w * 2;
+  canvas.height = h * 2;
+  const ctx = canvas.getContext("2d")!;
+  ctx.scale(2, 2);
+
+  const img = new Image();
+  const blob = new Blob([svgData], { type: "image/svg+xml;charset=utf-8" });
+  const url = URL.createObjectURL(blob);
+
+  img.onload = () => {
+    ctx.drawImage(img, 0, 0, w, h);
+    URL.revokeObjectURL(url);
+    canvas.toBlob((blob) => {
+      if (!blob) return;
+      const a = document.createElement("a");
+      a.download = "hsc-scaling-graph.png";
+      a.href = URL.createObjectURL(blob);
+      a.click();
+      URL.revokeObjectURL(a.href);
+    }, "image/png");
+  };
+
+  img.src = url;
+}
+
 export function ScalingGraph({ curves, yearMode, graphMode }: ScalingGraphProps) {
   const chartData = useMemo(() => mergeCurvesForRecharts(curves), [curves]);
   const bounds = useMemo(() => computeDataBounds(curves), [curves]);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const handleDownload = useCallback(() => {
+    const svg = containerRef.current?.querySelector("svg");
+    if (svg) downloadGraph(svg as unknown as SVGSVGElement);
+  }, []);
 
   const yearLabel = yearMode === "last" ? "2025" : "2021–2025 Avg";
   const isPercentile = graphMode === "percentile";
@@ -114,18 +163,29 @@ export function ScalingGraph({ curves, yearMode, graphMode }: ScalingGraphProps)
 
   return (
     <div className="rounded-lg border border-border bg-surface p-4 sm:p-6">
-      <div className="mb-3">
-        <h3 className="text-sm font-semibold text-foreground">
-          {isPercentile ? "Percentile → Scaled Mark" : "HSC Mark → Scaled Mark"}
-        </h3>
-        <p className="text-xs text-muted mt-0.5">
-          {yearLabel} · Per unit scaled mark (out of 50)
-        </p>
+      <div className="mb-3 flex items-start justify-between">
+        <div>
+          <h3 className="text-sm font-semibold text-foreground">
+            {isPercentile ? "Percentile → Scaled Mark" : "HSC Mark → Scaled Mark"}
+          </h3>
+          <p className="text-xs text-muted mt-0.5">
+            {yearLabel} · Per unit scaled mark (out of 50)
+          </p>
+        </div>
+        <button
+          onClick={handleDownload}
+          className="inline-flex items-center gap-1.5 rounded-md border border-border px-2.5 py-1.5 text-xs text-muted hover:text-foreground hover:border-foreground/30 transition-colors"
+          title="Download graph as PNG"
+        >
+          <Download className="h-3 w-3" />
+          PNG
+        </button>
       </div>
+      <div ref={containerRef}>
       <ResponsiveContainer width="100%" height={500}>
         <LineChart
           data={chartData}
-          margin={{ top: 4, right: 8, left: -4, bottom: 4 }}
+          margin={{ top: 4, right: 8, left: 8, bottom: 4 }}
         >
           <CartesianGrid
             strokeDasharray="3 3"
@@ -160,7 +220,7 @@ export function ScalingGraph({ curves, yearMode, graphMode }: ScalingGraphProps)
               value: "Scaled / 50",
               position: "insideLeft",
               angle: -90,
-              offset: 22,
+              offset: 32,
               style: { fontSize: 11, fill: "var(--muted)", fontFamily: "var(--font-sans)" },
             }}
           />
@@ -182,6 +242,7 @@ export function ScalingGraph({ curves, yearMode, graphMode }: ScalingGraphProps)
           ))}
         </LineChart>
       </ResponsiveContainer>
+      </div>
     </div>
   );
 }
