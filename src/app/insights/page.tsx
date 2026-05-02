@@ -1,5 +1,22 @@
+import type { Metadata } from "next";
 import { KatexBlock } from "@/components/KatexRenderer";
 import { Terminal, AlertTriangle, CheckCircle, TrendingDown, TrendingUp, Users, History, Ruler, Award, BarChart3, Calculator, ChevronRight } from "lucide-react";
+import { JsonLd } from "@/components/JsonLd";
+
+export const metadata: Metadata = {
+  title: "Insights — How HSC Scaling & ATAR Work",
+  description:
+    "The definitive guide to HSC scaling, moderation, and ATAR calculation. Debunking myths with data. Learn how your HSC marks are actually determined.",
+  alternates: {
+    canonical: "/insights",
+  },
+  openGraph: {
+    title: "HSC Insights — How Scaling & ATAR Actually Work",
+    description:
+      "The definitive guide to HSC scaling, moderation, and ATAR calculation. No myths — just the mathematical reality.",
+    url: "https://hscdata.org/insights",
+  },
+};
 
 const myths = [
   {
@@ -199,7 +216,7 @@ export default function InsightsPage() {
         <div className="relative mx-auto max-w-7xl px-4 py-20 sm:px-6 lg:px-8">
           <div className="flex items-center gap-2 mb-6">
             <Terminal className="h-5 w-5 text-accent" />
-            <span className="text-sm font-mono font-medium text-accent uppercase tracking-wider">Truth Engine</span>
+            <span className="text-sm font-mono font-medium text-accent uppercase tracking-wider">HSC Data</span>
           </div>
           <h1 className="text-4xl sm:text-6xl font-bold tracking-tight text-foreground max-w-3xl leading-[1.1]">
             The Truth About{" "}
@@ -409,6 +426,20 @@ export default function InsightsPage() {
           </a>
         </div>
       </section>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "FAQPage",
+          mainEntity: myths.map((m) => ({
+            "@type": "Question",
+            name: m.myth,
+            acceptedAnswer: {
+              "@type": "Answer",
+              text: m.points.join(". ") + ".",
+            },
+          })),
+        }}
+      />
     </div>
   );
 }

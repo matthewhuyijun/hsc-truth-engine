@@ -1,10 +1,10 @@
-# HSC Truth Engine
+# HSC Data
 
 **hscdata.org** — Transparent HSC data. No myths. Just mathematics.
 
 ## What is this?
 
-The HSC Truth Engine is an open-source platform that explains how the NSW HSC and ATAR actually work. Three modules:
+HSC Data is an open-source platform that explains how the NSW HSC and ATAR actually work. Three modules:
 
 | Module | Description |
 |--------|-------------|

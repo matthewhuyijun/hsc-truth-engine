@@ -1,5 +1,22 @@
+import type { Metadata } from "next";
 import { AtarCalculator } from "@/components/AtarCalculator";
 import { ExternalLink } from "lucide-react";
+import { JsonLd } from "@/components/JsonLd";
+
+export const metadata: Metadata = {
+  title: "ATAR Calculator",
+  description:
+    "Estimate your ATAR from expected HSC marks using 2019–2025 UAC scaling data. Free, instant, no sign-up required. Compare courses and see your predicted rank.",
+  alternates: {
+    canonical: "/calculator",
+  },
+  openGraph: {
+    title: "ATAR Calculator — HSC Data",
+    description:
+      "Estimate your ATAR from expected HSC marks using official UAC scaling data from 2019–2025.",
+    url: "https://hscdata.org/calculator",
+  },
+};
 
 export default function CalculatorPage() {
   return (
@@ -34,6 +51,18 @@ export default function CalculatorPage() {
           <AtarCalculator />
         </div>
       </div>
+      <JsonLd
+        data={{
+          "@context": "https://schema.org",
+          "@type": "SoftwareApplication",
+          name: "HSC ATAR Calculator",
+          applicationCategory: "EducationalApplication",
+          operatingSystem: "Web",
+          description:
+            "Estimate your ATAR from expected HSC marks using 2019–2025 UAC scaling data.",
+          url: "https://hscdata.org/calculator",
+        }}
+      />
     </div>
   );
 }

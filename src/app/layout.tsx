@@ -6,6 +6,7 @@ import "katex/dist/katex.min.css";
 import Link from "next/link";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { ScrollToTop } from "@/components/ScrollToTop";
+import { JsonLd } from "@/components/JsonLd";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -18,8 +19,51 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HSC Truth Engine",
-  description: "Transparent HSC data. No myths. Just mathematics.",
+  title: {
+    default: "HSC Data — NSW ATAR Calculator & Scaling Data",
+    template: "%s | HSC Data",
+  },
+  description:
+    "Understand how the HSC and ATAR actually work. Free ATAR calculator, interactive scaling graphs, Band 6 honor roll, and data-driven insights. No myths — just mathematics sourced from NESA and UAC reports.",
+  metadataBase: new URL("https://hscdata.org"),
+  alternates: {
+    canonical: "/",
+  },
+  keywords: [
+    "HSC",
+    "ATAR calculator",
+    "scaling",
+    "HSC scaling",
+    "NSW HSC",
+    "Band 6",
+    "honor roll",
+    "distinguished achievers",
+    "all rounders",
+    "UAC",
+    "NESA",
+  ],
+  authors: [{ name: "Matthew Hu" }],
+  creator: "Matthew Hu",
+  publisher: "HSC Data",
+  openGraph: {
+    type: "website",
+    siteName: "HSC Data",
+    title: "HSC Data — NSW ATAR Calculator & Scaling Data",
+    description:
+      "Understand how the HSC and ATAR actually work. Free ATAR calculator, scaling graphs, honor roll, and data-driven insights.",
+    url: "https://hscdata.org",
+    locale: "en_AU",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "HSC Data — NSW ATAR Calculator & Scaling Data",
+    description:
+      "Understand how the HSC and ATAR actually work. No myths — just mathematics.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 const navItems = [
@@ -61,7 +105,7 @@ export default function RootLayout({
               <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-foreground text-background font-mono text-xs font-bold">
                 &gt;_
               </span>
-              <span>HSC Truth Engine</span>
+              <span>HSC Data</span>
             </Link>
 
             <nav className="hidden items-center gap-1 sm:flex">
@@ -102,7 +146,35 @@ export default function RootLayout({
               </p>
             </div>
           </div>
-        </footer>
+          </footer>
+
+        <JsonLd
+          data={{
+            "@context": "https://schema.org",
+            "@graph": [
+              {
+                "@type": "WebSite",
+                name: "HSC Data",
+                url: "https://hscdata.org",
+                description:
+                  "Understand how the HSC and ATAR actually work. ATAR calculator, scaling graphs, honor roll, and data-driven insights.",
+                potentialAction: {
+                  "@type": "SearchAction",
+                  target: "https://hscdata.org/honor-roll?search={search_term_string}",
+                  "query-input": "required name=search_term_string",
+                },
+              },
+              {
+                "@type": "Organization",
+                name: "HSC Data",
+                url: "https://hscdata.org",
+                description:
+                  "Independent, data-driven HSC and ATAR analysis. Not affiliated with NESA or UAC.",
+                sameAs: ["https://github.com/matthewhuyijun/hsc-truth-engine"],
+              },
+            ],
+          }}
+        />
       </body>
     </html>
   );

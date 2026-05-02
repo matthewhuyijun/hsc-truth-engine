@@ -29,7 +29,7 @@ export default function HomePage() {
       <section className="snap-start min-h-screen flex items-center relative border-b border-border">
         <div className="mx-auto max-w-5xl px-4 py-24 sm:py-32 w-full">
           <span className="text-xs font-medium uppercase tracking-wider text-muted">
-            HSC Truth Engine
+            HSC Data
           </span>
           <h1 className="mt-4 text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
             The Mathematics Behind
