@@ -247,6 +247,7 @@
     "xAxisHSC": "HSC 分数",
     "xAxisPercentile": "百分位",
     "comparisonHeading": "关键点分数对比",
+    "comparisonRowMax": "最高分（第1名）",
     "interpretationHeading": "如何阅读此图",
     "interpHsc1": "曲线位置：曲线越高代表缩放越强。Y 轴显示每单元对 ATAR 总分的缩放贡献。",
     "interpHsc2": "曲线陡峭度：曲线越陡，意味着 HSC 分数的小幅提升会转化为更大的缩放分数增益。",

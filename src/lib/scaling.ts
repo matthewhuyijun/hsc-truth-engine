@@ -77,8 +77,8 @@ export const GRAPH_MODES = [
 export type YearMode = "last" | "avg5";
 export type GraphMode = "hsc" | "percentile";
 
-const PERCENTILE_KEYS = ["p25", "p50", "p75", "p90", "p99"] as const;
-const PERCENTILE_LABELS: Record<string, number> = { p25: 25, p50: 50, p75: 75, p90: 90, p99: 99 };
+const PERCENTILE_KEYS = ["p25", "p50", "p75", "p90", "p99", "max"] as const;
+const PERCENTILE_LABELS: Record<string, number> = { p25: 25, p50: 50, p75: 75, p90: 90, p99: 99, max: 100 };
 
 export function getAllScalingCourses(): string[] {
   const names = new Set<string>();
@@ -287,8 +287,8 @@ export function generateCurve(courseName: string, yearMode: YearMode, graphMode:
     if (!params) return { course: courseName, points: [] };
     return {
       course: courseName,
-      points: [25, 50, 75, 90, 99].map((x) => {
-        const hscEst = params.hsc_mean + 0.5 * params.hsc_sd * (x === 25 ? -0.67 : x === 50 ? 0 : x === 75 ? 0.67 : x === 90 ? 1.28 : 2.33);
+      points: [25, 50, 75, 90, 99, 100].map((x) => {
+        const hscEst = params.hsc_mean + 0.5 * params.hsc_sd * (x === 25 ? -0.67 : x === 50 ? 0 : x === 75 ? 0.67 : x === 90 ? 1.28 : x === 99 ? 2.33 : 3.0);
         const hscMark = Math.round(Math.min(100, Math.max(0, hscEst * 2)) * 10) / 10;
         return { x, scaled: computeScaledMarkZScore(hscMark, params) };
       }).filter((p) => p.scaled > 0),
@@ -343,7 +343,7 @@ export function buildComparisonTable(
   graphMode: GraphMode
 ): ComparisonRow[] {
   if (graphMode === "percentile") {
-    const xPoints = [50, 75, 90, 99];
+    const xPoints = [50, 75, 90, 99, 100];
     return xPoints.map((x) => {
       const values = courseNames.map((course) => {
         const curve = getPercentileCurve(course, yearMode);

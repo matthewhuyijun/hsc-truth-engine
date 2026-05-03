@@ -260,7 +260,9 @@ export default function ScalingGraphsPage() {
                 <tbody>
                   {comparisonTable.map((row, ri) => (
                     <tr key={row.x} className={ri < comparisonTable.length - 1 ? "border-b border-border/50" : ""}>
-                      <td className="px-4 py-2.5 font-mono text-foreground">{row.x}</td>
+                      <td className="px-4 py-2.5 font-mono text-foreground">
+                        {graphMode === "percentile" && row.x === 100 ? t("comparisonRowMax") : row.x}
+                      </td>
                       {row.values.map((v, vi) => (
                         <td key={v.course} className="px-4 py-2.5 text-right font-mono tabular-nums text-foreground/80">
                           {v.scaled > 0 ? v.scaled.toFixed(1) : "—"}

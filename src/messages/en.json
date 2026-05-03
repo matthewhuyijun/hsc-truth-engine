@@ -248,6 +248,7 @@
     "xAxisHSC": "HSC Mark",
     "xAxisPercentile": "Percentile",
     "comparisonHeading": "Mark Comparison at Key Points",
+    "comparisonRowMax": "Max (#1)",
     "interpretationHeading": "How to Read This",
     "interpHsc1": "Curve position: A higher curve means stronger scaling. The y-axis shows per-unit scaled contribution to your ATAR aggregate.",
     "interpHsc2": "Curve steepness: A steeper slope means small HSC mark improvements translate to larger scaled mark gains.",
