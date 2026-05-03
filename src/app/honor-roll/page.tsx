@@ -190,51 +190,68 @@ function PillPicker<T>({ icon, placeholder, items, selected, onSelect, onClear, 
   const [open, setOpen] = useState(false);
   const [search, setSearch] = useState('');
   const cr = useRef<HTMLDivElement | null>(null);
-  const ir = useRef<HTMLInputElement | null>(null);
 
   useEffect(() => {
-    const h = (e: MouseEvent) => { if (cr.current && !cr.current.contains(e.target as Node)) setOpen(false); };
-    document.addEventListener('mousedown', h);
-    return () => document.removeEventListener('mousedown', h);
-  }, []);
+    if (!open) return () => {};
+    const h = (e: MouseEvent) => {
+      if (cr.current && !cr.current.contains(e.target as Node)) { setOpen(false); setSearch(''); }
+    };
+    document.addEventListener('click', h);
+    return () => document.removeEventListener('click', h);
+  }, [open]);
 
   const filtered = useMemo(() => {
-    if (!search) return [] as T[];
     const q = search.toLowerCase();
-    return items.filter(it => {
-      const n = typeof it === 'string' ? it : (it as { name: string }).name;
-      return n.toLowerCase().includes(q);
-    }).slice(0, 100);
+    let r = items;
+    if (q) {
+      r = items.filter(it => {
+        const n = typeof it === 'string' ? it : (it as { name: string }).name;
+        return n.toLowerCase().includes(q);
+      });
+      r = [...r].sort((a, b) => {
+        const na = (typeof a === 'string' ? a : (a as { name: string }).name).toLowerCase();
+        const nb = (typeof b === 'string' ? b : (b as { name: string }).name).toLowerCase();
+        return (na.startsWith(q) ? 0 : 1) - (nb.startsWith(q) ? 0 : 1) || na.localeCompare(nb);
+      });
+    }
+    return r.slice(0, 100);
   }, [items, search]);
 
-  if (selected) {
-    return <span className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-sm">
-      {icon}<span className="truncate max-w-[180px]">{selected}</span>
-      <button onClick={onClear} className="text-muted hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
-    </span>;
-  }
+  const handleSelect = (key: string) => {
+    onSelect(key);
+    setOpen(false);
+    setSearch('');
+  };
+
+  const handleToggle = () => {
+    setOpen(v => !v);
+    if (selected) onClear();
+  };
 
   return <div className="relative" ref={cr}>
-    <button onClick={() => { setOpen(!open); setTimeout(() => ir.current?.focus(), 50); }}
-      className="inline-flex items-center gap-1 rounded-lg border border-dashed border-border px-2.5 py-1 text-sm text-muted hover:text-foreground hover:border-foreground/30 transition-colors">
-      {icon}{placeholder}
+    <button onClick={handleToggle}
+      className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-sm transition-colors ${selected ? 'border-border bg-surface text-foreground' : 'border-dashed border-border text-muted hover:text-foreground hover:border-foreground/30'}`}>
+      {icon}{selected || placeholder}
+      {selected && <X className="h-3.5 w-3.5 text-muted hover:text-foreground" onClick={e => { e.stopPropagation(); onClear(); }} />}
     </button>
     {open && <div className="absolute left-0 top-full mt-1 w-72 rounded-lg border border-border bg-background shadow-lg z-50">
       <div className="flex items-center gap-2 border-b border-border px-3 py-2">
         <Search className="h-3.5 w-3.5 text-muted shrink-0" />
-        <input ref={ir} type="text" placeholder={placeholder + '...'} value={search}
+        <input autoFocus type="text" placeholder={placeholder + '...'} value={search}
           onChange={e => setSearch(e.target.value)} className="flex-1 bg-transparent text-sm placeholder:text-muted focus:outline-none" />
       </div>
       <div className="max-h-64 overflow-y-auto">
-        {filtered.length === 0
-          ? <p className="px-3 py-4 text-sm text-muted text-center">{search ? 'No matches' : 'Type to search'}</p>
-          : filtered.map(item => {
-              const key = getKey(item);
-              const name = typeof item === 'string' ? item : (item as { name: string }).name;
-              return <button key={key} onClick={() => { onSelect(key); setSearch(''); setOpen(false); }}
-                className="w-full text-left px-3 py-2 text-sm hover:bg-surface-hover transition-colors">{name}</button>;
-            })
-        }
+        {filtered.length === 0 && !search ? (
+          <p className="px-3 py-4 text-sm text-muted text-center">Type to search</p>
+        ) : filtered.length === 0 ? (
+          <p className="px-3 py-4 text-sm text-muted text-center">No matches</p>
+        ) : filtered.map(item => {
+          const key = getKey(item);
+          const name = typeof item === 'string' ? item : (item as { name: string }).name;
+          return <button key={key} onMouseDown={e => e.preventDefault()}
+            onClick={() => handleSelect(key)}
+            className="w-full text-left px-3 py-2 text-sm hover:bg-surface-hover transition-colors">{name}</button>;
+        })}
       </div>
     </div>}
   </div>;
@@ -273,13 +290,16 @@ function DefaultView({ schools, courses, onSchool, onCourse }: {
   return <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
     <div className="rounded-xl border border-border bg-surface overflow-hidden">
       <div className="border-b border-border px-6 py-3 flex items-center justify-between flex-wrap gap-3">
-        <div className="flex rounded-lg border border-border overflow-hidden">
-          <button onClick={() => setTab('schools')} className={`px-3 py-1.5 text-sm font-medium ${isSchool ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>Schools</button>
-          <button onClick={() => setTab('courses')} className={`px-3 py-1.5 text-sm font-medium border-l border-border ${!isSchool ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>Courses</button>
+        <div className="flex items-center gap-3">
+          <div className="flex rounded-lg border border-border overflow-hidden">
+            <button onClick={() => setTab('schools')} className={`px-3 py-1.5 text-sm font-medium ${isSchool ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>Schools</button>
+            <button onClick={() => setTab('courses')} className={`px-3 py-1.5 text-sm font-medium border-l border-border ${!isSchool ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>Courses</button>
+          </div>
+          <span className="text-xs text-muted">Click a row to add as filter</span>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-          <input type="text" placeholder={`Search ${tab}...`} value={search} onChange={e => setSearch(e.target.value)}
+          <input type="text" placeholder="Search list..." value={search} onChange={e => setSearch(e.target.value)}
             className="w-full sm:w-64 rounded-lg border border-border bg-surface py-1.5 pl-9 pr-3 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-foreground/10" />
         </div>
       </div>
