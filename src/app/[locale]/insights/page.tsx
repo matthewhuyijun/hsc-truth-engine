@@ -1,8 +1,23 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { KatexBlock } from "@/components/KatexRenderer";
 import { Terminal, AlertTriangle, CheckCircle, TrendingDown, TrendingUp, Users, History, Ruler, Award, BarChart3, Calculator, ChevronRight } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Metadata");
+  return {
+    title: t("insightsTitle"),
+    description: t("insightsDescription"),
+    alternates: { canonical: "/insights" },
+    openGraph: {
+      title: t("insightsOgTitle"),
+      description: t("insightsOgDescription"),
+      url: "https://hscdata.org/insights",
+    },
+  };
+}
 
 export default async function InsightsPage() {
   const t = await getTranslations("Insights");

@@ -1,5 +1,15 @@
 import { getTranslations } from "next-intl/server";
+import type { Metadata } from "next";
 import { ArrowRight } from "lucide-react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("Metadata");
+  return {
+    title: t("changelogTitle"),
+    description: t("changelogDescription"),
+    alternates: { canonical: "/changelog" },
+  };
+}
 
 const CHANGES = [
   {
