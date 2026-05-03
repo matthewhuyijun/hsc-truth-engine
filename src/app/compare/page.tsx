@@ -217,15 +217,66 @@ function SchoolPicker({ items, popularity, selected, onToggle }: {
 function SubjectPicker({ courses, selected, onToggle }: {
   courses: CourseEntry[]; selected: string[]; onToggle: (code: string) => void;
 }) {
-  return <div className="flex flex-wrap gap-2">
-    {courses.map(c => {
-      const sel = selected.length === 0 || selected.includes(c.code);
-      return <button key={c.code} onClick={() => onToggle(c.code)}
-        className={`rounded-md px-2.5 py-1 text-xs font-medium border transition-colors ${sel ? '' : 'opacity-30'}`}
-        style={{ borderColor: CAT_COLORS[c.category] || '#888', color: sel ? CAT_COLORS[c.category] || '#888' : '#888' }}>
-        {c.name}
-      </button>;
-    })}
+  const [open, setOpen] = useState(false);
+  const [search, setSearch] = useState('');
+  const cr = useRef<HTMLDivElement | null>(null);
+  useEffect(() => {
+    if (!open) return () => {};
+    const h = (e: MouseEvent) => { if (cr.current && !cr.current.contains(e.target as Node)) setOpen(false); };
+    document.addEventListener('click', h); return () => document.removeEventListener('click', h);
+  }, [open]);
+
+  const grouped = useMemo(() => {
+    let items = [...courses];
+    if (search) { const q = search.toLowerCase(); items = items.filter(c => c.name.toLowerCase().includes(q)); }
+    // Group by category, sort categories
+    const groups: Record<string, CourseEntry[]> = {};
+    for (const c of items) {
+      const cat = c.category;
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(c);
+    }
+    // Sort: selected first, then by name
+    for (const cat of Object.keys(groups)) {
+      groups[cat].sort((a, b) => {
+        if (selected.includes(a.code) !== selected.includes(b.code)) return selected.includes(a.code) ? -1 : 1;
+        return a.name.localeCompare(b.name);
+      });
+    }
+    return Object.entries(groups).sort(([, a], [, b]) => a.length === b.length ? 0 : b.length - a.length);
+  }, [courses, search, selected]);
+
+  return <div className="relative" ref={cr}>
+    <div className="flex items-center gap-2 flex-wrap mb-2">
+      {selected.map(code => {
+        const c = courses.find(x => x.code === code);
+        if (!c) return null;
+        return <span key={code} className="inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-sm" style={{ borderColor: CAT_COLORS[c.category] || '#888' }}>
+          {c.name}<button onClick={() => onToggle(code)} className="text-muted hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
+        </span>;
+      })}
+    </div>
+    <button onClick={() => setOpen(v => !v)} className="inline-flex items-center gap-1 rounded-lg border border-dashed border-border px-2.5 py-1 text-sm text-muted hover:text-foreground hover:border-foreground/30">
+      <BookOpen className="h-3.5 w-3.5" />+ Add Subject
+    </button>
+    {open && <div className="absolute left-0 top-full mt-1 w-80 rounded-lg border border-border bg-background shadow-lg z-50">
+      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
+        <Search className="h-3.5 w-3.5 text-muted shrink-0" /><input autoFocus type="text" placeholder="Search subjects..." value={search} onChange={e => setSearch(e.target.value)} className="flex-1 bg-transparent text-sm placeholder:text-muted focus:outline-none" />
+      </div>
+      <div className="max-h-80 overflow-y-auto">
+        {grouped.length === 0 ? <p className="px-3 py-4 text-sm text-muted text-center">No matches</p> :
+          grouped.map(([cat, items]) => <div key={cat}>
+            <div className="px-3 py-1.5 text-[10px] font-semibold uppercase text-muted/60 bg-surface/50 border-b border-border/50" style={{ color: CAT_COLORS[cat] || '#888' }}>{cat} ({items.length})</div>
+            {items.map(c => <button key={c.code} onMouseDown={e => e.preventDefault()}
+              onClick={() => onToggle(c.code)}
+              className={`w-full text-left px-3 py-2 text-sm hover:bg-surface-hover transition-colors flex items-center gap-2 ${selected.includes(c.code) ? 'bg-accent-dim' : ''}`}>
+              <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: CAT_COLORS[c.category] || '#888' }} />
+              <span>{c.name}</span>
+            </button>)}
+          </div>)
+        )}
+      </div>
+    </div>}
   </div>;
 }
 
