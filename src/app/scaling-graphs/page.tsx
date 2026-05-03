@@ -82,18 +82,14 @@ export default function ScalingGraphsPage() {
 
   return (
     <div className="min-h-screen">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        {/* Header */}
-        <span className="text-xs font-medium uppercase tracking-wider text-muted">
-          Tool
-        </span>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">Scaling Graphs</h1>
-        <p className="mt-2 max-w-xl text-sm text-muted leading-relaxed">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+        <h1 className="text-3xl font-bold tracking-tight">Scaling Graphs</h1>
+        <p className="mt-1 max-w-xl text-sm text-muted leading-relaxed">
           Visualise how HSC marks translate to scaled marks. Select courses and compare scaling curves side-by-side.
         </p>
 
         {/* Controls */}
-        <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-end">
+        <div className="mt-4 flex flex-col gap-4 sm:flex-row sm:items-end">
           {/* Course Selector */}
           <div className="flex-1" ref={dropdownRef}>
             <label className="block text-xs font-medium text-muted mb-2">

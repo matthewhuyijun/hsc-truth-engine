@@ -21,12 +21,9 @@ export const metadata: Metadata = {
 export default function CalculatorPage() {
   return (
     <div className="min-h-screen">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
-        <span className="text-xs font-medium uppercase tracking-wider text-muted">
-          Tool
-        </span>
-        <h1 className="mt-2 text-3xl font-bold tracking-tight">ATAR Calculator</h1>
-        <p className="mt-2 max-w-xl text-sm text-muted leading-relaxed">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+        <h1 className="text-3xl font-bold tracking-tight">ATAR Calculator</h1>
+        <p className="mt-1 max-w-xl text-sm text-muted leading-relaxed">
           Estimate your ATAR from expected HSC marks using 2019–2025 UAC scaling data.
         </p>
 
