@@ -393,6 +393,14 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
 
   const totalB6 = topSchools.reduce((s, ts) => s + ts.band6Count, 0);
 
+  const [activeTab, setActiveTab] = useState<'top-schools' | 'state-ranks' | 'enrollment'>(stateRanks.length > 0 ? 'state-ranks' : 'top-schools');
+
+  const tabs = [
+    { id: 'top-schools' as const, label: 'Top Schools' },
+    ...(stateRanks.length > 0 ? [{ id: 'state-ranks' as const, label: 'State Ranks' }] : []),
+    ...(stats ? [{ id: 'enrollment' as const, label: 'Enrollment' }] : []),
+  ];
+
   return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard label="Band 6/E4" value={totalB6.toLocaleString()} />
@@ -401,57 +409,41 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
       {stats && <StatCard label="Total Enrolled" value={stats.total.toLocaleString()} />}
     </div>
 
-    {stats && <EnrollmentBlock stats={stats} />}
+    {tabs.length > 1 && (
+      <div className="flex items-center gap-2">
+        {tabs.map(t => (
+          <button key={t.id} onClick={() => setActiveTab(t.id)}
+            className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${activeTab === t.id ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+    )}
 
-    <div>
-      <h2 className="text-lg font-semibold mb-3">Top Schools</h2>
-      {sparoData && <p className="mt-1 text-sm text-muted mb-3">Public school HSC marks from publicly available SPaRO reports. Ranked by school average.</p>}
-      <TableWrap>
-        <TableHeader
-          cols={sparoData ? ['#','School','B6/E4','School Avg vs State (Gov)'] : ['#','School','B6/E4']}
-          widths={sparoData ? ['col-span-1','col-span-4','col-span-2','col-span-5'] : ['col-span-1','col-span-9','col-span-2']}
-          aligns={['','','justify-end',sparoData?'justify-end':'']}
-        />
-        <div className="divide-y divide-border">
-          {topSchools.slice(0,30).map((s, idx) => {
-            const sp = sparoData?.[s.slug]?.subjects?.find(sb => sb.subject === course.name);
-            const rk = sp ? (() => {
-              const all = Object.entries(sparoData || {})
-                .filter(([, sc]) => sc.subjects.some(sb => sb.subject === course.name))
-                .map(([, sc]) => sc.subjects.find(sb => sb.subject === course.name)!)
-                .sort((a, b) => b.school_average - a.school_average);
-              return all.findIndex(a => a.school_average === sp.school_average) + 1;
-            })() : null;
-            return (
-            <button key={s.slug} onClick={() => onSchool(s.name)} className="w-full text-left grid grid-cols-12 gap-3 px-5 py-3 hover:bg-surface-hover transition-colors">
-              <div className="col-span-1"><span className="text-xs text-muted font-mono">{idx+1}</span></div>
-              <div className={sparoData ? 'col-span-4' : 'col-span-9'}><span className="text-sm font-medium">{s.name}</span></div>
-              <div className={`${sparoData ? 'col-span-2' : 'col-span-2'} flex justify-end`}><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{s.band6Count.toLocaleString()}</span></div>
-              {sparoData && <div className="col-span-5 flex justify-end items-center gap-1">
-                {sp ? <><span className="inline-flex items-center rounded-md bg-accent-dim px-1.5 py-0.5 text-xs font-mono font-medium">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}
-              </div>}
-            </button>
-          );})}
-        </div>
-      </TableWrap>
-    </div>
+    {activeTab === 'enrollment' && stats && <EnrollmentBlock stats={stats} />}
 
-    {stateRanks.length > 0 && <div>
-      <h2 className="text-lg font-semibold mb-3">State Ranks</h2>
-      <TableWrap>
-        <TableHeader cols={['#','Student','School','Rank']} widths={['col-span-1','col-span-4','col-span-5','col-span-2']} aligns={['','','','justify-end']} />
-        <div className="divide-y divide-border">
-          {stateRanks.map((sr, idx) => (
-            <div key={sr.lastName+sr.firstName+sr.rank} className="grid grid-cols-12 gap-3 px-5 py-3">
-              <div className="col-span-1"><span className="text-xs text-muted font-mono">{idx+1}</span></div>
-              <div className="col-span-4"><span className="text-sm font-medium truncate">{sr.lastName}, {sr.firstName}</span></div>
-              <div className="col-span-5"><button onClick={() => onSchool(sr.schoolName)} className="text-sm hover:underline truncate">{sr.schoolName}</button></div>
-              <div className="col-span-2 flex justify-end"><span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-mono font-medium ${sr.rank===1?'border-green-600 bg-green-600 text-white':'border-blue-600 bg-blue-600 text-white'}`}>{sr.rank}</span></div>
-            </div>
-          ))}
-        </div>
-      </TableWrap>
-    </div>}
+    {activeTab === 'top-schools' && (
+      <TopSchoolsExpanded schools={topSchools} sparoData={sparoData} courseName={course.name} onSchool={onSchool} />
+    )}
+
+    {activeTab === 'state-ranks' && stateRanks.length > 0 && (
+      <div>
+        <h2 className="text-lg font-semibold mb-3">State Ranks</h2>
+        <TableWrap>
+          <TableHeader cols={['#','Student','School','Rank']} widths={['col-span-1','col-span-4','col-span-5','col-span-2']} aligns={['','','','justify-end']} />
+          <div className="divide-y divide-border">
+            {stateRanks.map((sr, idx) => (
+              <div key={sr.lastName+sr.firstName+sr.rank} className="grid grid-cols-12 gap-3 px-5 py-3">
+                <div className="col-span-1"><span className="text-xs text-muted font-mono">{idx+1}</span></div>
+                <div className="col-span-4"><span className="text-sm font-medium truncate">{sr.lastName}, {sr.firstName}</span></div>
+                <div className="col-span-5"><button onClick={() => onSchool(sr.schoolName)} className="text-sm hover:underline truncate">{sr.schoolName}</button></div>
+                <div className="col-span-2 flex justify-end"><span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-mono font-medium ${sr.rank===1?'border-green-600 bg-green-600 text-white':'border-blue-600 bg-blue-600 text-white'}`}>{sr.rank}</span></div>
+              </div>
+            ))}
+          </div>
+        </TableWrap>
+      </div>
+    )}
   </div>;
 }
 
@@ -482,6 +474,56 @@ function IntersectionView({ detail, course, stats, year }: {
 // ─── Shared Components ────────────────────────────────────────────────────────
 
 // ─── Shared Components ────────────────────────────────────────────────────────
+
+// ─── Shared Components ────────────────────────────────────────────────────────
+
+function TopSchoolsExpanded({ schools, sparoData, courseName, onSchool }: {
+  schools: { name: string; slug: string; band6Count: number }[];
+  sparoData: Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null;
+  courseName: string; onSchool: (s: string) => void;
+}) {
+  const [showAll, setShowAll] = useState(false);
+  const display = showAll ? schools : schools.slice(0, 30);
+
+  return <div>
+    <h2 className="text-lg font-semibold mb-3">Top Schools</h2>
+    {sparoData && <p className="text-sm text-muted mb-3">Public school HSC marks from publicly available SPaRO reports.</p>}
+    <TableWrap>
+      <TableHeader
+        cols={sparoData ? ['#','School','B6/E4','School Avg vs State (Gov)'] : ['#','School','B6/E4']}
+        widths={sparoData ? ['col-span-1','col-span-4','col-span-2','col-span-5'] : ['col-span-1','col-span-9','col-span-2']}
+        aligns={['','','justify-end',sparoData?'justify-end':'']}
+      />
+      <div className="divide-y divide-border">
+        {display.map((s, idx) => {
+          const sp = sparoData?.[s.slug]?.subjects?.find(sb => sb.subject === courseName);
+          const rk = sp ? (() => {
+            const all = Object.entries(sparoData || {})
+              .filter(([, sc]) => sc.subjects.some(sb => sb.subject === courseName))
+              .map(([, sc]) => sc.subjects.find(sb => sb.subject === courseName)!)
+              .sort((a, b) => b.school_average - a.school_average);
+            return all.findIndex(a => a.school_average === sp.school_average) + 1;
+          })() : null;
+          return (
+          <button key={s.slug} onClick={() => onSchool(s.name)} className="w-full text-left grid grid-cols-12 gap-3 px-5 py-3 hover:bg-surface-hover transition-colors">
+            <div className="col-span-1"><span className="text-xs text-muted font-mono">{idx+1}</span></div>
+            <div className={sparoData ? 'col-span-4' : 'col-span-9'}><span className="text-sm font-medium">{s.name}</span></div>
+            <div className={`${sparoData ? 'col-span-2' : 'col-span-2'} flex justify-end`}><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{s.band6Count.toLocaleString()}</span></div>
+            {sparoData && <div className="col-span-5 flex justify-end items-center gap-1">
+              {sp ? <><span className="inline-flex items-center rounded-md bg-accent-dim px-1.5 py-0.5 text-xs font-mono font-medium">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}
+            </div>}
+          </button>
+        );})}
+      </div>
+      {schools.length > 30 && (
+        <div className="border-t border-border px-5 py-2 text-xs text-muted flex items-center justify-between">
+          <span>Showing {display.length} of {schools.length}</span>
+          <button onClick={() => setShowAll(v => !v)} className="hover:text-foreground">{showAll ? 'Show less' : `Show all ${schools.length}`}</button>
+        </div>
+      )}
+    </TableWrap>
+  </div>;
+}
 
 function StudentsTable({ students, highlightCourse, onCourseClick }: {
   students: StudentEntry[];
