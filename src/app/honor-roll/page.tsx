@@ -128,7 +128,7 @@ function HonorRollContent() {
   return (
     <div className="min-h-screen">
       <section className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center gap-3 mb-3">
             <Award className="h-5 w-5 text-muted" />
             <span className="text-xs font-medium uppercase tracking-wider text-muted">Distinguished Achievers</span>
@@ -188,7 +188,7 @@ function HonorRollContent() {
 }
 
 function LoadingView() {
-  return <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+  return <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
     <div className="rounded-xl border border-border bg-surface p-16 text-center">
       <div className="inline-block h-5 w-5 animate-spin rounded-full border-2 border-foreground/20 border-t-foreground" />
       <p className="mt-2 text-sm text-muted">Loading...</p>
@@ -226,7 +226,7 @@ function DefaultView({ schools, courses, onSchool, onCourse }: {
 
   const isSchool = tab === 'schools';
 
-  return <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+  return <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
     <div className="rounded-xl border border-border bg-surface overflow-hidden">
       <div className="border-b border-border px-6 py-3 flex items-center justify-between flex-wrap gap-3">
         <div className="flex items-center gap-3">
@@ -330,7 +330,7 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
 
   if (!detail) return <EmptyView msg={`No data for ${name} in ${year}.`} />;
 
-  return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard label="Band 6/E4" value={detail.stats.band6Count.toLocaleString()} />
       <StatCard label="Students" value={detail.stats.uniqueStudents.toLocaleString()} />
@@ -435,7 +435,7 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
     ...(stats ? [{ id: 'enrollment' as const, label: 'Enrollment' }] : []),
   ];
 
-  return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard label="Band 6/E4" value={totalB6.toLocaleString()} />
       <StatCard label="State Ranks" value={String(stateRanks.length)} />
@@ -491,7 +491,7 @@ function IntersectionView({ detail, course, stats, year }: {
   const ca = detail.courses.find(c => c.code === course.code);
   const sts = detail.students.filter(st => st.courses.some(c => c.code === course.code));
 
-  return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+  return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard label="Band 6/E4" value={ca ? String(ca.band6Count) : '0'} />
       <StatCard label="Students" value={String(sts.length)} />
@@ -651,7 +651,7 @@ function StatCard({ label, value }: { label: string; value: string }) {
 }
 
 function EmptyView({ msg }: { msg: string }) {
-  return <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
+  return <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
     <div className="rounded-xl border border-border bg-surface p-16 text-center"><p className="text-sm text-muted">{msg}</p></div>
   </section>;
 }
