@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
 import { Header } from "@/components/Header";
 import { ScrollToTop } from "@/components/ScrollToTop";
@@ -62,6 +62,7 @@ export default async function LocaleLayout({
   children: React.ReactNode;
 }>) {
   const messages = await getMessages();
+  const t = await getTranslations("Footer");
 
   return (
     <NextIntlClientProvider messages={messages}>
@@ -75,7 +76,7 @@ export default async function LocaleLayout({
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center justify-between gap-2 sm:flex-row">
             <p className="text-xs text-muted">
-              Data sourced from NESA. Not affiliated with NESA or UAC.
+              {t("disclaimer")}
             </p>
             <div className="flex items-center gap-4">
               <a
@@ -84,19 +85,19 @@ export default async function LocaleLayout({
                 rel="noopener noreferrer"
                 className="text-xs text-muted/70 hover:text-foreground transition-colors"
               >
-                GitHub
+                {t("github")}
               </a>
               <a
                 href="/changelog"
                 className="text-xs text-muted/70 hover:text-foreground transition-colors"
               >
-                Changelog
+                {t("changelog")}
               </a>
               <a
                 href="mailto:hscmathsguy@gmail.com"
                 className="text-xs text-muted/70 hover:text-foreground transition-colors"
               >
-                Contact / Feedback
+                {t("contact")}
               </a>
             </div>
           </div>
