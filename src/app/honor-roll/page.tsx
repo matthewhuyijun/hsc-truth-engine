@@ -295,19 +295,15 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
   sparoData: Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null;
   onCourse: (c: CourseMeta) => void;
 }) {
-  if (!detail) return <EmptyView msg={`No data for ${name} in ${year}.`} />;
-
   const sparoSchool = sparoData?.[slug];
   const sparoSubjects = sparoSchool?.subjects || [];
 
-  // Build SPaRO lookup by subject name
   const sparoMap = useMemo(() => {
     const m = new Map<string, { school_average: number; state_average: number }>();
     for (const s of sparoSubjects) m.set(s.subject, { school_average: s.school_average, state_average: s.state_average });
     return m;
   }, [sparoSubjects]);
 
-  // Build SPaRO rank map
   const sparoRank = useMemo(() => {
     if (!sparoData || sparoSubjects.length === 0) return new Map<string, number>();
     const ranks = new Map<string, number>();
@@ -331,6 +327,8 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
     const q = courseSearch.toLowerCase();
     return detail.courses.filter(c => c.name.toLowerCase().includes(q));
   }, [detail.courses, courseSearch]);
+
+  if (!detail) return <EmptyView msg={`No data for ${name} in ${year}.`} />;
 
   return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
