@@ -5,6 +5,11 @@ const CHANGES = [
   {
     date: "May 2026",
     items: [
+      "Added Chinese (中文) localization — switch between English and Chinese via the header toggle. Translates all page content, UI labels, and SEO metadata (/zh/* routes).",
+      "SEO: dynamic metadata (title, description, Open Graph) now generated for every school and course detail page.",
+      "SEO: sitemap expanded to include all school detail pages, course detail pages, and changelog with hreflang alternates for bilingual indexing.",
+      "SEO: Open Graph social preview image added — dark-themed card shown when sharing links on social media.",
+      "SEO: BreadcrumbList structured data added to school and course detail pages for richer Google search results.",
       "Fixed Band 1-6 incorrectly showing for Extension courses. Extension courses now correctly display E1-E4 band distribution for all years (2001-2025).",
       "Added enrollment distribution and band performance charts to course detail views.",
       "State rank mapping fixed — 2,200+ missing state ranks restored across school detail data.",
