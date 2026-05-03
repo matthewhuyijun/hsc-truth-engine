@@ -422,7 +422,14 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
 
   const totalB6 = topSchools.reduce((s, ts) => s + ts.band6Count, 0);
 
-  const [activeTab, setActiveTab] = useState<'top-schools' | 'state-ranks' | 'enrollment'>(stateRanks.length > 0 ? 'state-ranks' : 'top-schools');
+  const [activeTab, setActiveTab] = useState<'top-schools' | 'state-ranks' | 'enrollment'>('top-schools');
+
+  // Only auto-switch if current tab becomes unavailable
+  useEffect(() => {
+    if (activeTab === 'state-ranks' && stateRanks.length === 0) {
+      setActiveTab('top-schools');
+    }
+  }, [stateRanks.length]);
 
   const tabs = [
     { id: 'top-schools' as const, label: 'Top Schools' },
