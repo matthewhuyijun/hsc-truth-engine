@@ -45,3 +45,7 @@ research/**/*.pdf
 
 # OS
 .DS_Store
+
+# HSCninja scraped data (do NOT commit)
+data/hscninja/
+scripts/scrape-hscninja.mjs

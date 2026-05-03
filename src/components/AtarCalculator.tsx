@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo, useRef, useEffect } from "react";
+import { useState, useMemo, useRef, useEffect, useLayoutEffect } from "react";
 import { Trash2, Search, ChevronDown, AlertTriangle } from "lucide-react";
 import {
   getAllCourses,
@@ -17,28 +17,39 @@ const DEFAULT_ROWS = 5;
 interface RowState {
   course: string;
   hscMark: number;
-  searchOpen: boolean;
+}
+
+interface DropdownState {
+  rowIndex: number;
+  top: number;
+  left: number;
+  width: number;
   searchQuery: string;
   activeIdx: number;
 }
 
 function createEmptyRow(): RowState {
-  return { course: "", hscMark: 0, searchOpen: false, searchQuery: "", activeIdx: 0 };
+  return { course: "", hscMark: 0 };
 }
 
 export function AtarCalculator() {
   const [rows, setRows] = useState<RowState[]>(() =>
     Array.from({ length: DEFAULT_ROWS }, () => createEmptyRow())
   );
+  const [dropdown, setDropdown] = useState<DropdownState | null>(null);
+  const triggerRef = useRef<HTMLElement | null>(null);
+  const dropdownContainerRef = useRef<HTMLDivElement | null>(null);
+  const [yearView, setYearView] = useState<"all" | string>("all");
 
   const allCourses = useMemo(() => getAllCourses(), []);
 
   const filterCourses = (q: string, rowIndex: number) => {
-    const hasEnglishSelected = rows.some((r) => r.course !== "" && /^english (advanced|standard|eal|studies)/i.test(r.course));
+    const hasEnglishSelected = rows.some(
+      (r) => r.course !== "" && /^english (advanced|standard|eal|studies)/i.test(r.course)
+    );
     const query = q.trim().toLowerCase();
 
     let pool = allCourses;
-    // Row 1: only show primary English courses (the 2-unit ones that satisfy mandatory English)
     if (rowIndex === 0 && !hasEnglishSelected) {
       pool = allCourses.filter((c) => /^english (advanced|standard|eal|studies)/i.test(c));
     }
@@ -47,12 +58,19 @@ export function AtarCalculator() {
     return pool.filter((c) => c.toLowerCase().includes(query)).slice(0, 30);
   };
 
+  const dropdownFiltered = useMemo(() => {
+    if (!dropdown) return [] as string[];
+    return filterCourses(dropdown.searchQuery, dropdown.rowIndex);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dropdown?.rowIndex, dropdown?.searchQuery, allCourses, rows]);
+
   function updateRow(idx: number, partial: Partial<RowState>) {
     setRows((prev) => prev.map((r, i) => (i === idx ? { ...r, ...partial } : r)));
   }
 
   function selectCourse(idx: number, courseName: string) {
-    updateRow(idx, { course: courseName, searchOpen: false, searchQuery: "" });
+    updateRow(idx, { course: courseName });
+    setDropdown(null);
   }
 
   function removeCourse(idx: number, e: React.MouseEvent) {
@@ -64,16 +82,69 @@ export function AtarCalculator() {
     setRows((prev) => [...prev, createEmptyRow()]);
   }
 
+  function toggleDropdown(idx: number, btn: HTMLElement) {
+    if (dropdown?.rowIndex === idx) {
+      setDropdown(null);
+      triggerRef.current = null;
+      return;
+    }
+    triggerRef.current = btn;
+    const rect = btn.getBoundingClientRect();
+    const filtered = filterCourses("", idx);
+    const dropH = Math.min(filtered.length * 40 + 44, 360);
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
+    setDropdown({
+      rowIndex: idx,
+      top: spaceBelow >= dropH + 8 ? rect.bottom + 4 : rect.top - dropH - 4,
+      left: rect.left,
+      width: rect.width,
+      searchQuery: "",
+      activeIdx: 0,
+    });
+  }
+
+  function updateDropdown(partial: Partial<DropdownState>) {
+    setDropdown((prev) => (prev ? { ...prev, ...partial } : null));
+  }
+
   const tableRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClick(e: MouseEvent) {
       if (tableRef.current && !tableRef.current.contains(e.target as Node)) {
-        setRows((prev) => prev.map((r) => ({ ...r, searchOpen: false })));
+        setDropdown(null);
+        triggerRef.current = null;
       }
     }
     document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
+    return () => {
+      document.removeEventListener("mousedown", handleClick);
+    };
   }, []);
+
+  useLayoutEffect(() => {
+    if (!dropdown || !triggerRef.current || !dropdownContainerRef.current) return;
+    const btn = triggerRef.current;
+    const el = dropdownContainerRef.current;
+    let rafId: number;
+
+    function syncPosition() {
+      const rect = btn.getBoundingClientRect();
+      const dropH = Math.min(dropdownFiltered.length * 40 + 44, 360);
+      const spaceBelow = window.innerHeight - rect.bottom;
+      el.style.top = `${spaceBelow >= dropH + 8 ? rect.bottom + 4 : rect.top - dropH - 4}px`;
+      el.style.left = `${rect.left}px`;
+      el.style.width = `${rect.width}px`;
+      el.style.maxHeight = `${Math.min(360, window.innerHeight - 16)}px`;
+      rafId = requestAnimationFrame(syncPosition);
+    }
+
+    rafId = requestAnimationFrame(syncPosition);
+
+    return () => cancelAnimationFrame(rafId);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dropdown?.rowIndex, dropdown?.searchQuery]);
 
   const inputs: CourseInput[] = useMemo(
     () => rows.filter((r) => r.course !== "").map((r) => ({ course: r.course, hscMark: r.hscMark })),
@@ -110,8 +181,38 @@ export function AtarCalculator() {
         </ol>
       </div>
 
+      {/* Year filter */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs font-medium text-muted">Year filter:</span>
+        <div className="flex flex-wrap gap-1">
+          <button
+            onClick={() => setYearView("all")}
+            className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors border ${
+              yearView === "all"
+                ? "bg-foreground text-background border-foreground"
+                : "border-border text-muted hover:text-foreground hover:border-foreground/30"
+            }`}
+          >
+            All
+          </button>
+          {YEARS.map((year) => (
+            <button
+              key={year}
+              onClick={() => setYearView(year)}
+              className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium font-mono transition-colors border ${
+                yearView === year
+                  ? "bg-foreground text-background border-foreground"
+                  : "border-border text-muted hover:text-foreground hover:border-foreground/30"
+              }`}
+            >
+              {year}
+            </button>
+          ))}
+        </div>
+      </div>
+
       {/* Table */}
-      <div className="rounded-lg border border-border" ref={tableRef}>
+      <div className="rounded-lg border border-border overflow-x-auto" ref={tableRef}>
         <table className="w-full text-sm table-fixed">
           <thead>
             <tr className="border-b border-border text-muted">
@@ -120,11 +221,20 @@ export function AtarCalculator() {
               <th className="w-[13%] px-1 py-2.5 text-center font-medium text-xs uppercase tracking-wider">
                 HSC Mark
               </th>
-              {YEARS.map((year) => (
-                <th key={year} className="w-[8%] px-1 py-2.5 text-center font-mono text-xs text-muted">
-                  {year}
-                </th>
-              ))}
+              {yearView === "all"
+                ? YEARS.map((year) => (
+                    <th
+                      key={year}
+                      className="hidden sm:table-cell w-[8%] px-1 py-2.5 text-center font-mono text-xs text-muted"
+                    >
+                      {year}
+                    </th>
+                  ))
+                : (
+                    <th className="px-1 py-2.5 text-center font-mono text-xs text-muted">
+                      {yearView}
+                    </th>
+                  )}
             </tr>
             <tr className="border-b border-border">
               <th></th>
@@ -134,11 +244,17 @@ export function AtarCalculator() {
               <th className="px-1 py-1 text-center">
                 <span className="text-xs text-muted/50">/100</span>
               </th>
-              {YEARS.map((year) => (
-                <th key={year} className="px-1 py-1 text-center">
-                  <span className="text-xs text-muted/50 font-mono">Scaled</span>
-                </th>
-              ))}
+              {yearView === "all"
+                ? YEARS.map((year) => (
+                    <th key={year} className="hidden sm:table-cell px-1 py-1 text-center">
+                      <span className="text-xs text-muted/50 font-mono">Scaled</span>
+                    </th>
+                  ))
+                : (
+                    <th className="px-1 py-1 text-center">
+                      <span className="text-xs text-muted/50 font-mono">Scaled</span>
+                    </th>
+                  )}
             </tr>
           </thead>
           <tbody>
@@ -154,13 +270,12 @@ export function AtarCalculator() {
                   </td>
 
                   {/* Course Select */}
-                  <td className="px-2 py-2.5 relative">
+                  <td className="px-2 py-2.5">
                     <div className="flex items-center gap-1.5">
                       <button
-                        onClick={() =>
-                          updateRow(i, { searchOpen: !row.searchOpen, searchQuery: "", activeIdx: 0 })
-                        }
-                        className="flex-1 flex items-center justify-between rounded border border-border bg-background px-2.5 py-1.5 text-left text-sm hover:border-foreground/30 transition-colors min-w-0"
+                        onClick={(e) => toggleDropdown(i, e.currentTarget)}
+                        className="flex items-center justify-between rounded border border-border bg-background px-2.5 py-1.5 text-left text-sm hover:border-foreground/30 transition-colors min-w-0"
+                        style={{ width: dropdown?.rowIndex === i ? dropdown.width : "100%" }}
                       >
                         <span className={row.course ? "text-foreground truncate" : "text-muted/50 truncate"}>
                           {row.course || "Select course..."}
@@ -184,64 +299,6 @@ export function AtarCalculator() {
                         <span className="flex-shrink-0 text-xs text-amber-500 font-mono">excluded</span>
                       )}
                     </div>
-
-                    {/* Dropdown */}
-                    {row.searchOpen && (
-                      <div className="absolute left-2 right-0 top-full z-50 mt-1 max-h-52 overflow-y-auto rounded-md border border-border bg-background shadow-lg">
-                        <div className="sticky top-0 border-b border-border p-1.5 bg-background">
-                          <div className="flex items-center gap-1.5 rounded border border-border px-2 py-1">
-                            <Search className="h-3.5 w-3.5 text-muted/50 flex-shrink-0" />
-                            <input
-                              type="text"
-                              autoFocus
-                              value={row.searchQuery}
-                              onChange={(e) =>
-                                updateRow(i, { searchQuery: e.target.value, activeIdx: 0 })
-                              }
-                              placeholder="Search courses..."
-                              className="flex-1 bg-transparent text-sm placeholder:text-muted/50 focus:outline-none"
-                              onKeyDown={(e) => {
-                                const filtered = filterCourses(row.searchQuery, i);
-                                if (filtered.length === 0) return;
-                                if (e.key === "ArrowDown") {
-                                  e.preventDefault();
-                                  updateRow(i, {
-                                    activeIdx: row.activeIdx < filtered.length - 1 ? row.activeIdx + 1 : 0,
-                                  });
-                                } else if (e.key === "ArrowUp") {
-                                  e.preventDefault();
-                                  updateRow(i, {
-                                    activeIdx: row.activeIdx > 0 ? row.activeIdx - 1 : filtered.length - 1,
-                                  });
-                                } else if (e.key === "Enter") {
-                                  e.preventDefault();
-                                  selectCourse(i, filtered[row.activeIdx]);
-                                } else if (e.key === "Escape") {
-                                  updateRow(i, { searchOpen: false });
-                                }
-                              }}
-                            />
-                          </div>
-                        </div>
-                        {filterCourses(row.searchQuery, i).map((name, idx) => {
-                          const selected = rows.some((r) => r.course === name);
-                          const u = resolveUnits(name, activeInputsForUnits);
-                          return (
-                            <button
-                              key={name}
-                              onClick={() => !selected && selectCourse(i, name)}
-                              disabled={selected}
-                              className={`flex w-full items-center justify-between px-3 py-2 text-sm text-left transition-colors ${
-                                idx === row.activeIdx ? "bg-surface-hover" : "hover:bg-surface-hover/50"
-                              } disabled:opacity-30 disabled:cursor-not-allowed`}
-                            >
-                              <span className="truncate">{name}</span>
-                              <span className="text-xs text-muted/50 font-mono ml-2 flex-shrink-0">{u}u</span>
-                            </button>
-                          );
-                        })}
-                      </div>
-                    )}
                   </td>
 
                   {/* HSC Mark */}
@@ -266,30 +323,48 @@ export function AtarCalculator() {
                   </td>
 
                   {/* Per-Year Scaled Marks */}
-                  {YEARS.map((year) => {
-                    const yd = courseResult?.perYearScaled.find((ys) => ys.year === year);
-                    if (!row.hscMark || !yd) {
-                      return (
-                        <td key={year} className="px-1 py-2.5 text-center">
-                          <span className="text-sm text-muted/30 font-mono">—</span>
-                        </td>
-                      );
-                    }
-                    if (!yd.courseExists && courseResult?.perYearScaled.some((ys) => ys.courseExists)) {
-                      return (
-                        <td key={year} className="px-1 py-2.5 text-center">
-                          <span className="text-sm text-muted/40 font-mono">a</span>
-                        </td>
-                      );
-                    }
-                    return (
-                      <td key={year} className="px-1 py-2.5 text-center">
-                        <span className="font-mono text-sm tabular-nums">
-                          {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
-                        </span>
-                      </td>
-                    );
-                  })}
+                  {yearView === "all"
+                    ? YEARS.map((year) => {
+                        const yd = courseResult?.perYearScaled.find((ys) => ys.year === year);
+                        if (!row.hscMark || !yd) {
+                          return (
+                            <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
+                              <span className="text-sm text-muted/30 font-mono">—</span>
+                            </td>
+                          );
+                        }
+                        if (!yd.courseExists && courseResult?.perYearScaled.some((ys) => ys.courseExists)) {
+                          return (
+                            <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
+                              <span className="text-sm text-muted/40 font-mono">a</span>
+                            </td>
+                          );
+                        }
+                        return (
+                          <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
+                            <span className="font-mono text-sm tabular-nums">
+                              {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
+                            </span>
+                          </td>
+                        );
+                      })
+                    : (() => {
+                        const yd = courseResult?.perYearScaled.find((ys) => ys.year === yearView);
+                        if (!row.hscMark || !yd) {
+                          return (
+                            <td className="px-1 py-2.5 text-center">
+                              <span className="text-sm text-muted/30 font-mono">—</span>
+                            </td>
+                          );
+                        }
+                        return (
+                          <td className="px-1 py-2.5 text-center">
+                            <span className="font-mono text-sm tabular-nums">
+                              {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
+                            </span>
+                          </td>
+                        );
+                      })()}
                 </tr>
               );
             })}
@@ -300,16 +375,27 @@ export function AtarCalculator() {
                 <td></td>
                 <td className="px-2 py-2.5 text-sm font-semibold text-foreground">Aggregate</td>
                 <td></td>
-                {YEARS.map((year) => {
-                  const yr = result.yearResults.find((r) => r.year === year);
-                  return (
-                    <td key={year} className="px-1 py-2.5 text-center">
-                      <span className="font-mono text-sm font-medium tabular-nums">
-                        {yr?.aggregate ? yr.aggregate.toFixed(1) : "—"}
-                      </span>
-                    </td>
-                  );
-                })}
+                {yearView === "all"
+                  ? YEARS.map((year) => {
+                      const yr = result.yearResults.find((r) => r.year === year);
+                      return (
+                        <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
+                          <span className="font-mono text-sm font-medium tabular-nums">
+                            {yr?.aggregate ? yr.aggregate.toFixed(1) : "—"}
+                          </span>
+                        </td>
+                      );
+                    })
+                  : (() => {
+                      const yr = result.yearResults.find((r) => r.year === yearView);
+                      return (
+                        <td className="px-1 py-2.5 text-center">
+                          <span className="font-mono text-sm font-medium tabular-nums">
+                            {yr?.aggregate ? yr.aggregate.toFixed(1) : "—"}
+                          </span>
+                        </td>
+                      );
+                    })()}
               </tr>
             )}
 
@@ -319,22 +405,103 @@ export function AtarCalculator() {
                 <td></td>
                 <td className="px-2 py-2.5 text-sm font-semibold text-foreground">Est. ATAR</td>
                 <td></td>
-                {YEARS.map((year) => {
-                  const yr = result.yearResults.find((r) => r.year === year);
-                  const atarVal = yr?.atar;
-                  return (
-                    <td key={year} className="px-1 py-2.5 text-center">
-                      <span className="font-mono text-sm font-semibold tabular-nums">
-                        {atarVal !== undefined && atarVal > 0 ? atarVal.toFixed(2) : "—"}
-                      </span>
-                    </td>
-                  );
-                })}
+                {yearView === "all"
+                  ? YEARS.map((year) => {
+                      const yr = result.yearResults.find((r) => r.year === year);
+                      const atarVal = yr?.atar;
+                      return (
+                        <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
+                          <span className="font-mono text-sm font-semibold tabular-nums">
+                            {atarVal !== undefined && atarVal > 0 ? atarVal.toFixed(2) : "—"}
+                          </span>
+                        </td>
+                      );
+                    })
+                  : (() => {
+                      const yr = result.yearResults.find((r) => r.year === yearView);
+                      const atarVal = yr?.atar;
+                      return (
+                        <td className="px-1 py-2.5 text-center">
+                          <span className="font-mono text-sm font-semibold tabular-nums">
+                            {atarVal !== undefined && atarVal > 0 ? atarVal.toFixed(2) : "—"}
+                          </span>
+                        </td>
+                      );
+                    })()}
               </tr>
             )}
           </tbody>
         </table>
       </div>
+
+      {/* Dropdown overlay (fixed position, kept in sync via RAF) */}
+      {dropdown && (
+        <div
+          ref={dropdownContainerRef}
+          className="fixed z-[100] rounded-md border border-border bg-background shadow-lg overflow-hidden flex flex-col"
+          style={{
+            top: dropdown.top,
+            left: dropdown.left,
+            width: dropdown.width,
+          }}
+          onScroll={(e) => e.stopPropagation()}
+        >
+          <div className="shrink-0 border-b border-border p-1.5 bg-background">
+            <div className="flex items-center gap-1.5 rounded border border-border px-2 py-1">
+              <Search className="h-3.5 w-3.5 text-muted/50 flex-shrink-0" />
+              <input
+                type="text"
+                autoFocus
+                value={dropdown.searchQuery}
+                onChange={(e) =>
+                  updateDropdown({ searchQuery: e.target.value, activeIdx: 0 })
+                }
+                placeholder="Search courses..."
+                className="flex-1 bg-transparent text-sm placeholder:text-muted/50 focus:outline-none"
+                onKeyDown={(e) => {
+                  if (dropdownFiltered.length === 0) return;
+                  if (e.key === "ArrowDown") {
+                    e.preventDefault();
+                    updateDropdown({
+                      activeIdx: dropdown.activeIdx < dropdownFiltered.length - 1 ? dropdown.activeIdx + 1 : 0,
+                    });
+                  } else if (e.key === "ArrowUp") {
+                    e.preventDefault();
+                    updateDropdown({
+                      activeIdx: dropdown.activeIdx > 0 ? dropdown.activeIdx - 1 : dropdownFiltered.length - 1,
+                    });
+                  } else if (e.key === "Enter") {
+                    e.preventDefault();
+                    selectCourse(dropdown.rowIndex, dropdownFiltered[dropdown.activeIdx]);
+                  } else if (e.key === "Escape") {
+                    triggerRef.current = null;
+                    setDropdown(null);
+                  }
+                }}
+              />
+            </div>
+          </div>
+          <div className="overflow-y-auto" style={{ maxHeight: dropdownFiltered.length * 40 }}>
+            {dropdownFiltered.map((name, idx) => {
+              const selected = rows.some((r) => r.course === name);
+              const u = resolveUnits(name, activeInputsForUnits);
+              return (
+                <button
+                  key={name}
+                  onClick={() => !selected && selectCourse(dropdown.rowIndex, name)}
+                  disabled={selected}
+                  className={`flex w-full items-center justify-between px-3 py-2 text-sm text-left transition-colors ${
+                    idx === dropdown.activeIdx ? "bg-surface-hover" : "hover:bg-surface-hover/50"
+                  } disabled:opacity-30 disabled:cursor-not-allowed`}
+                >
+                  <span className="truncate">{name}</span>
+                  <span className="text-xs text-muted/50 font-mono ml-2 flex-shrink-0">{u}u</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* Add course button */}
       <div className="flex justify-center">

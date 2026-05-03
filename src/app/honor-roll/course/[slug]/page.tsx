@@ -3,12 +3,23 @@
 import { Suspense, useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, BookOpen, Trophy, Search } from 'lucide-react';
-import { getRenameHistory } from '@/lib/course-aliases';
+import { ArrowLeft, Search, Info } from 'lucide-react';
+import { getRenameHistory, resolveCourseNumbers } from '@/lib/course-aliases';
+import {
+  useCourseData, useSparoCourseData,
+  type SchoolDetail, type StateRankEntry, type SchoolB6Entry,
+  type B6StudentEntry, type SparoSchoolData,
+} from '@/lib/honor-roll';
 
-const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017'];
+const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003', '2002', '2001'];
 const ALL_YEARS = 'all';
 type YearValue = 'all' | string;
+type TabId = 'state-ranks' | 'band6-list' | 'top-schools';
+const ALL_TABS: { id: TabId; label: string }[] = [
+  { id: 'state-ranks', label: 'State Ranks' },
+  { id: 'band6-list', label: 'Band 6/E4 List' },
+  { id: 'top-schools', label: 'Top Schools' },
+];
 
 interface YearData {
   year: number;
@@ -20,60 +31,6 @@ interface CourseData {
   name: string;
   allNames?: string[];
   years: YearData[];
-}
-
-interface StudentCourse {
-  code: string;
-  name: string;
-  rank: number;
-}
-
-interface StudentEntry {
-  firstName: string;
-  lastName: string;
-  courses: StudentCourse[];
-  b6Count: number;
-  stateRankCount: number;
-  isAllRounder: boolean;
-}
-
-interface CourseAggregate {
-  code: string;
-  name: string;
-  band6Count: number;
-  stateRanks: number[];
-}
-
-interface SchoolDetail {
-  name: string;
-  stats: {
-    band6Count: number;
-    uniqueStudents: number;
-    stateRanks: number;
-    allRounders: number;
-  };
-  students: StudentEntry[];
-  courses: CourseAggregate[];
-}
-
-interface StateRankEntry {
-  firstName: string;
-  lastName: string;
-  schoolName: string;
-  rank: number;
-}
-
-interface SchoolB6Entry {
-  name: string;
-  slug: string;
-  band6Count: number;
-}
-
-interface B6StudentEntry {
-  firstName: string;
-  lastName: string;
-  schoolName: string;
-  schoolSlug: string;
 }
 
 interface CourseStats {
@@ -185,12 +142,18 @@ function CourseDetailContent({
   const [allCourseData, setAllCourseData] = useState<CourseData[] | null>(null);
   const [schoolDetailMap, setSchoolDetailMap] = useState<Record<string, SchoolDetail> | null>(null);
   const [courseStats, setCourseStats] = useState<CourseStats | null>(null);
+  const [sparoData, setSparoData] = useState<Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null>(null);
   const [loading, setLoading] = useState(true);
   const [notFound, setNotFound] = useState(false);
   const [error, setError] = useState(false);
+  const [activeSection, setActiveSection] = useState<TabId>('state-ranks');
 
   useEffect(() => {
     params.then(p => setResolvedParams(p));
+    fetch('/data/sparo-schools.json')
+      .then(r => r.json())
+      .then(data => setSparoData(data))
+      .catch(() => setSparoData(null));
   }, [params]);
 
   /* eslint-disable react-hooks/set-state-in-effect */
@@ -200,8 +163,6 @@ function CourseDetailContent({
     setLoading(true);
     setNotFound(false);
     setError(false);
-    setSchoolDetailMap(null);
-    setCourseStats(null);
 
     if (isAllYears) {
       fetch('/data/courses.json')
@@ -252,78 +213,29 @@ function CourseDetailContent({
     return getRenameHistory(resolvedParams.slug);
   }, [resolvedParams]);
 
-  const stateRanks = useMemo((): StateRankEntry[] => {
-    if (!schoolDetailMap || !resolvedParams) return [];
-    const results: StateRankEntry[] = [];
-    const courseCode = resolvedParams.slug;
-    for (const [, school] of Object.entries(schoolDetailMap)) {
-      for (const student of school.students) {
-        for (const course of student.courses) {
-          if (course.code === courseCode && course.rank > 0) {
-            results.push({
-              firstName: student.firstName,
-              lastName: student.lastName,
-              schoolName: school.name,
-              rank: course.rank,
-            });
-          }
-        }
-      }
-    }
-    results.sort((a, b) => a.rank - b.rank);
-    return results;
-  }, [schoolDetailMap, resolvedParams]);
+  const { sparoCourseMap, sparoRankMap } = useSparoCourseData(sparoData, courseData?.name);
 
-  const b6Students = useMemo((): B6StudentEntry[] => {
-    if (!schoolDetailMap || !resolvedParams) return [];
-    const results: B6StudentEntry[] = [];
-    const courseCode = resolvedParams.slug;
-    const seen = new Set<string>();
-    for (const [schoolSlug, school] of Object.entries(schoolDetailMap)) {
-      for (const student of school.students) {
-        for (const course of student.courses) {
-          if (course.code === courseCode) {
-            const key = `${student.lastName}|${student.firstName}|${schoolSlug}`;
-            if (seen.has(key)) continue;
-            seen.add(key);
-            results.push({
-              firstName: student.firstName,
-              lastName: student.lastName,
-              schoolName: school.name,
-              schoolSlug,
-            });
-            break;
-          }
-        }
-      }
-    }
-    results.sort((a, b) => {
-      const ln = a.lastName.localeCompare(b.lastName);
-      if (ln !== 0) return ln;
-      return a.firstName.localeCompare(b.firstName);
-    });
-    return results;
-  }, [schoolDetailMap, resolvedParams]);
-
-  const topSchools = useMemo((): SchoolB6Entry[] => {
-    if (!schoolDetailMap || !resolvedParams) return [];
-    const results: SchoolB6Entry[] = [];
-    const courseCode = resolvedParams.slug;
-    for (const [slug, school] of Object.entries(schoolDetailMap)) {
-      const ca = school.courses.find(c => c.code === courseCode);
-      if (ca && ca.band6Count > 0) {
-        results.push({
-          name: school.name,
-          slug,
-          band6Count: ca.band6Count,
-        });
-      }
-    }
-    results.sort((a, b) => b.band6Count - a.band6Count);
-    return results;
-  }, [schoolDetailMap, resolvedParams]);
-
+  const { stateRanks, b6Students, topSchools } = useCourseData(schoolDetailMap, resolvedParams?.slug);
   const totalStateRanks = useMemo(() => stateRanks.length, [stateRanks]);
+
+  const availableTabs = useMemo(() =>
+    ALL_TABS.filter(tab => {
+      if (tab.id === 'state-ranks') return stateRanks.length > 0;
+      if (tab.id === 'top-schools') return topSchools.length > 0;
+      return true; // band6-list always available
+    }),
+    [stateRanks, topSchools]
+  );
+
+  // auto-switch to first available tab if current one isn't available
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (availableTabs.length === 0) return;
+    if (!availableTabs.find(t => t.id === activeSection)) {
+      setActiveSection(availableTabs[0].id);
+    }
+  }, [availableTabs, activeSection]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   const handleYearSelect = (y: YearValue) => {
     if (!resolvedParams) return;
@@ -350,16 +262,44 @@ function CourseDetailContent({
         notFound={notFound}
         error={error}
         currentYear={currentYear}
-        yearB6Count={currentYearB6Count}
-        allYearsTotalB6={allYearsTotalB6}
-        totalStateRanks={totalStateRanks}
-        renameHistory={renameHistory}
-        courseStats={courseStats}
+        renameHistory={isAllYears ? renameHistory : null}
+        availableTabs={availableTabs}
+        activeSection={activeSection}
+        onTabChange={setActiveSection}
       />
 
       {!loading && !notFound && !error && courseData && (
         <>
-          <YearTabBar currentYear={currentYear} onSelect={handleYearSelect} />
+          {/* Sticky bar: horizontally scrollable year pills */}
+          <section className="sticky top-14 z-10 border-b border-border bg-background/95 backdrop-blur-sm">
+            <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
+              <div className="flex gap-1 overflow-x-auto scrollbar-none">
+                <button
+                  onClick={() => handleYearSelect(ALL_YEARS)}
+                  className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                    currentYear === ALL_YEARS
+                      ? 'bg-foreground text-background'
+                      : 'text-muted hover:text-foreground hover:bg-surface-hover'
+                  }`}
+                >
+                  All
+                </button>
+                {AVAILABLE_YEARS.map(y => (
+                  <button
+                    key={y}
+                    onClick={() => handleYearSelect(y)}
+                    className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                      currentYear === y
+                        ? 'bg-foreground text-background'
+                        : 'text-muted hover:text-foreground hover:bg-surface-hover'
+                    }`}
+                  >
+                    {y}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </section>
 
           {isAllYears ? (
             <div className="mx-auto max-w-7xl divide-y divide-border">
@@ -369,11 +309,26 @@ function CourseDetailContent({
           ) : (
             <div className="mx-auto max-w-7xl divide-y divide-border">
               {courseStats && (
-                <CourseEnrollmentSection courseStats={courseStats} year={currentYear} />
+                <CourseEnrollmentSection
+                  courseStats={courseStats}
+                  year={currentYear}
+                  band6Count={currentYearB6Count}
+                />
               )}
-              <TopSchoolsSection schools={topSchools} year={currentYear} />
-              <StateRanksSection stateRanks={stateRanks} year={currentYear} />
-              <Band6ListSection students={b6Students} year={currentYear} />
+              {activeSection === 'top-schools' && (
+                <TopSchoolsSection schools={topSchools} year={currentYear} sparoMap={sparoCourseMap} sparoRankMap={sparoRankMap} />
+              )}
+              {activeSection === 'state-ranks' && (
+                <StateRanksSection
+                  stateRanks={stateRanks}
+                  year={currentYear}
+                  totalB6={b6Students.length}
+                  onSwitchToB6List={() => setActiveSection('band6-list')}
+                />
+              )}
+              {activeSection === 'band6-list' && (
+                <Band6ListSection students={b6Students} year={currentYear} />
+              )}
             </div>
           )}
 
@@ -390,24 +345,22 @@ function HeaderSection({
   notFound,
   error,
   currentYear,
-  yearB6Count,
-  allYearsTotalB6,
-  totalStateRanks,
   renameHistory,
-  courseStats,
+  availableTabs,
+  activeSection,
+  onTabChange,
 }: {
   courseData: CourseData | null;
   loading: boolean;
   notFound: boolean;
   error: boolean;
   currentYear: YearValue;
-  yearB6Count: number | null;
-  allYearsTotalB6: number;
-  totalStateRanks: number;
   renameHistory: { name: string; years: string }[] | null;
-  courseStats: CourseStats | null;
+  availableTabs: { id: TabId; label: string }[];
+  activeSection: TabId;
+  onTabChange: (id: TabId) => void;
 }) {
-  const yearLabel = currentYear === ALL_YEARS ? '2017–2025' : currentYear;
+  const yearLabel = currentYear === ALL_YEARS ? '2001–2025' : currentYear;
 
   return (
     <section className="border-b border-border">
@@ -451,9 +404,28 @@ function HeaderSection({
           </>
         ) : (
           <>
-            <h1 className="text-3xl font-bold tracking-tight">
-              {courseData?.name}
-            </h1>
+            <div className="flex flex-wrap items-center gap-4">
+              <h1 className="text-3xl font-bold tracking-tight">
+                {courseData?.name}
+              </h1>
+              {availableTabs.length > 0 && (
+                <div className="inline-flex items-center rounded-lg bg-accent-dim p-1">
+                  {availableTabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => onTabChange(tab.id)}
+                      className={`rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                        activeSection === tab.id
+                          ? 'bg-background text-foreground shadow-sm'
+                          : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <p className="mt-1 text-sm text-muted">
               {yearLabel} HSC Distinguished Achievers
             </p>
@@ -471,87 +443,8 @@ function HeaderSection({
                 ))}
               </div>
             )}
-
-            <div className="mt-6 grid grid-cols-2 gap-6 sm:grid-cols-4">
-              <div>
-                <div className="text-3xl font-bold font-mono tracking-tight">
-                  {currentYear === ALL_YEARS
-                    ? allYearsTotalB6.toLocaleString()
-                    : yearB6Count?.toLocaleString() || '—'}
-                </div>
-                <div className="mt-1 text-xs text-muted font-medium">
-                  B6/E4
-                </div>
-              </div>
-              <div>
-                <div className="text-3xl font-bold font-mono tracking-tight">
-                  {currentYear === ALL_YEARS ? '—' : totalStateRanks.toLocaleString() || '—'}
-                </div>
-                <div className="mt-1 text-xs text-muted font-medium">
-                  State Ranks
-                </div>
-              </div>
-              {courseStats && (
-                <div>
-                  <div className="text-3xl font-bold font-mono tracking-tight">
-                    {courseStats.total.toLocaleString()}
-                  </div>
-                  <div className="mt-1 text-xs text-muted font-medium">
-                    Enrollment
-                  </div>
-                </div>
-              )}
-              <div>
-                <div className="text-3xl font-bold font-mono tracking-tight">
-                  {courseData?.years.length.toLocaleString()}
-                </div>
-                <div className="mt-1 text-xs text-muted font-medium">
-                  Years of Data
-                </div>
-              </div>
-            </div>
           </>
         )}
-      </div>
-    </section>
-  );
-}
-
-function YearTabBar({
-  currentYear,
-  onSelect,
-}: {
-  currentYear: YearValue;
-  onSelect: (year: YearValue) => void;
-}) {
-  return (
-    <section className="sticky top-14 z-10 border-b border-border bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
-        <div className="flex items-center gap-1 overflow-x-auto">
-          <button
-            onClick={() => onSelect(ALL_YEARS)}
-            className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              currentYear === ALL_YEARS
-                ? 'bg-foreground text-background'
-                : 'text-muted hover:text-foreground hover:bg-surface-hover'
-            }`}
-          >
-            All
-          </button>
-          {AVAILABLE_YEARS.map(y => (
-            <button
-              key={y}
-              onClick={() => onSelect(y)}
-              className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                currentYear === y
-                  ? 'bg-foreground text-background'
-                  : 'text-muted hover:text-foreground hover:bg-surface-hover'
-              }`}
-            >
-              {y}
-            </button>
-          ))}
-        </div>
       </div>
     </section>
   );
@@ -562,52 +455,91 @@ function YearTabBar({
 function TopSchoolsSection({
   schools,
   year,
+  sparoMap,
+  sparoRankMap,
 }: {
   schools: SchoolB6Entry[];
   year: string;
+  sparoMap: Map<string, { school_average: number; state_average: number }> | null;
+  sparoRankMap: Map<string, number> | null;
 }) {
   const INITIAL_COUNT = 30;
   const [showAll, setShowAll] = useState(false);
   const displaySchools = showAll ? schools : schools.slice(0, INITIAL_COUNT);
 
+  const hasSparo = sparoMap !== null && sparoMap.size > 0;
+
   if (schools.length === 0) return null;
 
+  const colSchool = hasSparo ? 'col-span-4' : 'col-span-9';
+  const colB6 = 'col-span-2';
+  const colSparo = 'col-span-5';
+
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Top Schools</h2>
         <p className="mt-1 text-sm text-muted">
           {schools.length} school{schools.length !== 1 ? 's' : ''} with at least one B6/E4 in this course during {year}.
+          {hasSparo && ' Avg HSC Mark data from SPaRO school annual reports.'}
         </p>
       </div>
 
       <div className="rounded-xl border border-border bg-surface overflow-hidden">
         <div className="grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted">
           <div className="col-span-1">#</div>
-          <div className="col-span-9">School</div>
-          <div className="col-span-2 flex justify-end">B6/E4</div>
+          <div className={colSchool}>School</div>
+          <div className={`${colB6} flex justify-end`}>B6/E4</div>
+          {hasSparo && (
+            <div className={`${colSparo} flex justify-end items-center gap-1`}>
+              School Avg vs State Avg
+              <span className="cursor-help" title="Rank by school average from published SPaRO data">
+                <Info className="h-3 w-3 text-muted/70" />
+              </span>
+            </div>
+          )}
         </div>
 
         <div className="divide-y divide-border">
-          {displaySchools.map((school, idx) => (
-            <Link
-              key={school.slug}
-              href={`/honor-roll/school/${school.slug}?year=${year}`}
-              className="grid grid-cols-12 gap-3 px-5 py-3 hover:bg-surface-hover transition-colors"
-            >
-              <div className="col-span-1 flex items-center">
-                <span className="text-xs text-muted font-mono">{idx + 1}</span>
-              </div>
-              <div className="col-span-9 flex items-center min-w-0">
-                <span className="text-sm font-medium truncate">{school.name}</span>
-              </div>
-              <div className="col-span-2 flex items-center justify-end">
-                <span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">
-                  {school.band6Count.toLocaleString()}
-                </span>
-              </div>
-            </Link>
-          ))}
+          {displaySchools.map((school, idx) => {
+            const sparo = sparoMap?.get(school.slug);
+            const rank = sparoRankMap?.get(school.slug);
+            return (
+              <Link
+                key={school.slug}
+                href={`/honor-roll/school/${school.slug}?year=${year}`}
+                className="grid grid-cols-12 gap-3 px-5 py-3 hover:bg-surface-hover transition-colors"
+              >
+                <div className="col-span-1 flex items-center">
+                  <span className="text-xs text-muted font-mono">{idx + 1}</span>
+                </div>
+                <div className={`${colSchool} flex items-center min-w-0`}>
+                  <span className="text-sm font-medium truncate">{school.name}</span>
+                </div>
+                <div className={`${colB6} flex items-center justify-end`}>
+                  <span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">
+                    {school.band6Count.toLocaleString()}
+                  </span>
+                </div>
+                {hasSparo && (
+                  <div className={`${colSparo} flex items-center justify-end gap-1`}>
+                    {sparo ? (
+                      <>
+                        <span className="text-xs font-mono text-muted/70 ml-0.5">#{rank}</span>
+                        <span className="text-xs font-mono text-muted">
+                          {sparo.school_average.toFixed(1)}
+                          <span className="text-muted/40 mx-1">vs</span>
+                          {sparo.state_average.toFixed(1)}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-xs text-muted/20">—</span>
+                    )}
+                  </div>
+                )}
+              </Link>
+            );
+          })}
         </div>
 
         <div className="border-t border-border px-5 py-2 text-xs text-muted flex items-center justify-between">
@@ -633,64 +565,96 @@ function TopSchoolsSection({
 function StateRanksSection({
   stateRanks,
   year,
+  totalB6,
+  onSwitchToB6List,
 }: {
   stateRanks: StateRankEntry[];
   year: string;
+  totalB6: number;
+  onSwitchToB6List: () => void;
 }) {
-  if (stateRanks.length === 0) return null;
+  const otherCount = totalB6 - stateRanks.length;
 
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">State Ranks</h2>
         <p className="mt-1 text-sm text-muted">
-          Top {stateRanks.length} student{stateRanks.length !== 1 ? 's' : ''} in this course for {year}.
+          The number of state rank students (Top Achievers) awarded by NESA depends on the number of candidates in the course.
         </p>
       </div>
 
-      <div className="rounded-xl border border-border bg-surface overflow-hidden">
-        <div className="grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted">
-          <div className="col-span-1">#</div>
-          <div className="col-span-4">Student</div>
-          <div className="col-span-5">School</div>
-          <div className="col-span-2 flex justify-end">Rank</div>
+      {stateRanks.length === 0 ? (
+        <div className="rounded-xl border border-border bg-surface px-5 py-16 text-center">
+          <p className="text-sm text-muted">No state ranks awarded for this course in {year}.</p>
         </div>
-
-        <div className="divide-y divide-border">
-          {stateRanks.map((entry, idx) => (
-            <div
-              key={`${entry.lastName}-${entry.firstName}-${entry.rank}`}
-              className="grid grid-cols-12 gap-3 px-5 py-3"
-            >
-              <div className="col-span-1 flex items-center">
-                <span className="text-xs text-muted font-mono">{idx + 1}</span>
-              </div>
-              <div className="col-span-4 flex items-center min-w-0">
-                <span className="text-sm font-medium truncate">
-                  {entry.firstName} {entry.lastName}
-                </span>
-              </div>
-              <div className="col-span-5 flex items-center min-w-0">
-                <Link
-                  href={`/honor-roll/school/${slugify(entry.schoolName)}?year=${year}`}
-                  className="text-sm text-foreground hover:underline underline-offset-4 transition-colors truncate"
-                >
-                  {entry.schoolName}
-                </Link>
-              </div>
-              <div className="col-span-2 flex items-center justify-end">
-                <span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">
-                  {entry.rank}
-                </span>
-              </div>
+      ) : (
+        <>
+          <div className="rounded-xl border border-border bg-surface overflow-hidden">
+            <div className="grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted">
+              <div className="col-span-1">#</div>
+              <div className="col-span-4">Student Name</div>
+              <div className="col-span-5">School</div>
+              <div className="col-span-2 flex justify-end">Rank</div>
             </div>
-          ))}
-        </div>
 
-        <div className="border-t border-border px-5 py-2 text-xs text-muted">
-          {stateRanks.length} state rank{stateRanks.length !== 1 ? 's' : ''}
-        </div>
-      </div>
+            <div className="divide-y divide-border">
+              {stateRanks.map((entry, idx) => (
+                <div
+                  key={`${entry.lastName}-${entry.firstName}-${entry.rank}`}
+                  className="grid grid-cols-12 gap-3 px-5 py-3"
+                >
+                  <div className="col-span-1 flex items-center">
+                    <span className="text-xs text-muted font-mono">{idx + 1}</span>
+                  </div>
+                  <div className="col-span-4 flex items-center min-w-0">
+                    <span className="text-sm font-medium truncate">
+                      {entry.lastName}, {entry.firstName}
+                    </span>
+                  </div>
+                  <div className="col-span-5 flex items-center min-w-0">
+                    <Link
+                      href={`/honor-roll/school/${slugify(entry.schoolName)}?year=${year}`}
+                      className="text-sm text-foreground hover:underline underline-offset-4 transition-colors truncate"
+                    >
+                      {entry.schoolName}
+                    </Link>
+                  </div>
+                  <div className="col-span-2 flex items-center justify-end">
+                    <span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-mono font-medium ${
+                      entry.rank === 1
+                        ? 'border-green-600 bg-green-600 text-white'
+                        : 'border-border text-muted'
+                    }`}>
+                      {entry.rank}
+                    </span>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t border-border px-5 py-2 text-xs text-muted">
+              {stateRanks.length} state rank{stateRanks.length !== 1 ? 's' : ''}
+            </div>
+          </div>
+
+          {otherCount > 0 && (
+            <div className="mt-4 text-center">
+              <p className="text-sm text-muted">
+                Plus{' '}
+                <span className="font-medium text-foreground">{otherCount} other student{otherCount !== 1 ? 's' : ''}</span>
+                {' '}achieved the highest band for this course.{' '}
+                <button
+                  onClick={onSwitchToB6List}
+                  className="text-foreground hover:underline underline-offset-4 font-medium"
+                >
+                  See the Band 6/E4 List for full details.
+                </button>
+              </p>
+            </div>
+          )}
+        </>
+      )}
     </section>
   );
 }
@@ -705,25 +669,32 @@ function Band6ListSection({
   year: string;
 }) {
   const [search, setSearch] = useState('');
-  const INITIAL_COUNT = 30;
-  const [showAll, setShowAll] = useState(false);
+  const [filterAllRounder, setFilterAllRounder] = useState(false);
+  const [filterStateRank, setFilterStateRank] = useState(false);
 
   const filtered = useMemo(() => {
-    if (!search) return students;
+    let result = students;
     const s = search.toLowerCase();
-    return students.filter(
-      stu =>
+    if (s) {
+      result = result.filter(stu =>
         `${stu.firstName} ${stu.lastName}`.toLowerCase().includes(s) ||
-        stu.schoolName.toLowerCase().includes(s)
-    );
-  }, [students, search]);
-
-  const displayStudents = showAll ? filtered : filtered.slice(0, INITIAL_COUNT);
+        stu.schoolName.toLowerCase().includes(s) ||
+        stu.courses.some(c => c.name.toLowerCase().includes(s))
+      );
+    }
+    if (filterAllRounder) {
+      result = result.filter(s => s.isAllRounder);
+    }
+    if (filterStateRank) {
+      result = result.filter(s => s.stateRankCount > 0);
+    }
+    return result;
+  }, [students, search, filterAllRounder, filterStateRank]);
 
   if (students.length === 0) return null;
 
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Band 6 / E4 List</h2>
         <p className="mt-1 text-sm text-muted">
@@ -731,29 +702,71 @@ function Band6ListSection({
         </p>
       </div>
 
-      <div className="flex items-center gap-3 mb-4">
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted" />
-          <input
-            type="text"
-            placeholder="Search student or school..."
-            value={search}
-            onChange={e => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-border bg-surface py-1.5 pl-8 pr-3 text-sm
-              placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-foreground/10"
-          />
+      <div className="flex flex-col gap-3 mb-4">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="relative flex-1 max-w-xs">
+            <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted" />
+            <input
+              type="text"
+              placeholder="Search by student name..."
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              className="w-full rounded-lg border border-border bg-surface py-1.5 pl-8 pr-3 text-sm
+                placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-foreground/10"
+            />
+          </div>
         </div>
-        {search && (
-          <span className="text-xs text-muted">
-            {filtered.length} of {students.length}
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="text-xs font-medium text-muted">Filters:</span>
+          <button
+            onClick={() => setFilterAllRounder(v => !v)}
+            className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors ${
+              filterAllRounder
+                ? 'border-foreground bg-foreground text-background'
+                : 'border-border text-muted hover:text-foreground'
+            }`}
+          >
+            All-rounders
+          </button>
+          <button
+            onClick={() => setFilterStateRank(v => !v)}
+            className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1.5 text-xs font-medium transition-colors ${
+              filterStateRank
+                ? 'border-foreground bg-foreground text-background'
+                : 'border-border text-muted hover:text-foreground'
+            }`}
+          >
+            Has state rank
+          </button>
+        </div>
+        <div className="flex flex-wrap items-center gap-4 rounded-lg border border-border bg-surface px-3 py-2 text-xs text-muted">
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2 w-2 rounded-full bg-amber-400 shrink-0" />
+            All-rounder
           </span>
-        )}
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" />
+            First in course
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" />
+            State rank
+          </span>
+          <span className="flex items-center gap-1.5 ml-auto">
+            <span className="inline-flex items-center rounded-full border border-green-600 bg-green-600 px-1.5 py-0.5 text-[10px] font-medium text-white">Course (#1)</span>
+            <span className="inline-flex items-center rounded-full border border-blue-600 bg-blue-600 px-1.5 py-0.5 text-[10px] font-medium text-white">Course (#N)</span>
+            <span className="inline-flex items-center rounded-full border border-border px-1.5 py-0.5 text-[10px] font-medium text-foreground/70">Course</span>
+          </span>
+        </div>
       </div>
 
       <div className="rounded-xl border border-border bg-surface overflow-hidden">
         <div className="grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted">
-          <div className="col-span-5">Student</div>
-          <div className="col-span-7">School</div>
+          <div className="col-span-3">Student Name</div>
+          <div className="col-span-2 hidden md:block">School</div>
+          <div className="col-span-5 md:col-span-4">B6/E4 Courses</div>
+          <div className="col-span-2 md:col-span-1 flex justify-end">B6/E4 Count</div>
+          <div className="col-span-2 flex justify-end">State Ranks</div>
         </div>
 
         {filtered.length === 0 ? (
@@ -762,17 +775,37 @@ function Band6ListSection({
           </div>
         ) : (
           <div className="divide-y divide-border">
-            {displayStudents.map((entry) => (
+            {filtered.map((entry) => {
+              const hasFirst = entry.courses.some(c => c.rank === 1);
+              const hasStateRank = entry.courses.some(c => c.rank > 1);
+              return (
               <div
                 key={`${entry.lastName}-${entry.firstName}-${entry.schoolSlug}`}
                 className="grid grid-cols-12 gap-3 px-5 py-3"
               >
-                <div className="col-span-5 flex items-center min-w-0">
+                <div className="col-span-3 flex items-center gap-1.5 min-w-0">
+                  {entry.isAllRounder && (
+                    <span className="inline-block h-2 w-2 rounded-full bg-amber-400 shrink-0" title="All-rounder" />
+                  )}
                   <span className="text-sm font-medium truncate">
-                    {entry.firstName} {entry.lastName}
+                    {entry.lastName}, {entry.firstName}
                   </span>
+                  {hasFirst && (
+                    <span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" title="First in course" />
+                  )}
+                  {hasStateRank && (
+                    <span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" title="State rank" />
+                  )}
+                  <div className="md:hidden ml-1">
+                    <Link
+                      href={`/honor-roll/school/${entry.schoolSlug}?year=${year}`}
+                      className="text-xs text-muted hover:text-foreground transition-colors"
+                    >
+                      {entry.schoolName}
+                    </Link>
+                  </div>
                 </div>
-                <div className="col-span-7 flex items-center min-w-0">
+                <div className="col-span-2 hidden md:flex items-center min-w-0">
                   <Link
                     href={`/honor-roll/school/${entry.schoolSlug}?year=${year}`}
                     className="text-sm text-foreground hover:underline underline-offset-4 transition-colors truncate"
@@ -780,25 +813,44 @@ function Band6ListSection({
                     {entry.schoolName}
                   </Link>
                 </div>
+                <div className="col-span-5 md:col-span-4 flex flex-wrap items-center gap-1 min-w-0">
+                  {entry.courses.map((course, cIdx) => {
+                    const rank = course.rank > 0 ? course.rank : 0;
+                    const isFirst = rank === 1;
+                    const badgeClass = isFirst
+                      ? 'border-green-600 bg-green-600 text-white hover:bg-green-700'
+                      : rank > 0
+                        ? 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700'
+                        : 'border-border text-foreground/70 hover:bg-surface-hover';
+                    return (
+                      <Link
+                        key={course.code + cIdx}
+                        href={`/honor-roll/course/${course.code}?year=${year}`}
+                        className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium transition-colors ${badgeClass}`}
+                      >
+                        {course.name}
+                        {rank > 0 && <span className="ml-1 font-mono">(#{rank})</span>}
+                      </Link>
+                    );
+                  })}
+                </div>
+                <div className="col-span-2 md:col-span-1 flex items-center justify-end">
+                  <span className="text-sm text-muted font-mono">{entry.b6Count}</span>
+                </div>
+                <div className="col-span-2 flex items-center justify-end">
+                  <span className="text-sm text-muted font-mono">
+                    {entry.stateRankCount > 0 ? entry.stateRankCount : '0'}
+                  </span>
+                </div>
               </div>
-            ))}
+            );})}
           </div>
         )}
 
-        <div className="border-t border-border px-5 py-2 text-xs text-muted flex items-center justify-between">
-          <span>
-            {displayStudents.length} of {filtered.length} student{filtered.length !== 1 ? 's' : ''}
-            {filtered.length < students.length && (
-              <span className="text-muted/60"> (filtered from {students.length})</span>
-            )}
-          </span>
-          {filtered.length > INITIAL_COUNT && (
-            <button
-              onClick={() => setShowAll(v => !v)}
-              className="text-xs font-medium text-muted hover:text-foreground transition-colors"
-            >
-              {showAll ? 'Show less' : `Show all ${filtered.length}`}
-            </button>
+        <div className="border-t border-border px-5 py-2 text-xs text-muted">
+          Showing {filtered.length} of {students.length} student{students.length !== 1 ? 's' : ''}
+          {filtered.length < students.length && (
+            <span className="text-muted/60"> (filtered from {students.length})</span>
           )}
         </div>
       </div>
@@ -826,7 +878,7 @@ function YearBreakdownSection({
   );
 
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Year by Year</h2>
         <p className="mt-1 text-sm text-muted">
@@ -910,6 +962,8 @@ function TopSchoolsOverTimeSection({
   const [allData, setAllData] = useState<Map<string, { name: string; totalB6: number }> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  const allAliases = resolveCourseNumbers(courseCode);
+
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     let cancelled = false;
@@ -927,12 +981,16 @@ function TopSchoolsOverTimeSection({
       const aggregate = new Map<string, { name: string; totalB6: number }>();
       for (const { detailMap } of results) {
         for (const [slug, school] of Object.entries(detailMap)) {
-          const ca = school.courses.find(c => c.code === courseCode);
-          if (ca && ca.band6Count > 0) {
-            if (!aggregate.has(slug)) {
-              aggregate.set(slug, { name: school.name, totalB6: 0 });
+          // Check all alias codes (legacy + canonical) for this school
+          for (const aliasCode of allAliases) {
+            const ca = school.courses.find(c => c.code === aliasCode);
+            if (ca && ca.band6Count > 0) {
+              if (!aggregate.has(slug)) {
+                aggregate.set(slug, { name: school.name, totalB6: 0 });
+              }
+              aggregate.get(slug)!.totalB6 += ca.band6Count;
+              break; // found match for this school, don't double-count
             }
-            aggregate.get(slug)!.totalB6 += ca.band6Count;
           }
         }
       }
@@ -956,11 +1014,11 @@ function TopSchoolsOverTimeSection({
   const displaySchools = showAll ? sorted : sorted.slice(0, INITIAL_COUNT);
 
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Top Schools Over Time</h2>
         <p className="mt-1 text-sm text-muted">
-          Cumulative B6/E4 counts across {AVAILABLE_YEARS.length} years (2017–2025).
+          Cumulative B6/E4 counts across {AVAILABLE_YEARS.length} years (2001–2025).
         </p>
       </div>
 
@@ -1027,15 +1085,17 @@ function TopSchoolsOverTimeSection({
 function CourseEnrollmentSection({
   courseStats,
   year,
+  band6Count,
 }: {
   courseStats: CourseStats;
   year: string;
+  band6Count: number | null;
 }) {
   const hasBands = courseStats.bands && Object.keys(courseStats.bands).length > 0;
   const bandOrder = ['6', '5', '4', '3', '2', '1'] as const;
 
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Course Statistics</h2>
         <p className="mt-1 text-sm text-muted">
@@ -1102,7 +1162,9 @@ function CourseEnrollmentSection({
             <div className="flex flex-wrap gap-x-4 gap-y-1">
               {bandOrder.map((band, i) => {
                 const pct = courseStats.bands![`Band ${band}`] || 0;
-                const count = courseStats.total > 0 ? Math.round(courseStats.total * pct / 100) : 0;
+                const count = band === '6' && band6Count != null
+                  ? band6Count
+                  : courseStats.total > 0 ? Math.round(courseStats.total * pct / 100) : 0;
                 const opacities = [0.80, 0.64, 0.48, 0.34, 0.22, 0.12];
                 return (
                   <span key={band} className="inline-flex items-center gap-1.5 text-xs">

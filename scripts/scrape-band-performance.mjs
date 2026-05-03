@@ -30,28 +30,60 @@ async function scrapeBands(page, url) {
 
     const data = await page.evaluate(() => {
       const result = {};
+
+      const extractPct = (text) => {
+        const pct = text.match(/\(([\d.]+)%\)/);
+        return pct ? parseFloat(pct[1]) : null;
+      };
+
+      // Strategy 1: <h3> with following <p> (2012+)
       const h3s = document.querySelectorAll('h3');
       h3s.forEach(h3 => {
         const match = h3.textContent.match(/Band\s*(\d+)/i);
-        if (match) {
+        if (match && !result[`Band ${match[1]}`]) {
           const p = h3.nextElementSibling;
           if (p && p.tagName === 'P') {
-            const pct = p.textContent.match(/\(([\d.]+)%\)/);
-            if (pct) result[`Band ${match[1]}`] = parseFloat(pct[1]);
+            const pct = extractPct(p.textContent);
+            if (pct !== null) result[`Band ${match[1]}`] = pct;
           }
         }
       });
       if (Object.keys(result).length > 0) return result;
 
+      // Strategy 2: <strong> tags with Band text
       const strongs = document.querySelectorAll('strong');
       strongs.forEach(strong => {
         const match = strong.textContent.match(/Band\s*(\d+)/i);
         if (match && !result[`Band ${match[1]}`]) {
           const text = strong.parentElement?.textContent || '';
-          const pct = text.match(/\(([\d.]+)%\)/);
-          if (pct) result[`Band ${match[1]}`] = parseFloat(pct[1]);
+          const pct = extractPct(text);
+          if (pct !== null) result[`Band ${match[1]}`] = pct;
         }
       });
+      if (Object.keys(result).length > 0) return result;
+
+      // Strategy 3: <b> tags with Band text (2001-2007 format)
+      const bTags = document.querySelectorAll('b');
+      bTags.forEach(b => {
+        const match = b.textContent.match(/Band[\s&nbsp;]*(\d+)/i);
+        if (match && !result[`Band ${match[1]}`]) {
+          const text = b.parentElement?.textContent || '';
+          const pct = extractPct(text);
+          if (pct !== null) result[`Band ${match[1]}`] = pct;
+        }
+      });
+      if (Object.keys(result).length > 0) return result;
+
+      // Strategy 4: regex on all td elements
+      const tds = document.querySelectorAll('td');
+      for (const td of tds) {
+        const text = td.textContent || '';
+        const bandMatch = text.match(/Band[\s&nbsp;]*(\d+)/i);
+        if (bandMatch && !result[`Band ${bandMatch[1]}`]) {
+          const pct = extractPct(text);
+          if (pct !== null) result[`Band ${bandMatch[1]}`] = pct;
+        }
+      }
 
       return result;
     });
@@ -83,7 +115,7 @@ async function main() {
 
       for (let i = 0; i < courseLinks.length; i++) {
         const { href, name } = courseLinks[i];
-        const fullUrl = href.startsWith('http') ? href : baseUrl + href;
+        const fullUrl = href.startsWith('http') ? href : href.startsWith('/') ? `https://www.boardofstudies.nsw.edu.au${href}` : baseUrl + href;
 
         const data = await scrapeBands(page, fullUrl);
         if (data) {

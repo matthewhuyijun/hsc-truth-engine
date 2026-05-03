@@ -3,10 +3,17 @@
 import { Suspense, useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import Link from 'next/link';
-import { ArrowLeft, Award, Users, Trophy, Search, X } from 'lucide-react';
+import { ArrowLeft, Award, Users, Trophy, Search, X, Info } from 'lucide-react';
 
-const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017'];
-const ALL_YEARS_VALUE = 'all';
+const AVAILABLE_YEARS = ['2025', '2024', '2023', '2022', '2021', '2020', '2019', '2018', '2017', '2016', '2015', '2014', '2013', '2012', '2011', '2010', '2009', '2008', '2007', '2006', '2005', '2004', '2003', '2002', '2001'];
+const ALL_YEARS = 'all';
+type YearValue = 'all' | string;
+type SchoolTabId = 'subject-performance' | 'students' | 'year-trend';
+const ALL_SCHOOL_TABS: { id: SchoolTabId; label: string }[] = [
+  { id: 'subject-performance', label: 'Subject Performance' },
+  { id: 'students', label: 'Students' },
+  { id: 'year-trend', label: 'Year Trend' },
+];
 
 interface SchoolStats {
   name: string;
@@ -48,8 +55,6 @@ interface SchoolDetailData {
   students: StudentEntry[];
   courses: CourseEntry[];
 }
-
-type YearValue = typeof ALL_YEARS_VALUE | string;
 
 export default function SchoolDetailPage({
   params,
@@ -147,7 +152,7 @@ function SchoolDetailContent({
   const router = useRouter();
 
   const yearParam = searchParams.get('year') || '2025';
-  const currentYear = yearParam === ALL_YEARS_VALUE ? ALL_YEARS_VALUE : yearParam;
+  const currentYear = yearParam === ALL_YEARS ? ALL_YEARS : yearParam;
 
   const [schoolDetail, setSchoolDetail] = useState<SchoolDetailData | null>(null);
   const [allYearsStats, setAllYearsStats] = useState<Map<string, SchoolStats> | null>(null);
@@ -160,6 +165,7 @@ function SchoolDetailContent({
   const [filterStateRank, setFilterStateRank] = useState(false);
   const [filterCourseSearch, setFilterCourseSearch] = useState('');
   const [showAllStudents, setShowAllStudents] = useState(false);
+  const [activeSection, setActiveSection] = useState<SchoolTabId>('subject-performance');
 
   useEffect(() => {
     params.then(p => setResolvedParams(p));
@@ -176,12 +182,12 @@ function SchoolDetailContent({
     let cancelled = false;
     setLoading(true);
     setNotFound(false);
-    setSchoolDetail(null);
-    setAllYearsStats(null);
-    setAllYearsCourses(null);
+    setFilterAllRounder(false);
+    setFilterStateRank(false);
+    setFilterCourseSearch('');
     setShowAllStudents(false);
 
-    if (currentYear === ALL_YEARS_VALUE) {
+    if (currentYear === ALL_YEARS) {
       Promise.all(
         AVAILABLE_YEARS.map(y =>
           Promise.all([
@@ -285,7 +291,7 @@ function SchoolDetailContent({
   }, [schoolDetail, filterAllRounder, filterStateRank, filterCourseSearch]);
 
   const currentStats = useMemo(() => {
-    if (currentYear === ALL_YEARS_VALUE) {
+    if (currentYear === ALL_YEARS) {
       if (!allYearsStats) return null;
       let totalB6 = 0;
       let totalStudents = 0;
@@ -302,9 +308,50 @@ function SchoolDetailContent({
   }, [currentYear, schoolDetail, allYearsStats]);
 
   const schoolName =
-    (currentYear === ALL_YEARS_VALUE
+    (currentYear === ALL_YEARS
       ? allYearsStats?.values().next().value?.name
       : schoolDetail?.name) || '';
+
+  const sparoRankMap = useMemo((): Map<string, number> | null => {
+    if (!sparoData || !resolvedParams) return null;
+    const subjects = sparoData[resolvedParams.slug]?.subjects;
+    if (!subjects || subjects.length === 0) return null;
+    const map = new Map<string, number>();
+    for (const { subject } of subjects) {
+      const allAverages: { slug: string; average: number }[] = [];
+      for (const [slug, school] of Object.entries(sparoData)) {
+        const subj = school.subjects.find(s => s.subject === subject);
+        if (subj) allAverages.push({ slug, average: subj.school_average });
+      }
+      allAverages.sort((a, b) => b.average - a.average);
+      allAverages.forEach((entry, i) => {
+        if (entry.slug === resolvedParams.slug) map.set(subject, i + 1);
+        else if (map.has(entry.slug)) return;
+      });
+    }
+    return map.size > 0 ? map : null;
+  }, [sparoData, resolvedParams]);
+
+  const isAllYears = currentYear === ALL_YEARS;
+
+  const availableTabs = useMemo(() => {
+    return ALL_SCHOOL_TABS.filter(tab => {
+      if (tab.id === 'subject-performance') return (schoolDetail?.courses?.length || 0) > 0;
+      if (tab.id === 'students') return (schoolDetail?.students?.length || 0) > 0;
+      if (tab.id === 'year-trend') return (allYearsStats?.size || 0) >= 2;
+      return true;
+    });
+  }, [isAllYears, schoolDetail, allYearsStats]);
+
+  // auto-switch to first available tab if current one isn't available
+  /* eslint-disable react-hooks/set-state-in-effect */
+  useEffect(() => {
+    if (availableTabs.length === 0) return;
+    if (!availableTabs.find(t => t.id === activeSection)) {
+      setActiveSection(availableTabs[0].id);
+    }
+  }, [availableTabs, activeSection]);
+  /* eslint-enable react-hooks/set-state-in-effect */
 
   if (!resolvedParams) return null;
 
@@ -314,25 +361,54 @@ function SchoolDetailContent({
         loading={loading}
         schoolName={schoolName || ''}
         currentYear={currentYear}
-        stats={currentStats}
         notFound={notFound}
         yearParam={yearParam}
+        availableTabs={availableTabs}
+        activeSection={activeSection}
+        onTabChange={setActiveSection}
       />
 
-      <YearTabBar
-        currentYear={currentYear}
-        onSelect={handleYearSelect}
-      />
+      {/* Sticky bar: horizontally scrollable year pills */}
+      <section className="sticky top-14 z-10 border-b border-border bg-background/95 backdrop-blur-sm">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
+          <div className="flex gap-1 overflow-x-auto scrollbar-none">
+            <button
+              onClick={() => handleYearSelect(ALL_YEARS)}
+              className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                currentYear === ALL_YEARS
+                  ? 'bg-foreground text-background'
+                  : 'text-muted hover:text-foreground hover:bg-surface-hover'
+              }`}
+            >
+              All
+            </button>
+            {AVAILABLE_YEARS.map(y => (
+              <button
+                key={y}
+                onClick={() => handleYearSelect(y)}
+                className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
+                  currentYear === y
+                    ? 'bg-foreground text-background'
+                    : 'text-muted hover:text-foreground hover:bg-surface-hover'
+                }`}
+              >
+                {y}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {!loading && !notFound && (
         <>
-          {currentYear === ALL_YEARS_VALUE ? (
+          {currentYear === ALL_YEARS ? (
             <div className="mx-auto max-w-7xl divide-y divide-border">
               {allYearsCourses && allYearsCourses.length > 0 && (
                 <SubjectPerformanceSection
                   courses={allYearsCourses}
-                  year="2017–2025"
+                  year="2001–2025"
                   sparoSubjects={sparoData?.[resolvedParams.slug]?.subjects}
+                  sparoRankMap={sparoRankMap}
                 />
               )}
               <AllYearsView
@@ -341,30 +417,39 @@ function SchoolDetailContent({
               />
             </div>
           ) : (
-            <div className="mx-auto max-w-7xl divide-y divide-border">
-              <SubjectPerformanceSection
-                courses={schoolDetail?.courses || []}
-                year={currentYear}
-                sparoSubjects={sparoData?.[resolvedParams.slug]?.subjects}
-              />
-              <StudentsSection
-                students={schoolDetail?.students || []}
-                filteredStudents={filteredStudents}
-                filterAllRounder={filterAllRounder}
-                filterStateRank={filterStateRank}
-                filterCourseSearch={filterCourseSearch}
-                onToggleAllRounder={() => { setFilterAllRounder(v => !v); setFilterStateRank(false); }}
-                onToggleStateRank={() => { setFilterStateRank(v => !v); setFilterAllRounder(false); }}
-                onCourseSearchChange={setFilterCourseSearch}
-                year={currentYear}
-                showAll={showAllStudents}
-                onToggleShowAll={() => setShowAllStudents(v => !v)}
-              />
-              <YearTrendSection
-                allYearsStats={allYearsStats}
-                slug={resolvedParams.slug}
-              />
-            </div>
+            <>
+              <div className="mx-auto max-w-7xl divide-y divide-border">
+                {activeSection === 'subject-performance' && (
+                  <SubjectPerformanceSection
+                    courses={schoolDetail?.courses || []}
+                    year={currentYear}
+                    sparoSubjects={sparoData?.[resolvedParams.slug]?.subjects}
+                    sparoRankMap={sparoRankMap}
+                  />
+                )}
+                {activeSection === 'students' && (
+                  <StudentsSection
+                    students={schoolDetail?.students || []}
+                    filteredStudents={filteredStudents}
+                    filterAllRounder={filterAllRounder}
+                    filterStateRank={filterStateRank}
+                    filterCourseSearch={filterCourseSearch}
+                    onToggleAllRounder={() => { setFilterAllRounder(v => !v); setFilterStateRank(false); }}
+                    onToggleStateRank={() => { setFilterStateRank(v => !v); setFilterAllRounder(false); }}
+                    onCourseSearchChange={setFilterCourseSearch}
+                    year={currentYear}
+                    showAll={showAllStudents}
+                    onToggleShowAll={() => setShowAllStudents(v => !v)}
+                  />
+                )}
+                {activeSection === 'year-trend' && (
+                  <YearTrendSection
+                    allYearsStats={allYearsStats}
+                    slug={resolvedParams.slug}
+                  />
+                )}
+              </div>
+            </>
           )}
         </>
       )}
@@ -376,23 +461,27 @@ function HeaderSection({
   loading,
   schoolName,
   currentYear,
-  stats,
   notFound,
   yearParam,
+  availableTabs,
+  activeSection,
+  onTabChange,
 }: {
   loading: boolean;
   schoolName: string;
   currentYear: YearValue;
-  stats: { band6Count: number; uniqueStudents: number; stateRanks: number } | null;
   notFound: boolean;
   yearParam: string;
+  availableTabs: { id: SchoolTabId; label: string }[];
+  activeSection: SchoolTabId;
+  onTabChange: (id: SchoolTabId) => void;
 }) {
   return (
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-4">
         <div className="flex items-center gap-2 text-base text-muted/70">
           <Link
-            href={`/honor-roll?year=${yearParam === ALL_YEARS_VALUE ? '2025' : yearParam}`}
+            href={`/honor-roll?year=${yearParam === ALL_YEARS ? '2025' : yearParam}`}
             className="hover:text-foreground transition-colors"
           >
             Honor Roll
@@ -418,83 +507,35 @@ function HeaderSection({
           </>
         ) : (
           <>
-            <h1 className="text-3xl font-bold tracking-tight">{schoolName}</h1>
+            <div className="flex flex-wrap items-center gap-4">
+              <h1 className="text-3xl font-bold tracking-tight">{schoolName}</h1>
+              {availableTabs.length > 0 && (
+                <div className="inline-flex items-center rounded-lg bg-accent-dim p-1">
+                  {availableTabs.map((tab) => (
+                    <button
+                      key={tab.id}
+                      onClick={() => onTabChange(tab.id)}
+                      className={`rounded-md px-3 py-1.5 text-sm font-medium transition-all ${
+                        activeSection === tab.id
+                          ? 'bg-background text-foreground shadow-sm'
+                          : 'text-muted hover:text-foreground'
+                      }`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <p className="mt-1 text-sm text-muted">
-              {currentYear === ALL_YEARS_VALUE
+              {currentYear === ALL_YEARS
                 ? 'Cumulative distinguished achievers across all years'
                 : `${currentYear} HSC Distinguished Achievers`}
             </p>
 
-            {stats && (
-              <div className="mt-6 grid grid-cols-3 gap-6">
-                <div>
-                  <div className="text-3xl font-bold font-mono tracking-tight">
-                    {stats.band6Count.toLocaleString()}
-                  </div>
-                  <div className="mt-1 text-xs text-muted font-medium">
-                    Total B6/E4
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold font-mono tracking-tight">
-                    {stats.uniqueStudents.toLocaleString()}
-                  </div>
-                  <div className="mt-1 text-xs text-muted font-medium">
-                    Unique Students
-                  </div>
-                </div>
-                <div>
-                  <div className="text-3xl font-bold font-mono tracking-tight">
-                    {stats.stateRanks > 0 ? stats.stateRanks.toLocaleString() : '—'}
-                  </div>
-                  <div className="mt-1 text-xs text-muted font-medium">
-                    State Ranks
-                  </div>
-                </div>
-              </div>
-            )}
+
           </>
         )}
-      </div>
-    </section>
-  );
-}
-
-function YearTabBar({
-  currentYear,
-  onSelect,
-}: {
-  currentYear: YearValue;
-  onSelect: (year: YearValue) => void;
-}) {
-  return (
-    <section className="sticky top-14 z-10 border-b border-border bg-background/95 backdrop-blur-sm">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-2">
-        <div className="flex items-center gap-1 overflow-x-auto">
-          <button
-            onClick={() => onSelect(ALL_YEARS_VALUE)}
-            className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-              currentYear === ALL_YEARS_VALUE
-                ? 'bg-foreground text-background'
-                : 'text-muted hover:text-foreground hover:bg-surface-hover'
-            }`}
-          >
-            All
-          </button>
-          {AVAILABLE_YEARS.map(y => (
-            <button
-              key={y}
-              onClick={() => onSelect(y)}
-              className={`shrink-0 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                currentYear === y
-                  ? 'bg-foreground text-background'
-                  : 'text-muted hover:text-foreground hover:bg-surface-hover'
-              }`}
-            >
-              {y}
-            </button>
-          ))}
-        </div>
       </div>
     </section>
   );
@@ -506,10 +547,12 @@ function SubjectPerformanceSection({
   courses,
   year,
   sparoSubjects,
+  sparoRankMap,
 }: {
   courses: CourseEntry[];
   year: string;
   sparoSubjects?: { subject: string; school_average: number; state_average: number }[];
+  sparoRankMap: Map<string, number> | null;
 }) {
   const sparoMap = new Map((sparoSubjects || []).map(s => [s.subject, s]));
   const hasSparo = !!(sparoSubjects && sparoSubjects.length > 0);
@@ -535,7 +578,7 @@ function SubjectPerformanceSection({
   const colSparo = 'col-span-4';
 
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Subject Performance</h2>
         <p className="mt-1 text-sm text-muted">
@@ -563,7 +606,14 @@ function SubjectPerformanceSection({
           <div className={`${colCourse}`}>Course</div>
           <div className={`${colB6} flex justify-end`}>B6/E4</div>
           <div className={`${colRanks} flex justify-end`}>State Ranks</div>
-          {hasSparo && <div className={`${colSparo} flex justify-end`}>School Avg vs State Avg</div>}
+          {hasSparo && (
+            <div className={`${colSparo} flex justify-end items-center gap-1`}>
+              School Avg vs State Avg
+              <span className="cursor-help" title="Rank by school average from published SPaRO data">
+                <Info className="h-3 w-3 text-muted/70" />
+              </span>
+            </div>
+          )}
         </div>
 
         {sortedCourses.length === 0 && (
@@ -580,6 +630,7 @@ function SubjectPerformanceSection({
             colSparo={colSparo}
             hasSparo={hasSparo}
             sparoMap={sparoMap}
+            sparoRankMap={sparoRankMap}
             year={year}
           />
         )}
@@ -606,6 +657,7 @@ function CoursesList({
   colSparo,
   hasSparo,
   sparoMap,
+  sparoRankMap,
   year,
 }: {
   courses: CourseEntry[];
@@ -615,6 +667,7 @@ function CoursesList({
   colSparo: string;
   hasSparo: boolean;
   sparoMap: Map<string, { subject: string; school_average: number; state_average: number }>;
+  sparoRankMap: Map<string, number> | null;
   year: string;
 }) {
   return (
@@ -629,6 +682,7 @@ function CoursesList({
           colSparo={colSparo}
           hasSparo={hasSparo}
           sparo={sparoMap.get(course.name)}
+          sparoRank={sparoRankMap?.get(course.name)}
           year={year}
         />
       ))}
@@ -644,6 +698,7 @@ function CourseRow({
   colSparo,
   hasSparo,
   sparo,
+  sparoRank,
   year,
 }: {
   course: CourseEntry;
@@ -653,6 +708,7 @@ function CourseRow({
   colSparo: string;
   hasSparo: boolean;
   sparo: { subject: string; school_average: number; state_average: number } | undefined;
+  sparoRank: number | undefined;
   year: string;
 }) {
   return (
@@ -687,11 +743,16 @@ function CourseRow({
       {hasSparo && (
         <div className={`${colSparo} flex items-center justify-end gap-1`}>
           {sparo ? (
-            <span className="text-xs font-mono text-muted">
-              {sparo.school_average.toFixed(1)}
-              <span className="text-muted/40 mx-1">vs</span>
-              {sparo.state_average.toFixed(1)}
-            </span>
+            <>
+              <span className="text-xs font-mono text-muted/70 ml-0.5">
+                #{sparoRank}
+              </span>
+              <span className="text-xs font-mono text-muted">
+                {sparo.school_average.toFixed(1)}
+                <span className="text-muted/40 mx-1">vs</span>
+                {sparo.state_average.toFixed(1)}
+              </span>
+            </>
           ) : (
             <span className="text-xs text-muted/20">—</span>
           )}
@@ -734,7 +795,7 @@ function StudentsSection({
   if (students.length === 0) return null;
 
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Students</h2>
         <p className="mt-1 text-sm text-muted">
@@ -778,12 +839,32 @@ function StudentsSection({
         </div>
       </div>
 
+      <div className="mb-4 flex flex-wrap items-center gap-4 rounded-lg border border-border bg-surface px-3 py-2 text-xs text-muted">
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2 w-2 rounded-full bg-amber-400 shrink-0" />
+          All-rounder
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" />
+          First in course
+        </span>
+        <span className="flex items-center gap-1.5">
+          <span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" />
+          State rank
+        </span>
+        <span className="flex items-center gap-1.5 ml-auto">
+          <span className="inline-flex items-center rounded-full border border-green-600 bg-green-600 px-1.5 py-0.5 text-[10px] font-medium text-white">Course (#1)</span>
+          <span className="inline-flex items-center rounded-full border border-blue-600 bg-blue-600 px-1.5 py-0.5 text-[10px] font-medium text-white">Course (#N)</span>
+          <span className="inline-flex items-center rounded-full border border-border px-1.5 py-0.5 text-[10px] font-medium text-foreground/70">Course</span>
+        </span>
+      </div>
+
       <div className="rounded-xl border border-border bg-surface overflow-hidden">
         <div className="grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted">
-          <div className="col-span-4">Student</div>
+          <div className="col-span-4">Student Name</div>
           <div className="col-span-6">B6/E4 Courses</div>
-          <div className="col-span-1 flex justify-end">B6</div>
-          <div className="col-span-1 flex justify-end">Ranks</div>
+          <div className="col-span-1 flex justify-end">B6/E4 Count</div>
+          <div className="col-span-1 flex justify-end">State Ranks</div>
         </div>
 
         {filteredStudents.length === 0 ? (
@@ -792,38 +873,48 @@ function StudentsSection({
           </div>
         ) : (
           <div className="divide-y divide-border">
-            {displayStudents.map((student, idx) => (
+            {displayStudents.map((student, idx) => {
+                const hasFirst = student.courses.some(c => c.rank != null && c.rank === 1);
+                const hasStateRank = student.courses.some(c => c.rank != null && c.rank > 1);
+                return (
               <div
                 key={`${student.lastName}-${student.firstName}-${idx}`}
                 className="grid grid-cols-12 gap-3 px-5 py-3"
               >
-                <div className="col-span-4">
-                  <span className="text-sm font-medium">
+                <div className="col-span-4 flex items-center gap-1.5 min-w-0">
+                  {student.isAllRounder && (
+                    <span className="inline-block h-2 w-2 rounded-full bg-amber-400 shrink-0" title="All-rounder" />
+                  )}
+                  <span className="text-sm font-medium truncate">
                     {student.lastName}, {student.firstName}
                   </span>
-                  {student.isAllRounder && (
-                    <span className="mt-1 block text-xs text-amber-500 font-medium">
-                      All-rounder
-                    </span>
+                  {hasFirst && (
+                    <span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" title="First in course" />
+                  )}
+                  {hasStateRank && (
+                    <span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" title="State rank" />
                   )}
                 </div>
-                <div className="col-span-6 flex flex-wrap items-center gap-x-1 gap-y-0.5 min-w-0">
-                  {student.courses.map((course, cIdx) => (
-                    <span key={course.code + cIdx}>
+                <div className="col-span-6 flex flex-wrap items-center gap-1 min-w-0">
+                  {student.courses.map((course, cIdx) => {
+                    const rank = course.rank != null && course.rank > 0 ? course.rank : 0;
+                    const isFirst = rank === 1;
+                    const badgeClass = isFirst
+                      ? 'border-green-600 bg-green-600 text-white hover:bg-green-700'
+                      : rank > 0
+                        ? 'border-blue-600 bg-blue-600 text-white hover:bg-blue-700'
+                        : 'border-border text-foreground/70 hover:bg-surface-hover';
+                    return (
                       <Link
+                        key={course.code + cIdx}
                         href={`/honor-roll/course/${course.code}?year=${year}`}
-                        className="text-xs text-foreground/70 hover:text-foreground hover:underline underline-offset-2 transition-colors"
+                        className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium transition-colors ${badgeClass}`}
                       >
                         {course.name}
-                        {course.rank != null && course.rank > 0 && (
-                          <span className="font-mono ml-0.5">(#{course.rank})</span>
-                        )}
+                        {rank > 0 && <span className="ml-1 font-mono">(#{rank})</span>}
                       </Link>
-                      {cIdx < student.courses.length - 1 && (
-                        <span className="text-muted/30 mx-0.5">·</span>
-                      )}
-                    </span>
-                  ))}
+                    );
+                  })}
                 </div>
                 <div className="col-span-1 flex items-center justify-end">
                   <span className="text-sm text-muted font-mono">{student.b6Count}</span>
@@ -834,7 +925,7 @@ function StudentsSection({
                   </span>
                 </div>
               </div>
-            ))}
+            );})}
           </div>
         )}
 
@@ -873,7 +964,7 @@ function YearTrendSection({
   const maxB6 = Math.max(...yearsWithData.map(y => allYearsStats.get(y)!.band6Count));
 
   return (
-    <section className="px-4 py-8">
+    <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Year Trend</h2>
         <p className="mt-1 text-sm text-muted">
@@ -956,7 +1047,7 @@ function AllYearsView({
 
   return (
     <div className="mx-auto max-w-7xl">
-      <section className="px-4 py-8">
+      <section className="px-4 sm:px-6 lg:px-8 py-8">
         <div className="mb-4">
           <h2 className="text-lg font-semibold tracking-tight">Year by Year</h2>
           <p className="mt-1 text-sm text-muted">
@@ -984,7 +1075,7 @@ function AllYearsView({
           <div className="grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted">
             <div className="col-span-4">Year</div>
             <div className="col-span-3 flex justify-end">B6/E4</div>
-            <div className="col-span-3 flex justify-end">Students</div>
+            <div className="col-span-3 flex justify-end">Unique Students</div>
             <div className="col-span-2 flex justify-end">Ranks</div>
           </div>
           <div className="divide-y divide-border">

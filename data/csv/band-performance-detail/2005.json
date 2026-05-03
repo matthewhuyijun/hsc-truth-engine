@@ -1,0 +1,847 @@
+[
+  {
+    "year": 2005,
+    "course": "Aboriginal Studies 2 unit (15000)",
+    "Band 6": 2.84,
+    "Band 5": 20.73,
+    "Band 4": 29.67,
+    "Band 3": 26.42,
+    "Band 2": 14.63,
+    "Band 1": 2.43
+  },
+  {
+    "year": 2005,
+    "course": "Accounting 2 unit (16150)",
+    "Band 6": 22.95,
+    "Band 5": 24.52,
+    "Band 4": 22.64,
+    "Band 3": 12.89,
+    "Band 2": 8.17,
+    "Band 1": 8.8
+  },
+  {
+    "year": 2005,
+    "course": "Agriculture 2 unit (15010)",
+    "Band 6": 5.02,
+    "Band 5": 27.39,
+    "Band 4": 34.85,
+    "Band 3": 20.4,
+    "Band 2": 10.04,
+    "Band 1": 1.88
+  },
+  {
+    "year": 2005,
+    "course": "Ancient History 2 unit (15020)",
+    "Band 6": 12.03,
+    "Band 5": 29.77,
+    "Band 4": 27.38,
+    "Band 3": 17.59,
+    "Band 2": 7.73,
+    "Band 1": 4.92
+  },
+  {
+    "year": 2005,
+    "course": "Arabic Continuers 2 unit (15510)",
+    "Band 6": 2.62,
+    "Band 5": 29.25,
+    "Band 4": 31,
+    "Band 3": 18.77,
+    "Band 2": 10.04,
+    "Band 1": 8.29
+  },
+  {
+    "year": 2005,
+    "course": "Armenian Continuers 2 unit (15530)",
+    "Band 6": 8,
+    "Band 5": 52,
+    "Band 4": 40
+  },
+  {
+    "year": 2005,
+    "course": "Biology 2 unit (15030)",
+    "Band 6": 8.25,
+    "Band 5": 27.64,
+    "Band 4": 30.07,
+    "Band 3": 23.55,
+    "Band 2": 8.1,
+    "Band 1": 1.96
+  },
+  {
+    "year": 2005,
+    "course": "Business Services Examination 2 unit (16745)",
+    "Band 6": 0.84,
+    "Band 5": 12.4,
+    "Band 4": 36.21,
+    "Band 3": 26.44,
+    "Band 2": 9.03,
+    "Band 1": 1.57
+  },
+  {
+    "year": 2005,
+    "course": "Business Studies 2 unit (15040)",
+    "Band 6": 3.62,
+    "Band 5": 20.32,
+    "Band 4": 28.69,
+    "Band 3": 25.92,
+    "Band 2": 14.14,
+    "Band 1": 6.25
+  },
+  {
+    "year": 2005,
+    "course": "Chemistry 2 unit (15050)",
+    "Band 6": 8.33,
+    "Band 5": 23.6,
+    "Band 4": 30.57,
+    "Band 3": 23.47,
+    "Band 2": 10.14,
+    "Band 1": 3.27
+  },
+  {
+    "year": 2005,
+    "course": "Chinese Background Speakers 2 unit (15560)",
+    "Band 6": 3.92,
+    "Band 5": 31.79,
+    "Band 4": 38.51,
+    "Band 3": 19.1,
+    "Band 2": 3.32,
+    "Band 1": 1.28
+  },
+  {
+    "year": 2005,
+    "course": "Chinese Beginners 2 unit (15540)",
+    "Band 6": 20.68,
+    "Band 5": 37.93,
+    "Band 4": 20.68,
+    "Band 3": 10.34,
+    "Band 2": 10.34
+  },
+  {
+    "year": 2005,
+    "course": "Chinese Continuers 2 unit (15550)",
+    "Band 6": 28.97,
+    "Band 5": 52.33,
+    "Band 4": 14.01,
+    "Band 3": 4.67
+  },
+  {
+    "year": 2005,
+    "course": "Classical Greek Continuers 2 unit (15580)",
+    "Band 6": 100
+  },
+  {
+    "year": 2005,
+    "course": "Classical Hebrew Continuers 2 unit (15600)",
+    "Band 6": 27.5,
+    "Band 5": 35,
+    "Band 4": 27.5,
+    "Band 3": 5,
+    "Band 2": 5
+  },
+  {
+    "year": 2005,
+    "course": "Community and Family Studies 2 unit (15060)",
+    "Band 6": 4.01,
+    "Band 5": 26.19,
+    "Band 4": 35.55,
+    "Band 3": 24.69,
+    "Band 2": 7.25,
+    "Band 1": 1.87
+  },
+  {
+    "year": 2005,
+    "course": "Construction Examination 2 unit (16305)",
+    "Band 6": 0.45,
+    "Band 5": 6.75,
+    "Band 4": 34.5,
+    "Band 3": 34.76,
+    "Band 2": 5.78,
+    "Band 1": 2.27
+  },
+  {
+    "year": 2005,
+    "course": "Croatian Continuers 2 unit (15620)",
+    "Band 6": 38.46,
+    "Band 5": 23.07,
+    "Band 4": 38.46
+  },
+  {
+    "year": 2005,
+    "course": "Czech Continuers 2 unit (15630)",
+    "Band 6": 87.5,
+    "Band 5": 12.5
+  },
+  {
+    "year": 2005,
+    "course": "Dance 2 unit (15070)",
+    "Band 6": 5.77,
+    "Band 5": 18.47,
+    "Band 4": 29.72,
+    "Band 3": 31.02,
+    "Band 2": 11.25,
+    "Band 1": 3.75
+  },
+  {
+    "year": 2005,
+    "course": "Design and Technology 2 unit (15080)",
+    "Band 6": 4.03,
+    "Band 5": 16.62,
+    "Band 4": 33.99,
+    "Band 3": 33.32,
+    "Band 2": 10.02,
+    "Band 1": 1.77
+  },
+  {
+    "year": 2005,
+    "course": "Drama 2 unit (15090)",
+    "Band 6": 7.85,
+    "Band 5": 27.62,
+    "Band 4": 35.31,
+    "Band 3": 22.25,
+    "Band 2": 5.7,
+    "Band 1": 1.12
+  },
+  {
+    "year": 2005,
+    "course": "Dutch Continuers 2 unit (15640)",
+    "Band 6": 100
+  },
+  {
+    "year": 2005,
+    "course": "Earth and Environmental Science 2 unit (15100)",
+    "Band 6": 11.75,
+    "Band 5": 36.51,
+    "Band 4": 29.17,
+    "Band 3": 15.82,
+    "Band 2": 5.57,
+    "Band 1": 0.79
+  },
+  {
+    "year": 2005,
+    "course": "Economics 2 unit (15110)",
+    "Band 6": 14.13,
+    "Band 5": 34.86,
+    "Band 4": 25.65,
+    "Band 3": 13.9,
+    "Band 2": 5.78,
+    "Band 1": 5.08
+  },
+  {
+    "year": 2005,
+    "course": "Engineering Studies 2 unit (15120)",
+    "Band 6": 8.42,
+    "Band 5": 29.47,
+    "Band 4": 41.47,
+    "Band 3": 16.63,
+    "Band 2": 2.92,
+    "Band 1": 1.07
+  },
+  {
+    "year": 2005,
+    "course": "English (Advanced) 2 unit (15140)",
+    "Band 6": 7.95,
+    "Band 5": 37.84,
+    "Band 4": 44.1,
+    "Band 3": 8.89,
+    "Band 2": 0.94,
+    "Band 1": 0.11
+  },
+  {
+    "year": 2005,
+    "course": "English (Standard) 2 unit (15130)",
+    "Band 6": 0.01,
+    "Band 5": 2.36,
+    "Band 4": 31.24,
+    "Band 3": 45.37,
+    "Band 2": 16.76,
+    "Band 1": 3.73
+  },
+  {
+    "year": 2005,
+    "course": "English as a Second Language 2 unit (15150)",
+    "Band 6": 1.95,
+    "Band 5": 18.46,
+    "Band 4": 33.19,
+    "Band 3": 23.78,
+    "Band 2": 13.31,
+    "Band 1": 7.5
+  },
+  {
+    "year": 2005,
+    "course": "Entertainment Examination 2 unit (16955)",
+    "Band 6": 2.74,
+    "Band 5": 21.53,
+    "Band 4": 40.89,
+    "Band 3": 22.39,
+    "Band 2": 4.33,
+    "Band 1": 0.72
+  },
+  {
+    "year": 2005,
+    "course": "Filipino Continuers 2 unit (15660)",
+    "Band 6": 5.88,
+    "Band 5": 38.23,
+    "Band 4": 41.17,
+    "Band 3": 14.7
+  },
+  {
+    "year": 2005,
+    "course": "Food Technology 2 unit (15180)",
+    "Band 6": 7.26,
+    "Band 5": 19.5,
+    "Band 4": 29.75,
+    "Band 3": 27.72,
+    "Band 2": 10.31,
+    "Band 1": 4.45
+  },
+  {
+    "year": 2005,
+    "course": "French Beginners 2 unit (15670)",
+    "Band 6": 17.16,
+    "Band 5": 20.81,
+    "Band 4": 23.6,
+    "Band 3": 19.31,
+    "Band 2": 11.58,
+    "Band 1": 7.51
+  },
+  {
+    "year": 2005,
+    "course": "French Continuers 2 unit (15680)",
+    "Band 6": 20.78,
+    "Band 5": 27.66,
+    "Band 4": 29.39,
+    "Band 3": 17.33,
+    "Band 2": 4.13,
+    "Band 1": 0.68
+  },
+  {
+    "year": 2005,
+    "course": "General Mathematics 2 unit (15230)",
+    "Band 6": 4.37,
+    "Band 5": 18.96,
+    "Band 4": 34.27,
+    "Band 3": 27.73,
+    "Band 2": 9.42,
+    "Band 1": 4.75
+  },
+  {
+    "year": 2005,
+    "course": "Geography 2 unit (15190)",
+    "Band 6": 7.68,
+    "Band 5": 31.41,
+    "Band 4": 34.32,
+    "Band 3": 18.15,
+    "Band 2": 5.41,
+    "Band 1": 2.65
+  },
+  {
+    "year": 2005,
+    "course": "German Beginners 2 unit (15700)",
+    "Band 6": 16.55,
+    "Band 5": 23.44,
+    "Band 4": 28.96,
+    "Band 3": 12.41,
+    "Band 2": 12.41,
+    "Band 1": 6.2
+  },
+  {
+    "year": 2005,
+    "course": "German Continuers 2 unit (15710)",
+    "Band 6": 29.62,
+    "Band 5": 30.06,
+    "Band 4": 18.3,
+    "Band 3": 16.99,
+    "Band 2": 3.26,
+    "Band 1": 1.74
+  },
+  {
+    "year": 2005,
+    "course": "Hindi Continuers 2 unit (15730)",
+    "Band 6": 61.11,
+    "Band 5": 27.77,
+    "Band 4": 11.11
+  },
+  {
+    "year": 2005,
+    "course": "Hospitality Examination 2 unit (16845)",
+    "Band 6": 1.96,
+    "Band 5": 15.31,
+    "Band 4": 35.47,
+    "Band 3": 29.6,
+    "Band 2": 9.39,
+    "Band 1": 0.76
+  },
+  {
+    "year": 2005,
+    "course": "Hungarian Continuers 2 unit (15740)",
+    "Band 6": 42.85,
+    "Band 5": 57.14
+  },
+  {
+    "year": 2005,
+    "course": "Indonesian Background Speakers 2 unit (15770)",
+    "Band 6": 2.83,
+    "Band 5": 35.84,
+    "Band 4": 54.71,
+    "Band 3": 5.66,
+    "Band 2": 0.94
+  },
+  {
+    "year": 2005,
+    "course": "Indonesian Beginners 2 unit (15750)",
+    "Band 6": 24.44,
+    "Band 5": 26.66,
+    "Band 4": 31.11,
+    "Band 3": 11.11,
+    "Band 2": 6.66
+  },
+  {
+    "year": 2005,
+    "course": "Indonesian Continuers 2 unit (15760)",
+    "Band 6": 30,
+    "Band 5": 27.77,
+    "Band 4": 20,
+    "Band 3": 20,
+    "Band 2": 2.22
+  },
+  {
+    "year": 2005,
+    "course": "Industrial Technology 2 unit (15200)",
+    "Band 6": 7.86,
+    "Band 5": 22.6,
+    "Band 4": 30.34,
+    "Band 3": 25.52,
+    "Band 2": 10.43,
+    "Band 1": 2.71
+  },
+  {
+    "year": 2005,
+    "course": "Information Processes and Technology 2 unit (15210)",
+    "Band 6": 6.94,
+    "Band 5": 27.19,
+    "Band 4": 29.93,
+    "Band 3": 20.67,
+    "Band 2": 8.65,
+    "Band 1": 5.41
+  },
+  {
+    "year": 2005,
+    "course": "Information Technology Examination 2 unit (18095)",
+    "Band 6": 1.34,
+    "Band 5": 13.18,
+    "Band 4": 26.73,
+    "Band 3": 34.99,
+    "Band 2": 12.79,
+    "Band 1": 4.29
+  },
+  {
+    "year": 2005,
+    "course": "Italian Beginners 2 unit (15790)",
+    "Band 6": 19.81,
+    "Band 5": 16.66,
+    "Band 4": 18.23,
+    "Band 3": 23.89,
+    "Band 2": 13.52,
+    "Band 1": 6.91
+  },
+  {
+    "year": 2005,
+    "course": "Italian Continuers 2 unit (15800)",
+    "Band 6": 13.45,
+    "Band 5": 31.87,
+    "Band 4": 30.7,
+    "Band 3": 16.37,
+    "Band 2": 6.14,
+    "Band 1": 1.46
+  },
+  {
+    "year": 2005,
+    "course": "Japanese Background Speakers 2 unit (15840)",
+    "Band 6": 16,
+    "Band 5": 44,
+    "Band 4": 28,
+    "Band 3": 10,
+    "Band 2": 2
+  },
+  {
+    "year": 2005,
+    "course": "Japanese Beginners 2 unit (15820)",
+    "Band 6": 17.75,
+    "Band 5": 25.9,
+    "Band 4": 18.47,
+    "Band 3": 16.84,
+    "Band 2": 10.68,
+    "Band 1": 9.42
+  },
+  {
+    "year": 2005,
+    "course": "Japanese Continuers 2 unit (15830)",
+    "Band 6": 28.1,
+    "Band 5": 25.62,
+    "Band 4": 22.51,
+    "Band 3": 16.16,
+    "Band 2": 6.21,
+    "Band 1": 1.24
+  },
+  {
+    "year": 2005,
+    "course": "Khmer Continuers 2 unit (15860)",
+    "Band 6": 40,
+    "Band 5": 53.33,
+    "Band 2": 6.66
+  },
+  {
+    "year": 2005,
+    "course": "Korean Background Speakers 2 unit (15890)",
+    "Band 6": 14.58,
+    "Band 5": 35.41,
+    "Band 4": 32.63,
+    "Band 3": 14.58,
+    "Band 2": 0.69
+  },
+  {
+    "year": 2005,
+    "course": "Korean Beginners 2 unit (15870)",
+    "Band 6": 100
+  },
+  {
+    "year": 2005,
+    "course": "Korean Continuers 2 unit (15880)",
+    "Band 6": 20,
+    "Band 5": 80
+  },
+  {
+    "year": 2005,
+    "course": "Latin Continuers 2 unit (15900)",
+    "Band 6": 73.18,
+    "Band 5": 19.55,
+    "Band 4": 5.58,
+    "Band 3": 1.67
+  },
+  {
+    "year": 2005,
+    "course": "Latvian Continuers 2 unit (15920)",
+    "Band 6": 50,
+    "Band 5": 50
+  },
+  {
+    "year": 2005,
+    "course": "Legal Studies 2 unit (15220)",
+    "Band 6": 6.52,
+    "Band 5": 27.96,
+    "Band 4": 32.44,
+    "Band 3": 22.52,
+    "Band 2": 8.26,
+    "Band 1": 1.71
+  },
+  {
+    "year": 2005,
+    "course": "Lithuanian Continuers 2 unit (15930)",
+    "Band 6": 50,
+    "Band 5": 25,
+    "Band 3": 25
+  },
+  {
+    "year": 2005,
+    "course": "Macedonian Continuers 2 unit (15940)",
+    "Band 6": 37.5,
+    "Band 5": 37.5,
+    "Band 4": 25
+  },
+  {
+    "year": 2005,
+    "course": "Maltese Continuers 2 unit (15960)",
+    "Band 5": 66.66,
+    "Band 4": 33.33
+  },
+  {
+    "year": 2005,
+    "course": "Mathematics 2 unit (15240)",
+    "Band 6": 15.05,
+    "Band 5": 23.73,
+    "Band 4": 24.93,
+    "Band 3": 18.93,
+    "Band 2": 10.6,
+    "Band 1": 6.11
+  },
+  {
+    "year": 2005,
+    "course": "Metal and Engineering Examination 2 unit (16425)",
+    "Band 6": 1.55,
+    "Band 5": 18,
+    "Band 4": 23.55,
+    "Band 3": 24.44,
+    "Band 2": 11.77,
+    "Band 1": 4.44
+  },
+  {
+    "year": 2005,
+    "course": "Modern Greek Beginners 2 unit (15970)",
+    "Band 6": 38.46,
+    "Band 5": 7.69,
+    "Band 4": 23.07,
+    "Band 3": 11.53,
+    "Band 2": 11.53,
+    "Band 1": 7.69
+  },
+  {
+    "year": 2005,
+    "course": "Modern Greek Continuers 2 unit (15980)",
+    "Band 6": 16.41,
+    "Band 5": 40.29,
+    "Band 4": 22.38,
+    "Band 3": 12.68,
+    "Band 2": 5.97,
+    "Band 1": 2.23
+  },
+  {
+    "year": 2005,
+    "course": "Modern Hebrew Continuers 2 unit (16000)",
+    "Band 6": 37.93,
+    "Band 5": 44.82,
+    "Band 4": 17.24
+  },
+  {
+    "year": 2005,
+    "course": "Modern History 2 unit (15270)",
+    "Band 6": 9.59,
+    "Band 5": 32.38,
+    "Band 4": 37.8,
+    "Band 3": 14.39,
+    "Band 2": 4.03,
+    "Band 1": 1.02
+  },
+  {
+    "year": 2005,
+    "course": "Music 1 2 unit (15290)",
+    "Band 6": 14.69,
+    "Band 5": 39.2,
+    "Band 4": 32.12,
+    "Band 3": 11.46,
+    "Band 2": 1.67,
+    "Band 1": 0.62
+  },
+  {
+    "year": 2005,
+    "course": "Music 2 2 unit (15300)",
+    "Band 6": 27.89,
+    "Band 5": 52.82,
+    "Band 4": 17.39,
+    "Band 3": 1.56,
+    "Band 2": 0.15
+  },
+  {
+    "year": 2005,
+    "course": "Persian Background Speakers 2 unit (16010)",
+    "Band 6": 21.27,
+    "Band 5": 40.42,
+    "Band 4": 21.27,
+    "Band 3": 10.63,
+    "Band 2": 2.12,
+    "Band 1": 2.12
+  },
+  {
+    "year": 2005,
+    "course": "Personal Development, Health and Physical Education 2 unit (15320)",
+    "Band 6": 5.61,
+    "Band 5": 28.71,
+    "Band 4": 35.25,
+    "Band 3": 22.65,
+    "Band 2": 5.68,
+    "Band 1": 1.67
+  },
+  {
+    "year": 2005,
+    "course": "Physics 2 unit (15330)",
+    "Band 6": 10.42,
+    "Band 5": 25.67,
+    "Band 4": 31.55,
+    "Band 3": 21.69,
+    "Band 2": 7.97,
+    "Band 1": 2.08
+  },
+  {
+    "year": 2005,
+    "course": "Polish Continuers 2 unit (16020)",
+    "Band 6": 84.61,
+    "Band 5": 11.53,
+    "Band 3": 3.84
+  },
+  {
+    "year": 2005,
+    "course": "Portuguese Continuers 2 unit (16030)",
+    "Band 6": 33.33,
+    "Band 5": 9.52,
+    "Band 4": 47.61,
+    "Band 3": 9.52
+  },
+  {
+    "year": 2005,
+    "course": "Primary Industries Examination 2 unit (17195)",
+    "Band 6": 1.8,
+    "Band 5": 14.95,
+    "Band 4": 41.62,
+    "Band 3": 24.14,
+    "Band 2": 8.82,
+    "Band 1": 1.62
+  },
+  {
+    "year": 2005,
+    "course": "Retail Operations Examination 2 unit (16995)",
+    "Band 6": 2.84,
+    "Band 5": 19.37,
+    "Band 4": 38.54,
+    "Band 3": 21.94,
+    "Band 2": 3.12,
+    "Band 1": 0.41
+  },
+  {
+    "year": 2005,
+    "course": "Russian Background Speakers 2 unit (16040)",
+    "Band 6": 25,
+    "Band 5": 45,
+    "Band 4": 25,
+    "Band 3": 5
+  },
+  {
+    "year": 2005,
+    "course": "Senior Science 2 unit (15340)",
+    "Band 6": 5.32,
+    "Band 5": 26.89,
+    "Band 4": 37.56,
+    "Band 3": 23.32,
+    "Band 2": 5.34,
+    "Band 1": 1.01
+  },
+  {
+    "year": 2005,
+    "course": "Serbian Continuers 2 unit (16050)",
+    "Band 6": 36.17,
+    "Band 5": 42.55,
+    "Band 4": 21.27
+  },
+  {
+    "year": 2005,
+    "course": "Society and Culture 2 unit (15350)",
+    "Band 6": 7.15,
+    "Band 5": 21.32,
+    "Band 4": 30.25,
+    "Band 3": 27.96,
+    "Band 2": 10.04,
+    "Band 1": 3.03
+  },
+  {
+    "year": 2005,
+    "course": "Software Design and Development 2 unit (15360)",
+    "Band 6": 7.3,
+    "Band 5": 25.92,
+    "Band 4": 34.76,
+    "Band 3": 21.5,
+    "Band 2": 6.49,
+    "Band 1": 1.39
+  },
+  {
+    "year": 2005,
+    "course": "Spanish Beginners 2 unit (16070)",
+    "Band 6": 12.57,
+    "Band 5": 24.52,
+    "Band 4": 22.01,
+    "Band 3": 21.38,
+    "Band 2": 11.32,
+    "Band 1": 7.54
+  },
+  {
+    "year": 2005,
+    "course": "Spanish Continuers 2 unit (16080)",
+    "Band 6": 11.7,
+    "Band 5": 45.74,
+    "Band 4": 34.04,
+    "Band 3": 5.31,
+    "Band 2": 2.12,
+    "Band 1": 1.06
+  },
+  {
+    "year": 2005,
+    "course": "Studies of Religion I 1 unit (15370)",
+    "Band 6": 10.46,
+    "Band 5": 29.89,
+    "Band 4": 43.47,
+    "Band 3": 13.42,
+    "Band 2": 2.34,
+    "Band 1": 0.3
+  },
+  {
+    "year": 2005,
+    "course": "Studies of Religion II 2 unit (15380)",
+    "Band 6": 8.05,
+    "Band 5": 34.42,
+    "Band 4": 41.99,
+    "Band 3": 11.56,
+    "Band 2": 2.91,
+    "Band 1": 0.83
+  },
+  {
+    "year": 2005,
+    "course": "Swedish Continuers 2 unit (16100)",
+    "Band 6": 83.33,
+    "Band 5": 16.66
+  },
+  {
+    "year": 2005,
+    "course": "Tamil Continuers 2 unit (16110)",
+    "Band 6": 5.88,
+    "Band 5": 64.7,
+    "Band 4": 29.41
+  },
+  {
+    "year": 2005,
+    "course": "Textiles and Design 2 unit (15390)",
+    "Band 6": 8.3,
+    "Band 5": 34,
+    "Band 4": 29.85,
+    "Band 3": 19.88,
+    "Band 2": 5.69,
+    "Band 1": 2.01
+  },
+  {
+    "year": 2005,
+    "course": "Tourism Examination 2 unit (16935)",
+    "Band 6": 2.04,
+    "Band 5": 18.36,
+    "Band 4": 37.9,
+    "Band 3": 29.44,
+    "Band 2": 4.66,
+    "Band 1": 0.58
+  },
+  {
+    "year": 2005,
+    "course": "Turkish Continuers 2 unit (16120)",
+    "Band 6": 20.27,
+    "Band 5": 45.94,
+    "Band 4": 22.97,
+    "Band 3": 10.81
+  },
+  {
+    "year": 2005,
+    "course": "Ukrainian Continuers 2 unit (16130)",
+    "Band 6": 100
+  },
+  {
+    "year": 2005,
+    "course": "Vietnamese Continuers 2 unit (16140)",
+    "Band 6": 2.88,
+    "Band 5": 37.5,
+    "Band 4": 46.15,
+    "Band 3": 11.53,
+    "Band 2": 1.92
+  },
+  {
+    "year": 2005,
+    "course": "Visual Arts 2 unit (15400)",
+    "Band 6": 11.3,
+    "Band 5": 39.99,
+    "Band 4": 35.91,
+    "Band 3": 11.24,
+    "Band 2": 1.24,
+    "Band 1": 0.05
+  }
+]

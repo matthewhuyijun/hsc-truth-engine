@@ -86,6 +86,9 @@ function loadDistinguishedAchievers() {
   }
 
   // 2001-2016 from Archive JSON
+  // Archive format: each row is [student_name, school_name, courses]
+  // Some rows are "range" rows that span multiple students: ['Name1 to Name2', 'Name3 to Name4', '']
+  // These are table page headers, not individual records — skip them.
   const archiveDir = path.join(DATA_DIR, 'archive-distinguished');
   if (fs.existsSync(archiveDir)) {
     for (const file of fs.readdirSync(archiveDir)) {
@@ -99,8 +102,16 @@ function loadDistinguishedAchievers() {
         if (!row[0] || !row[1]) continue;
         // Skip page navigation rows
         if (!row[0].includes(',')) continue;
+        // Skip range rows — column 1 would be a name range, not a school name
+        if (row[1].includes(' to ')) continue;
         const nameParts = row[0].split(',');
         if (nameParts.length < 2) continue;
+        // Also skip if row[0] is a name range
+        if (row[0].includes(' to ')) {
+          // Some rows have single student in col 0 with range in col 1
+          // Already handled by the skip above
+          continue;
+        }
         records.push({
           year,
           firstName: nameParts[1]?.trim() || '',
@@ -130,12 +141,12 @@ function loadTopAchievers() {
       const content = fs.readFileSync(path.join(taDir, file), 'utf-8');
       const { headers, rows } = parseCSV(content);
 
-      const courseNumIdx = headers.indexOf('course_number');
-      const courseNameIdx = headers.indexOf('course_name');
-      const firstIdx = headers.indexOf('first_name');
-      const lastIdx = headers.indexOf('last_name');
-      const placeIdx = headers.indexOf('place');
-      const schoolIdx = headers.indexOf('school_name');
+      const courseNumIdx = findHeaderIndex(headers, ['course_number', 'Course no']);
+      const courseNameIdx = findHeaderIndex(headers, ['course_name', 'Course name']);
+      const firstIdx = findHeaderIndex(headers, ['first_name', 'First name']);
+      const lastIdx = findHeaderIndex(headers, ['last_name', 'Last name']);
+      const placeIdx = findHeaderIndex(headers, ['place', 'Place']);
+      const schoolIdx = findHeaderIndex(headers, ['school_name', 'School name']);
 
       for (const row of rows) {
         records.push({
@@ -487,6 +498,100 @@ function slugify(name) {
   return name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 }
 
+function findHeaderIndex(headers, candidates) {
+  for (const candidate of candidates) {
+    const idx = headers.indexOf(candidate);
+    if (idx !== -1) return idx;
+  }
+  return -1;
+}
+
+// ============================================================
+// 10. COURSE GROUPS (legacy code relationships)
+// ============================================================
+
+function generateCourseGroups(coursesMap, courseNames) {
+  // Known course code replacements from NESA syllabus changes
+  const legacyPairs = [
+    { canonical: '15255', legacy: ['15240'] },                 // Mathematics → Mathematics Advanced (2020)
+    { canonical: '15236', legacy: ['15235', '15230'] },        // General Math → Math General 2 → Math Standard 2
+    { canonical: '15155', legacy: ['15150'] },                 // English ESL → English EAL/D (2019)
+    { canonical: '15365', legacy: ['15360'] },                 // Software Design → Software Engineering (2025)
+    { canonical: '15557', legacy: ['15560', '15555'] },        // Chinese Background/Heritage → Chinese in Context (2017)
+    { canonical: '15565', legacy: ['15560', '15555'] },        // Chinese Background/Heritage → Chinese and Literature (2017)
+    { canonical: '15837', legacy: ['15840', '15835'] },        // Japanese Background/Heritage → Japanese in Context (2017)
+    { canonical: '15845', legacy: ['15840', '15835'] },        // Japanese Background/Heritage → Japanese and Literature (2017)
+    { canonical: '15887', legacy: ['15890', '15885'] },        // Korean Background/Heritage → Korean in Context (2017)
+    { canonical: '15895', legacy: ['15890', '15885'] },        // Korean Background/Heritage → Korean and Literature (2017)
+    { canonical: '15767', legacy: ['15770', '15765'] },        // Indonesian Background/Heritage → Indonesian in Context (2017)
+    { canonical: '15775', legacy: ['15770', '15765'] },        // Indonesian Background/Heritage → Indonesian and Literature (2017)
+    { canonical: '16015', legacy: ['16010'] },                 // Persian Background → Persian Continuers (2019)
+    { canonical: '16045', legacy: ['16040'] },                 // Russian Background → Russian Continuers (2015)
+    { canonical: '26299', legacy: ['16305'] },                 // Construction Exam (VET renumber)
+    { canonical: '26199', legacy: ['16745'] },                 // Business Services Exam (VET renumber)
+    { canonical: '26499', legacy: ['16945'] },                 // Entertainment Exam (VET renumber)
+    { canonical: '26899', legacy: ['17195'] },                 // Primary Industries Exam (VET renumber)
+    { canonical: '26999', legacy: ['16995'] },                 // Retail Services Exam (VET renumber)
+    { canonical: '26098', legacy: ['26079'] },                 // Automotive Exam (VET renumber)
+    { canonical: '26579', legacy: ['26599'] },                 // Hospitality Exam (VET renumber)
+    { canonical: '27499', legacy: ['27099'] },                 // Tourism Exam (VET renumber)
+    { canonical: '27398', legacy: ['27379', '27399'] },        // IT Digital Exam (VET renumber)
+  ];
+  const discontinued = ['15340', '15210'];  // Senior Science, IPT
+
+  const groups = [];
+  const covered = new Set();
+
+  // Build legacy code groups
+  for (const { canonical, legacy } of legacyPairs) {
+    const cn = courseNames[canonical] || {};
+    const canonicalName = cn.name || canonical;
+    const codes = [];
+
+    for (const code of [...legacy, canonical]) {
+      const info = coursesMap.get(code);
+      if (info) {
+        const years = Object.keys(info.years).map(Number).sort((a, b) => a - b);
+        const name = courseNames[code]?.name || code;
+        codes.push({ code, name, years: [years[0], years[years.length - 1]] });
+        covered.add(code);
+      }
+    }
+
+    // Sort by chronological order (first year ascending)
+    codes.sort((a, b) => a.years[0] - b.years[0]);
+
+    groups.push({ id: `group-${canonical}`, canonical_name: canonicalName, canonical_code: canonical, codes });
+  }
+
+  // Discontinued
+  for (const code of discontinued) {
+    const info = coursesMap.get(code);
+    if (info) {
+      const years = Object.keys(info.years).map(Number).sort((a, b) => a - b);
+      const name = courseNames[code]?.name || code;
+      groups.push({
+        id: `discontinued-${code}`, canonical_name: name, canonical_code: code, discontinued: true,
+        codes: [{ code, name, years: [years[0], years[years.length - 1]] }]
+      });
+      covered.add(code);
+    }
+  }
+
+  // Remaining singletons
+  for (const [code, info] of coursesMap) {
+    if (covered.has(code)) continue;
+    const years = Object.keys(info.years).map(Number).sort((a, b) => a - b);
+    const name = courseNames[code]?.name || code;
+    groups.push({
+      id: `course-${code}`, canonical_name: name, canonical_code: code,
+      codes: [{ code, name, years: [years[0], years[years.length - 1]] }]
+    });
+  }
+
+  return groups;
+}
+
 function loadSparoData() {
   const sparoDir = path.join(ROOT_DIR, 'data', 'sparo');
   const result = {}; // year -> { slug -> { name, subjects } }
@@ -536,12 +641,14 @@ function generateSchoolDetail(year, distinguished, topAchievers, allRounders, sp
     arSet.add(`${r.firstName}|${r.lastName}|${r.schoolName}`);
   }
 
-  // Build top-achiever lookup: courseNumber|firstName|lastName|schoolName -> place
-  const taMap = new Map();
+  // Build top-achiever lookup: courseNumber|firstName|lastName -> [place, school]
+  // Also build a version with school for preferred matching
+  const taMapByName = new Map(); // "course|firstName|lastName" -> [{place, school}, ...]
   const taBySchool = new Map(); // schoolName -> stateRankCount
   for (const r of taYear) {
-    const key = `${r.courseNumber}|${r.firstName}|${r.lastName}|${r.schoolName}`;
-    taMap.set(key, r.place);
+    const nameKey = `${r.courseNumber}|${r.firstName}|${r.lastName}`;
+    if (!taMapByName.has(nameKey)) taMapByName.set(nameKey, []);
+    taMapByName.get(nameKey).push({ place: r.place, school: r.schoolName, used: false });
     taBySchool.set(r.schoolName, (taBySchool.get(r.schoolName) || 0) + 1);
   }
 
@@ -582,9 +689,27 @@ function generateSchoolDetail(year, distinguished, topAchievers, allRounders, sp
       school.stats.uniqueStudents++;
     }
 
-    // Look up state rank from top achievers
-    const taKey = `${course.code}|${r.firstName}|${r.lastName}|${r.schoolName}`;
-    const rank = taMap.get(taKey) || 0;
+    // Look up state rank: prefer matching on school name, then fall back to name-only
+    const nameKey = `${course.code}|${r.firstName}|${r.lastName}`;
+    const candidates = taMapByName.get(nameKey) || [];
+    let rank = 0;
+    for (let i = 0; i < candidates.length; i++) {
+      if (candidates[i].used) continue;
+      if (candidates[i].school === r.schoolName) {
+        rank = candidates[i].place;
+        candidates[i].used = true;
+        break;
+      }
+    }
+    if (rank === 0) {
+      for (let i = 0; i < candidates.length; i++) {
+        if (!candidates[i].used) {
+          rank = candidates[i].place;
+          candidates[i].used = true;
+          break;
+        }
+      }
+    }
 
     student.courses.push({ code: course.code, name: course.name, rank });
     student.b6Count++;
@@ -667,7 +792,35 @@ function generateSchoolDetail(year, distinguished, topAchievers, allRounders, sp
 }
 
 // ============================================================
-// 9. SPaRO SCHOOLS (sparo-schools.json)
+// 9. STUDENTS LIST (students-{year}.json)
+// ============================================================
+
+function generateStudentsList(schoolDetail) {
+  const students = [];
+  for (const [slug, school] of Object.entries(schoolDetail)) {
+    for (const s of school.students) {
+      students.push({
+        firstName: s.firstName,
+        lastName: s.lastName,
+        schoolName: school.name,
+        schoolSlug: slug,
+        b6Count: s.b6Count,
+        stateRankCount: s.stateRankCount,
+        isAllRounder: s.isAllRounder
+      });
+    }
+  }
+  // Primary sort: state rank count desc; tiebreaker: b6Count desc; final tiebreaker: lastName asc
+  students.sort((a, b) => {
+    if (b.stateRankCount !== a.stateRankCount) return b.stateRankCount - a.stateRankCount;
+    if (b.b6Count !== a.b6Count) return b.b6Count - a.b6Count;
+    return a.lastName.localeCompare(b.lastName);
+  });
+  return students;
+}
+
+// ============================================================
+// 10. SPaRO SCHOOLS (sparo-schools.json)
 // ============================================================
 
 function generateSparoSchools(sparoData) {
@@ -787,6 +940,9 @@ for (const year of validYears) {
   console.log(`   schools-${year}.json: ${yearSchools.length} schools`);
 }
 
+// Generate course groups (needed for merged courses.json below)
+const courseGroups = generateCourseGroups(courses, courseNames);
+
 // courses-{year}.json
 for (const year of validYears) {
   const yearCourses = [];
@@ -808,17 +964,47 @@ for (const year of validYears) {
   console.log(`   courses-${year}.json: ${yearCourses.length} courses`);
 }
 
-// courses.json — all courses with yearly data
+// courses.json — all courses with yearly data (merged: legacy codes rolled into canonical)
+console.log('\n📚 Merging legacy course data...');
+const mergedCourses = new Map(courses); // copy
+
+// Merge legacy code years into canonical codes using course groups
+for (const group of courseGroups) {
+  const canonical = group.canonical_code;
+  const canonicalInfo = mergedCourses.get(canonical);
+  if (!canonicalInfo) continue;
+
+  for (const legacy of group.codes) {
+    if (legacy.code === canonical) continue;
+    const legacyInfo = courses.get(legacy.code);
+    if (!legacyInfo) continue;
+
+    for (const [year, count] of Object.entries(legacyInfo.years)) {
+      canonicalInfo.years[year] = (canonicalInfo.years[year] || 0) + count;
+    }
+    
+    // Also update course name map for legacy codes
+    if (courseNames[legacy.code]) {
+      if (!courseNames[canonical]?.allNames) {
+        if (!courseNames[canonical]) courseNames[canonical] = { name: canonicalInfo.name, allNames: [] };
+        courseNames[canonical].allNames = [canonicalInfo.name];
+      }
+      courseNames[canonical].allNames.push(legacy.name);
+    }
+  }
+}
+
 const allCourses = [];
-for (const [code, info] of courses) {
-  const cn = courseNames[code];
+for (const [code, info] of mergedCourses) {
   const yearlyData = Object.entries(info.years)
     .map(([y, c]) => ({ year: parseInt(y), band6Count: c }))
     .filter(d => validYears.includes(d.year));
   if (yearlyData.length === 0) continue;
+
+  const cn = courseNames[code];
   allCourses.push({
     code,
-    name: info.name,
+    name: cn?.name || info.name,
     allNames: cn?.allNames || [info.name],
     years: yearlyData
   });
@@ -828,7 +1014,7 @@ fs.writeFileSync(
   path.join(OUTPUT_DIR, 'courses.json'),
   JSON.stringify(allCourses)
 );
-console.log(`   courses.json: ${allCourses.length} courses`);
+console.log(`   courses.json: ${allCourses.length} courses (legacy years merged)`);
 
 // course-names.json — code -> latest name mapping
 const courseNameObj = {};
@@ -873,10 +1059,26 @@ for (const year of validYears) {
   console.log(`   school-detail-${year}.json: ${Object.keys(detail).length} schools`);
 }
 
+// students-{year}.json — all students ranked by stateRank + b6Count
+console.log('\n🎓 Generating students list files...');
+for (const year of validYears) {
+  const sparoYearMap = sparoData[year] || null;
+  const detail = generateSchoolDetail(year, distinguished, topAchievers, allRounders, sparoYearMap);
+  const students = generateStudentsList(detail);
+  const outPath = path.join(OUTPUT_DIR, `students-${year}.json`);
+  fs.writeFileSync(outPath, JSON.stringify(students));
+  console.log(`   students-${year}.json: ${students.length} students`);
+}
+
 // sparo-schools.json — flattened SPaRO data keyed by slug
 console.log('\n🏥 Generating SPaRO schools file...');
 const sparoSchools = generateSparoSchools(sparoData);
 fs.writeFileSync(path.join(OUTPUT_DIR, 'sparo-schools.json'), JSON.stringify(sparoSchools));
 console.log(`   sparo-schools.json: ${Object.keys(sparoSchools).length} schools`);
+
+// course-groups.json — legacy course code relationships
+console.log('\n🔗 Writing course groups...');
+fs.writeFileSync(path.join(OUTPUT_DIR, 'course-groups.json'), JSON.stringify(courseGroups));
+console.log(`   course-groups.json: ${courseGroups.length} groups (${courseGroups.filter(g => g.codes.length > 1).length} with legacy codes)`);
 
 console.log('\n✅ Done!');

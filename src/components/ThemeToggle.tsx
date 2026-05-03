@@ -63,7 +63,7 @@ export function ThemeToggle() {
   };
 
   return (
-    <div className="flex items-center gap-0.5 rounded-md border border-border/50 bg-surface p-0.5">
+    <div className="hidden sm:flex items-center gap-0.5 rounded-md border border-border/50 bg-surface p-0.5">
       {options.map(({ key, icon: Icon, label }) => (
         <button
           key={key}

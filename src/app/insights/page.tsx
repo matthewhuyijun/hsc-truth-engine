@@ -310,27 +310,27 @@ export default function InsightsPage() {
             </span>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6 max-w-full overflow-hidden">
             {timeline.slice(0, 5).map((item) => (
               <div 
                 key={item.step}
                 className="grid gap-6 lg:grid-cols-2 rounded-xl border border-border bg-surface overflow-hidden hover:border-accent/20 transition-colors"
               >
-                <div className="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-border bg-terminal-bg/50">
+                <div className="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-border bg-terminal-bg/50 min-w-0">
                   <div className="flex items-center gap-3 mb-4">
                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent text-sm font-mono font-bold">
                       {item.step}
                     </span>
-                    <div>
+                    <div className="min-w-0">
                       <h3 className="font-semibold text-foreground">{item.title}</h3>
-                      <p className="text-xs text-accent font-mono uppercase tracking-wider">{item.statTerm}</p>
+                      <p className="text-xs text-accent font-mono uppercase tracking-wider truncate">{item.statTerm}</p>
                     </div>
                   </div>
                   <div className="rounded-lg border border-border bg-background p-4 overflow-x-auto">
                     <KatexBlock latex={item.formula} displayMode />
                   </div>
                 </div>
-                <div className="p-6 lg:p-8 flex items-start">
+                <div className="p-6 lg:p-8 flex items-start min-w-0">
                   <div>
                     <p className="text-base font-medium text-foreground mb-4 leading-relaxed">{item.plain}</p>
                     <ul className="space-y-2">
@@ -364,27 +364,27 @@ export default function InsightsPage() {
             </span>
           </div>
 
-          <div className="space-y-6">
+          <div className="space-y-6 max-w-full overflow-hidden">
             {timeline.slice(5).map((item) => (
               <div 
                 key={item.step}
                 className="grid gap-6 lg:grid-cols-2 rounded-xl border border-border bg-surface overflow-hidden hover:border-accent/20 transition-colors"
               >
-                <div className="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-border bg-terminal-bg/50">
+                <div className="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-border bg-terminal-bg/50 min-w-0">
                   <div className="flex items-center gap-3 mb-4">
                     <span className="inline-flex h-8 w-8 items-center justify-center rounded-lg bg-accent/10 text-accent text-sm font-mono font-bold">
                       {item.step}
                     </span>
-                    <div>
+                    <div className="min-w-0">
                       <h3 className="font-semibold text-foreground">{item.title}</h3>
-                      <p className="text-xs text-accent font-mono uppercase tracking-wider">{item.statTerm}</p>
+                      <p className="text-xs text-accent font-mono uppercase tracking-wider truncate">{item.statTerm}</p>
                     </div>
                   </div>
                   <div className="rounded-lg border border-border bg-background p-4 overflow-x-auto">
                     <KatexBlock latex={item.formula} displayMode />
                   </div>
                 </div>
-                <div className="p-6 lg:p-8 flex items-start">
+                <div className="p-6 lg:p-8 flex items-start min-w-0">
                   <div>
                     <p className="text-base font-medium text-foreground mb-4 leading-relaxed">{item.plain}</p>
                     <ul className="space-y-2">
