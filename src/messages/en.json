@@ -470,7 +470,10 @@
           "Honour Roll page rewritten with single-select year/school/course pickers and intersection views.",
           "SPaRO school average data restored with rank badges and public school sourcing notes.",
           "Added Compare page with bar charts, school maps, and category-based colour coding (currently hidden from nav).",
-          "Fixed enrollment distribution data — non_binary field was incorrectly storing total enrolment numbers."
+          "Fixed enrollment distribution data — non_binary field was incorrectly storing total enrolment numbers.",
+          "Scaling graph comparison table now includes the maximum scaled mark (100 / #1 student) — previously only showed percentiles p50–p99.",
+          "Refactored shared ATAR/scaling data layer into course-data.ts and spline.ts to eliminate duplicated code across modules.",
+          "Honor Roll page banner and subtitle simplified to show only the page title, now properly using i18n translations."
         ]
       }
     ]

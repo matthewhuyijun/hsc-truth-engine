@@ -13,6 +13,7 @@ import {
 } from "recharts";
 import { Download } from "lucide-react";
 import type { CourseCurve, YearMode, GraphMode } from "@/lib/scaling";
+import { mergeCurvesForRecharts } from "@/lib/scaling";
 
 const LINE_COLORS = [
   "#3b82f6",
@@ -29,17 +30,6 @@ interface ScalingGraphProps {
   curves: CourseCurve[];
   yearMode: YearMode;
   graphMode: GraphMode;
-}
-
-function mergeCurvesForRecharts(curves: CourseCurve[]): Array<{ x: number } & Record<string, number>> {
-  if (curves.length === 0) return [];
-  return curves[0].points.map((_, i) => {
-    const row: { x: number } & Record<string, number> = { x: curves[0].points[i].x } as any;
-    for (const curve of curves) {
-      row[curve.course] = curve.points[i].scaled;
-    }
-    return row;
-  });
 }
 
 function computeDataBounds(curves: CourseCurve[]): {

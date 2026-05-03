@@ -2,7 +2,8 @@
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Award, Search, ChevronUp, ChevronDown, X, School, BookOpen, Info } from 'lucide-react';
+import { useTranslations } from "next-intl";
+import { Search, ChevronUp, ChevronDown, X, School, BookOpen, Info } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -52,6 +53,7 @@ function Skeleton() {
 }
 
 function HonorRollContent() {
+  const t = useTranslations("HonorRoll");
   const router = useRouter();
   const sp = useSearchParams();
   const yearParam = sp.get('year') || '2025';
@@ -129,16 +131,9 @@ function HonorRollContent() {
     <div className="min-h-screen">
       <section className="border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex items-center gap-3 mb-3">
-            <Award className="h-5 w-5 text-muted" />
-            <span className="text-xs font-medium uppercase tracking-wider text-muted">Distinguished Achievers</span>
-          </div>
           <h1 className="text-3xl font-bold tracking-tight">
-            {!selSchool && !selCourse ? 'Honor Roll' : selSchool && selCourse ? `${selSchool} · ${selCourse.name}` : selSchool || selCourse?.name}
+            {!selSchool && !selCourse ? t("defaultTitle") : selSchool && selCourse ? `${selSchool} · ${selCourse.name}` : selSchool || selCourse?.name}
           </h1>
-          <p className="mt-2 text-sm text-muted">
-            {year} HSC Distinguished Achievers{selSchool && selCourse ? ` — ${selSchool}'s results in ${selCourse.name}` : ''}
-          </p>
         </div>
       </section>
 

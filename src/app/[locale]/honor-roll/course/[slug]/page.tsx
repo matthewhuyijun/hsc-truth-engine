@@ -366,9 +366,9 @@ function HeaderSection({
     <section className="border-b border-border">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-6 pb-4">
         <div className="flex items-center gap-2 text-base text-muted/70">
-          <Link href="/honor-roll" className="hover:text-foreground transition-colors">
-            Honor Roll
-          </Link>
+            <Link href="/honor-roll" className="hover:text-foreground transition-colors">
+              Honor Roll
+            </Link>
           <ArrowLeft className="h-3.5 w-3.5 rotate-180 text-muted/40" />
           <Link
             href={`/honor-roll?year=${currentYear === ALL_YEARS ? '2025' : currentYear}`}

@@ -1,51 +1,15 @@
-import tableA3AllYears from "@/data/table_a3_all_years.json";
-import scalingPercentileData from "@/data/scaling-percentiles.json";
 import tableA9 from "@/data/table_a9_2021_2025.json";
+import { buildMonotoneSpline } from "./spline";
+import {
+  type CourseData,
+  getCourseData as _getCourseData,
+  getPercentileAnchorsForYear,
+} from "./course-data";
 
-export interface CourseData {
-  course: string;
-  number: number;
-  hsc_mean: number;
-  hsc_sd: number;
-  hsc_max: number;
-  scaled_mean: number;
-  scaled_sd: number;
-  scaled_max: number;
-}
+export { type CourseData } from "./course-data";
+export { getAllCourses, getCourseData } from "./course-data";
 
-interface HscScaledAnchor {
-  hscHalf: number;
-  scaled: number;
-}
-
-interface AllYearsData {
-  [year: string]: { courses: CourseData[] };
-}
-
-interface PercentileYearData {
-  [year: string]: {
-    table_a3: Array<{
-      course: string;
-      number: number;
-      hsc: { mean: number; sd: number; max: number; p99: number; p90: number; p75: number; p50: number; p25: number };
-      scaled: { mean: number; sd: number; max: number; p99: number; p90: number; p75: number; p50: number; p25: number };
-    }>;
-  };
-}
-
-const ALL_YEARS_DATA = tableA3AllYears as unknown as AllYearsData;
-const PERCENTILE_DATA = scalingPercentileData as unknown as PercentileYearData;
 const atarMapping = tableA9.data;
-
-const COURSE_NAME_ALIASES: Record<string, string> = {
-  "English EAL/D": "English EALD",
-  "Mathematics": "Mathematics Advanced",
-  "Software Design & Development": "Software Engineering",
-};
-
-function normalizeCourseName(name: string): string {
-  return COURSE_NAME_ALIASES[name] || name;
-}
 
 export const AVAILABLE_YEARS = ["2025", "2024", "2023", "2022", "2021", "2020", "2019"] as const;
 const MATH_EXT_1 = "Mathematics Extension 1";
@@ -54,23 +18,6 @@ const MATH_ADVANCED = "Mathematics Advanced";
 const ENGLISH_ADVANCED = "English Advanced";
 const ENGLISH_EXT_1 = "English Extension 1";
 const ENGLISH_EXT_2 = "English Extension 2";
-
-export function getAllCourses(): string[] {
-  const names = new Set<string>();
-  for (const yearData of Object.values(ALL_YEARS_DATA)) {
-    for (const c of yearData.courses) {
-      names.add(normalizeCourseName(c.course));
-    }
-  }
-  return Array.from(names).sort();
-}
-
-export function getCourseData(courseName: string, year: string): CourseData | undefined {
-  const normalized = normalizeCourseName(courseName);
-  return ALL_YEARS_DATA[year]?.courses.find(
-    (c) => normalizeCourseName(c.course) === normalized
-  );
-}
 
 function isEnglishCourse(courseName: string): boolean {
   return /english/i.test(courseName);
@@ -113,76 +60,17 @@ export function checkEnglishPrerequisite(inputs: { course: string; hscMark: numb
   return null;
 }
 
-function getPercentileAnchors(courseName: string, year: string): HscScaledAnchor[] | null {
-  const normalized = normalizeCourseName(courseName);
-  const course = PERCENTILE_DATA[year]?.table_a3.find(
-    (c) => normalizeCourseName(c.course) === normalized
-  );
-  if (!course) return null;
-  return [
-    { hscHalf: 0, scaled: 0 },
-    { hscHalf: course.hsc.p25, scaled: course.scaled.p25 },
-    { hscHalf: course.hsc.p50, scaled: course.scaled.p50 },
-    { hscHalf: course.hsc.p75, scaled: course.scaled.p75 },
-    { hscHalf: course.hsc.p90, scaled: course.scaled.p90 },
-    { hscHalf: course.hsc.p99, scaled: course.scaled.p99 },
-    { hscHalf: course.hsc.max, scaled: course.scaled.max },
-  ];
-}
-
-function buildMonotoneSpline(anchors: HscScaledAnchor[]): (hscHalf: number) => number {
-  const n = anchors.length;
-  const xs = anchors.map((a) => a.hscHalf);
-  const ys = anchors.map((a) => a.scaled);
-
-  const delta = new Array(n - 1);
-  for (let i = 0; i < n - 1; i++) {
-    delta[i] = (ys[i + 1] - ys[i]) / (xs[i + 1] - xs[i]);
-  }
-
-  const m = new Array(n);
-  for (let i = 1; i < n - 1; i++) {
-    if (delta[i - 1] * delta[i] <= 0) {
-      m[i] = 0;
-    } else {
-      const w1 = 2 * delta[i] + delta[i - 1];
-      const w2 = delta[i] + 2 * delta[i - 1];
-      m[i] = (w1 + w2) / (w1 / delta[i - 1] + w2 / delta[i]);
-    }
-  }
-  m[0] = delta[0];
-  m[n - 1] = delta[n - 2];
-
-  return (hscHalf: number) => {
-    if (hscHalf <= xs[0]) return ys[0];
-    for (let i = 0; i < n - 1; i++) {
-      if (hscHalf >= xs[i] && hscHalf <= xs[i + 1]) {
-        const h = xs[i + 1] - xs[i];
-        const t = (hscHalf - xs[i]) / h;
-        const t2 = t * t;
-        const t3 = t2 * t;
-        const h00 = 2 * t3 - 3 * t2 + 1;
-        const h10 = t3 - 2 * t2 + t;
-        const h01 = -2 * t3 + 3 * t2;
-        const h11 = t3 - t2;
-        return h00 * ys[i] + h10 * h * m[i] + h01 * ys[i + 1] + h11 * h * m[i + 1];
-      }
-    }
-    return ys[n - 1];
-  };
-}
-
 function calculateScaledMarkForYear(courseName: string, year: string, hscMark: number): number {
   if (hscMark <= 0) return 0;
 
-  const anchors = getPercentileAnchors(courseName, year);
+  const anchors = getPercentileAnchorsForYear(courseName, year);
   if (anchors) {
     const spline = buildMonotoneSpline(anchors);
     return Math.round(spline(hscMark / 2) * 10) / 10;
   }
 
   // fallback: z-score using flat course data
-  const course = getCourseData(courseName, year);
+  const course = _getCourseData(courseName, year);
   if (!course || course.hsc_sd === 0) return 0;
   const hscMark50 = hscMark / 2;
   const cappedHsc = Math.min(hscMark50, course.hsc_max ?? 50);
@@ -272,7 +160,7 @@ export function calculateAtar(inputs: CourseInput[]): CalculatorResult {
     const perYearScaled: CourseYearScaled[] = [];
 
     AVAILABLE_YEARS.forEach((year) => {
-      const cd = getCourseData(inp.course, year);
+      const cd = _getCourseData(inp.course, year);
       if (cd) {
         const sm = calculateScaledMarkForYear(inp.course, year, inp.hscMark);
         existingScaledMarks.push(sm);
