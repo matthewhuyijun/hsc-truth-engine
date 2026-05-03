@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Award, Search, ChevronUp, ChevronDown, X, School, BookOpen, Info } from 'lucide-react';
+import { Award, Search, ChevronUp, ChevronDown, X, School, BookOpen } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -340,7 +340,7 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
         <div className={hasSparo ? 'col-span-3' : 'col-span-6'}>Course</div>
         <div className={`${hasSparo ? 'col-span-3' : 'col-span-3'} flex justify-end`}>B6/E4</div>
         <div className={`${hasSparo ? 'col-span-2' : 'col-span-3'} flex justify-end`}>State Ranks</div>
-        {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">School Avg vs State (Gov) <span className="cursor-help" title="School averages from publicly available SPaRO reports. Rank by school average within this course."><Info className="h-3.5 w-3.5 text-muted" /></span></div>}
+        {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">School Avg vs State (Gov) <span className="inline-flex items-center justify-center rounded-full border border-border w-4 h-4 text-[10px] font-medium text-muted cursor-help" title="School averages from publicly available SPaRO reports. Rank by school average within this course.">?</span></div>}
       </div>
       <div className="divide-y divide-border">
         {detail.courses.map(c => {
