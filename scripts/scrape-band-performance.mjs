@@ -36,6 +36,30 @@ async function scrapeBands(page, url) {
         return pct ? parseFloat(pct[1]) : null;
       };
 
+      // Strategy 0: Extension band descriptors (Band E1-E4)
+      const bTags = document.querySelectorAll('b');
+      bTags.forEach(b => {
+        const match = b.textContent.match(/Band[\s&nbsp;]*E\s*(\d+)/i);
+        if (match && !result[`Band E${match[1]}`]) {
+          const text = b.parentElement?.textContent || '';
+          const pct = extractPct(text);
+          if (pct !== null) result[`Band E${match[1]}`] = pct;
+        }
+      });
+      if (Object.keys(result).length >= 4) return result;
+
+      // Strategy 0b: <strong> tags with Extension band text
+      const strongsExt = document.querySelectorAll('strong');
+      strongsExt.forEach(strong => {
+        const match = strong.textContent.match(/Band[\s&nbsp;]*E\s*(\d+)/i);
+        if (match && !result[`Band E${match[1]}`]) {
+          const text = strong.parentElement?.textContent || '';
+          const pct = extractPct(text);
+          if (pct !== null) result[`Band E${match[1]}`] = pct;
+        }
+      });
+      if (Object.keys(result).length >= 4) return result;
+
       // Strategy 1: <h3> with following <p> (2012+)
       const h3s = document.querySelectorAll('h3');
       h3s.forEach(h3 => {

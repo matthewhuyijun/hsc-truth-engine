@@ -689,8 +689,9 @@ function EnrollmentBlock({ stats }: { stats: CourseStats }) {
 }
 
 function BandDistro({ bands }: { bands: Record<string, number> }) {
-  const order = ['6','5','4','3','2','1'] as const;
-  const opacities = [0.8, 0.64, 0.48, 0.34, 0.22, 0.12];
+  const isExt = Object.keys(bands).some(k => k.includes('E'));
+  const order = isExt ? ['E4','E3','E2','E1'] as const : ['6','5','4','3','2','1'] as const;
+  const opacities = isExt ? [0.8, 0.64, 0.48, 0.34] : [0.8, 0.64, 0.48, 0.34, 0.22, 0.12];
   return <div className="border-t border-border px-5 py-5">
     <h3 className="text-sm font-medium mb-3">Band Distribution</h3>
     <div className="flex h-4 rounded overflow-hidden bg-accent-dim mb-3">
