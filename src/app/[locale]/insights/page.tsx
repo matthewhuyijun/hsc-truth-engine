@@ -146,7 +146,11 @@ export default async function InsightsPage() {
       step: "10",
       title: t("step10Title"),
       statTerm: t("step10StatTerm"),
-      formula: "P(x) = \\begin{cases} \\frac{x^3}{(1000\\alpha)^2} & 0 \\leq x \\leq 100\\alpha \\\\ 1 - \\frac{(100-x)^3}{(1000-1000\\alpha)^2} & 100\\alpha \\leq x \\leq 100 \\end{cases}",
+      formulas: [
+        { label: t("step10FormulaLabel1"), latex: "P(x) = \\begin{cases} \\frac{x^3}{(1000\\alpha)^2} & 0 \\leq x \\leq 100\\alpha \\\\ 1 - \\frac{(100-x)^3}{(1000-1000\\alpha)^2} & 100\\alpha \\leq x \\leq 100 \\end{cases}" },
+        { label: t("step10FormulaLabel2"), latex: "\\alpha = 1.5 - 2r" },
+        { label: t("step10FormulaLabel3"), latex: "x(a) = \\begin{cases} 100\\alpha \\cdot \\sqrt[3]{a} & a \\leq \\alpha \\\\ 100 - 100(1-\\alpha) \\cdot \\sqrt[3]{1-a} & a \\geq \\alpha \\end{cases}" },
+      ],
       plain: t("step10Plain"),
       points: [t("step10p1"), t("step10p2"), t("step10p3"), t("step10p4"), t("step10p5"), t("step10p6"), t("step10p7")],
     },
@@ -267,7 +271,15 @@ export default async function InsightsPage() {
                     </div>
                   </div>
                   <div className="rounded-lg border border-border bg-background p-4 overflow-x-auto">
-                    <KatexBlock latex={item.formula} displayMode />
+                    {"formulas" in item
+                      ? item.formulas!.map((f, i) => (
+                          <div key={i} className={i > 0 ? "mt-4" : ""}>
+                            <span className="block text-[10px] text-muted font-mono uppercase tracking-wider mb-1">{f.label}</span>
+                            <KatexBlock latex={f.latex} displayMode />
+                          </div>
+                        ))
+                      : <KatexBlock latex={item.formula} displayMode />
+                    }
                   </div>
                 </div>
                 <div className="p-6 lg:p-8 flex items-start min-w-0">
@@ -321,7 +333,15 @@ export default async function InsightsPage() {
                     </div>
                   </div>
                   <div className="rounded-lg border border-border bg-background p-4 overflow-x-auto">
-                    <KatexBlock latex={item.formula} displayMode />
+                    {"formulas" in item
+                      ? item.formulas!.map((f, i) => (
+                          <div key={i} className={i > 0 ? "mt-4" : ""}>
+                            <span className="block text-[10px] text-muted font-mono uppercase tracking-wider mb-1">{f.label}</span>
+                            <KatexBlock latex={f.latex} displayMode />
+                          </div>
+                        ))
+                      : <KatexBlock latex={item.formula} displayMode />
+                    }
                   </div>
                 </div>
                 <div className="p-6 lg:p-8 flex items-start min-w-0">
