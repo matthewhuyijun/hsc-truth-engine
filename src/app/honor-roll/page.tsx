@@ -1,6 +1,6 @@
 'use client';
 
-import { Suspense, useState, useEffect, useMemo, useCallback, useRef } from 'react';
+import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { Award, Search, ChevronUp, ChevronDown, X, School, BookOpen } from 'lucide-react';
 
@@ -62,7 +62,6 @@ function HonorRollContent() {
   const [selSchool, setSelSchool] = useState<string | null>(schoolParam || null);
   const [selCourse, setSelCourse] = useState<CourseMeta | null>(courseParam ? { code: courseParam, name: '' } : null);
 
-  const [allSchools, setAllSchools] = useState<string[]>([]);
   const [allCourses, setAllCourses] = useState<CourseMeta[]>([]);
   const [schools, setSchools] = useState<SchoolEntry[] | null>(null);
   const [courses, setCourses] = useState<{ code: string; name: string; band6Count: number }[] | null>(null);
@@ -73,7 +72,6 @@ function HonorRollContent() {
   const hasFilters = !!(selSchool || selCourse);
 
   useEffect(() => {
-    fetch('/data/schools.json').then(r => r.json()).then(setAllSchools).catch(() => {});
     fetch('/data/courses.json').then(r => r.json())
       .then((d: { code: string; name: string }[]) => setAllCourses(d.map(c => ({ code: c.code, name: c.name }))))
       .catch(() => {});
@@ -138,7 +136,7 @@ function HonorRollContent() {
             {!selSchool && !selCourse ? 'Honor Roll' : selSchool && selCourse ? `${selSchool} · ${selCourse.name}` : selSchool || selCourse?.name}
           </h1>
           <p className="mt-2 text-sm text-muted">
-            {year} HSC Distinguished Achievers{selSchool && selCourse ? ` — ${selSchool}'s results in ${selCourse.name}` : ''}
+            {year} HSC Distinguished Achievers{selSchool && selCourse ? ` — ${selSchool}'s results in ${selCourse.name}` : ''}{!selSchool && !selCourse ? ' — click a school or course below to filter' : ''}
           </p>
         </div>
       </section>
@@ -151,12 +149,18 @@ function HonorRollContent() {
               className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-foreground/10">
               {ALL_YEARS.map(y => <option key={y} value={y}>{y}</option>)}
             </select>
-            <PillPicker icon={<School className="h-3.5 w-3.5" />} placeholder="Add School"
-              items={allSchools} selected={selSchool} onSelect={handleSchool} onClear={() => handleSchool(null)} getKey={(v: string) => v} />
-            <PillPicker icon={<BookOpen className="h-3.5 w-3.5" />} placeholder="Add Course"
-              items={allCourses} selected={selCourse?.name || null}
-              onSelect={v => { const f = allCourses.find(c => c.code === v); if (f) handleCourse(f); }}
-              onClear={() => handleCourse(null)} getKey={(v: CourseMeta) => v.code} />
+            {selSchool && (
+              <span className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-sm">
+                <School className="h-3.5 w-3.5 text-muted" />{selSchool}
+                <button onClick={() => handleSchool(null)} className="text-muted hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
+              </span>
+            )}
+            {selCourse && (
+              <span className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-sm">
+                <BookOpen className="h-3.5 w-3.5 text-muted" />{selCourse.name}
+                <button onClick={() => handleCourse(null)} className="text-muted hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
+              </span>
+            )}
             {hasFilters && <button onClick={clearAll} className="text-xs text-muted hover:text-foreground flex items-center gap-1"><X className="h-3 w-3" />Clear all</button>}
           </div>
         </div>
@@ -179,82 +183,6 @@ function LoadingView() {
       <p className="mt-2 text-sm text-muted">Loading...</p>
     </div>
   </section>;
-}
-
-// ─── Pill Picker ──────────────────────────────────────────────────────────────
-
-function PillPicker<T>({ icon, placeholder, items, selected, onSelect, onClear, getKey }: {
-  icon: React.ReactNode; placeholder: string; items: T[];
-  selected: string | null; onSelect: (v: string) => void; onClear: () => void; getKey: (item: T) => string;
-}) {
-  const [open, setOpen] = useState(false);
-  const [search, setSearch] = useState('');
-  const cr = useRef<HTMLDivElement | null>(null);
-
-  useEffect(() => {
-    if (!open) return () => {};
-    const h = (e: MouseEvent) => {
-      if (cr.current && !cr.current.contains(e.target as Node)) { setOpen(false); setSearch(''); }
-    };
-    document.addEventListener('click', h);
-    return () => document.removeEventListener('click', h);
-  }, [open]);
-
-  const filtered = useMemo(() => {
-    const q = search.toLowerCase();
-    let r = items;
-    if (q) {
-      r = items.filter(it => {
-        const n = typeof it === 'string' ? it : (it as { name: string }).name;
-        return n.toLowerCase().includes(q);
-      });
-      r = [...r].sort((a, b) => {
-        const na = (typeof a === 'string' ? a : (a as { name: string }).name).toLowerCase();
-        const nb = (typeof b === 'string' ? b : (b as { name: string }).name).toLowerCase();
-        return (na.startsWith(q) ? 0 : 1) - (nb.startsWith(q) ? 0 : 1) || na.localeCompare(nb);
-      });
-    }
-    return r.slice(0, 100);
-  }, [items, search]);
-
-  const handleSelect = (key: string) => {
-    onSelect(key);
-    setOpen(false);
-    setSearch('');
-  };
-
-  const handleToggle = () => {
-    setOpen(v => !v);
-    if (selected) onClear();
-  };
-
-  return <div className="relative" ref={cr}>
-    <button onClick={handleToggle}
-      className={`inline-flex items-center gap-1 rounded-lg border px-2.5 py-1 text-sm transition-colors ${selected ? 'border-border bg-surface text-foreground' : 'border-dashed border-border text-muted hover:text-foreground hover:border-foreground/30'}`}>
-      {icon}{selected || placeholder}
-      {selected && <X className="h-3.5 w-3.5 text-muted hover:text-foreground" onClick={e => { e.stopPropagation(); onClear(); }} />}
-    </button>
-    {open && <div className="absolute left-0 top-full mt-1 w-72 rounded-lg border border-border bg-background shadow-lg z-50">
-      <div className="flex items-center gap-2 border-b border-border px-3 py-2">
-        <Search className="h-3.5 w-3.5 text-muted shrink-0" />
-        <input autoFocus type="text" placeholder={placeholder + '...'} value={search}
-          onChange={e => setSearch(e.target.value)} className="flex-1 bg-transparent text-sm placeholder:text-muted focus:outline-none" />
-      </div>
-      <div className="max-h-64 overflow-y-auto">
-        {filtered.length === 0 && !search ? (
-          <p className="px-3 py-4 text-sm text-muted text-center">Type to search</p>
-        ) : filtered.length === 0 ? (
-          <p className="px-3 py-4 text-sm text-muted text-center">No matches</p>
-        ) : filtered.map(item => {
-          const key = getKey(item);
-          const name = typeof item === 'string' ? item : (item as { name: string }).name;
-          return <button key={key} onMouseDown={e => e.preventDefault()}
-            onClick={() => handleSelect(key)}
-            className="w-full text-left px-3 py-2 text-sm hover:bg-surface-hover transition-colors">{name}</button>;
-        })}
-      </div>
-    </div>}
-  </div>;
 }
 
 // ─── Default View: Schools & Courses tabs ─────────────────────────────────────
@@ -295,7 +223,7 @@ function DefaultView({ schools, courses, onSchool, onCourse }: {
             <button onClick={() => setTab('schools')} className={`px-3 py-1.5 text-sm font-medium ${isSchool ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>Schools</button>
             <button onClick={() => setTab('courses')} className={`px-3 py-1.5 text-sm font-medium border-l border-border ${!isSchool ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>Courses</button>
           </div>
-          <span className="text-xs text-muted">Click a row to add as filter</span>
+          <span className="text-xs text-muted hidden sm:inline">Click a row to add filter</span>
         </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
