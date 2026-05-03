@@ -114,20 +114,18 @@ export default function RootLayout({
                   GitHub
                 </a>
                 <a
+                  href="/changelog"
+                  className="text-xs text-muted/70 hover:text-foreground transition-colors"
+                >
+                  Changelog
+                </a>
+                <a
                   href="mailto:hscmathsguy@gmail.com"
                   className="text-xs text-muted/70 hover:text-foreground transition-colors"
                 >
                   Contact / Feedback
                 </a>
               </div>
-            </div>
-            <div className="mt-4 pt-3 border-t border-border/30">
-              <details className="text-xs text-muted/50">
-                <summary className="cursor-pointer hover:text-muted transition-colors">Changelog</summary>
-                <ul className="mt-2 space-y-1 pl-4">
-                  <li><span className="text-muted/60">May 2026</span> — Fixed Band 1-6 incorrectly showing for Extension courses. Now displays E1-E4 correctly for all years (2001-2025).</li>
-                </ul>
-              </details>
             </div>
           </div>
           </footer>
