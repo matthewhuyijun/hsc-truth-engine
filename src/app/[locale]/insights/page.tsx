@@ -240,7 +240,7 @@ export default async function InsightsPage() {
 
           {/* NESA Domain */}
           <div className="mb-2">
-            <span className="inline-flex items-center rounded px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400 mb-8">
+            <span className="inline-flex items-center rounded px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-accent/10 text-accent mb-8">
               {t("pipelineNesaDomain")}
             </span>
           </div>
