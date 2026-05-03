@@ -354,7 +354,7 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
                 {c.stateRanks.length > 0 ? c.stateRanks.map((r, i) => <span key={i} className="inline-flex items-center rounded-md bg-accent-dim px-1.5 py-0.5 text-xs font-mono text-muted">#{r}</span>) : <span className="text-sm text-muted/30 font-mono">—</span>}
               </div>
               {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">
-                {sp ? <><span className="text-xs font-mono text-muted/70">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}
+                {sp ? <><span className="inline-flex items-center rounded-md bg-accent-dim px-1.5 py-0.5 text-xs font-mono font-medium">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}
               </div>}
             </button>
           );
@@ -428,7 +428,7 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
               <div className={sparoData ? 'col-span-4' : 'col-span-9'}><span className="text-sm font-medium">{s.name}</span></div>
               <div className={`${sparoData ? 'col-span-2' : 'col-span-2'} flex justify-end`}><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{s.band6Count.toLocaleString()}</span></div>
               {sparoData && <div className="col-span-5 flex justify-end items-center gap-1">
-                {sp ? <><span className="text-xs font-mono text-muted/70">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}
+                {sp ? <><span className="inline-flex items-center rounded-md bg-accent-dim px-1.5 py-0.5 text-xs font-mono font-medium">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}
               </div>}
             </button>
           );})}
