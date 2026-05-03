@@ -446,7 +446,7 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
               <div className="col-span-1"><span className="text-xs text-muted font-mono">{idx+1}</span></div>
               <div className="col-span-4"><span className="text-sm font-medium truncate">{sr.lastName}, {sr.firstName}</span></div>
               <div className="col-span-5"><button onClick={() => onSchool(sr.schoolName)} className="text-sm hover:underline truncate">{sr.schoolName}</button></div>
-              <div className="col-span-2 flex justify-end"><span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-mono font-medium ${sr.rank===1?'border-green-600 bg-green-600 text-white':'border-border text-muted'}`}>{sr.rank}</span></div>
+              <div className="col-span-2 flex justify-end"><span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-mono font-medium ${sr.rank===1?'border-green-600 bg-green-600 text-white':'border-blue-600 bg-blue-600 text-white'}`}>{sr.rank}</span></div>
             </div>
           ))}
         </div>
