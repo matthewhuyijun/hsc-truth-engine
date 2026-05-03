@@ -335,7 +335,7 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
   return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
       <StatCard label="Band 6/E4" value={detail.stats.band6Count.toLocaleString()} />
-      <StatCard label="Unique Students" value={detail.stats.uniqueStudents.toLocaleString()} />
+      <StatCard label="Students" value={detail.stats.uniqueStudents.toLocaleString()} />
       <StatCard label="State Ranks" value={String(detail.stats.stateRanks)} />
       <StatCard label="All-rounders" value={String(detail.stats.allRounders)} />
     </div>
@@ -491,7 +491,6 @@ function IntersectionView({ detail, course, stats, year }: {
       <StatCard label="Band 6/E4" value={ca ? String(ca.band6Count) : '0'} />
       <StatCard label="Students" value={String(sts.length)} />
       <StatCard label="State Ranks" value={ca ? String(ca.stateRanks.length) : '0'} />
-      {stats && (stats.male + stats.female + stats.non_binary) > 0 && <StatCard label="Total Enrolled" value={(stats.male + stats.female + stats.non_binary).toLocaleString()} />}
     </div>
     <div>
       <h2 className="text-lg font-semibold mb-3">Students ({sts.length})</h2>
