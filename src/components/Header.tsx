@@ -11,6 +11,7 @@ const navItems = [
   { label: "Calculator", href: "/calculator" },
   { label: "Scaling", href: "/scaling-graphs" },
   { label: "Honor Roll", href: "/honor-roll" },
+  { label: "Compare", href: "/compare" },
 ];
 
 export function Header() {

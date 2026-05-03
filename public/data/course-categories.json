@@ -1,0 +1,690 @@
+{
+  "15000": {
+    "name": "Aboriginal Studies",
+    "category": "HSIE"
+  },
+  "15010": {
+    "name": "Agriculture",
+    "category": "Technology"
+  },
+  "15020": {
+    "name": "Ancient History",
+    "category": "HSIE"
+  },
+  "15030": {
+    "name": "Biology",
+    "category": "Science"
+  },
+  "15040": {
+    "name": "Business Studies",
+    "category": "HSIE"
+  },
+  "15050": {
+    "name": "Chemistry",
+    "category": "Science"
+  },
+  "15060": {
+    "name": "Community and Family Studies",
+    "category": "PDHPE"
+  },
+  "15070": {
+    "name": "Dance",
+    "category": "Creative Arts"
+  },
+  "15080": {
+    "name": "Design and Technology",
+    "category": "Technology"
+  },
+  "15090": {
+    "name": "Drama",
+    "category": "Creative Arts"
+  },
+  "15100": {
+    "name": "Earth and Environmental Science",
+    "category": "Science"
+  },
+  "15110": {
+    "name": "Economics",
+    "category": "HSIE"
+  },
+  "15120": {
+    "name": "Engineering Studies",
+    "category": "Technology"
+  },
+  "15126": {
+    "name": "English Studies Examination",
+    "category": "English"
+  },
+  "15130": {
+    "name": "English (Standard)",
+    "category": "English"
+  },
+  "15140": {
+    "name": "English (Advanced)",
+    "category": "English"
+  },
+  "15150": {
+    "name": "English as a Second Language",
+    "category": "English"
+  },
+  "15155": {
+    "name": "English EAL/D",
+    "category": "English"
+  },
+  "15160": {
+    "name": "English Extension 1",
+    "category": "English"
+  },
+  "15170": {
+    "name": "English Extension 2",
+    "category": "English"
+  },
+  "15175": {
+    "name": "Enterprise Computing",
+    "category": "Technology"
+  },
+  "15180": {
+    "name": "Food Technology",
+    "category": "Technology"
+  },
+  "15190": {
+    "name": "Geography",
+    "category": "HSIE"
+  },
+  "15200": {
+    "name": "Industrial Technology",
+    "category": "Technology"
+  },
+  "15210": {
+    "name": "Information Processes and Technology",
+    "category": "Technology"
+  },
+  "15215": {
+    "name": "Investigating Science",
+    "category": "Science"
+  },
+  "15220": {
+    "name": "Legal Studies",
+    "category": "HSIE"
+  },
+  "15230": {
+    "name": "General Mathematics",
+    "category": "Mathematics"
+  },
+  "15232": {
+    "name": "Mathematics Standard 1 Examination",
+    "category": "Mathematics"
+  },
+  "15235": {
+    "name": "Mathematics General 2",
+    "category": "Mathematics"
+  },
+  "15236": {
+    "name": "Mathematics Standard 2",
+    "category": "Mathematics"
+  },
+  "15240": {
+    "name": "Mathematics",
+    "category": "Mathematics"
+  },
+  "15250": {
+    "name": "Mathematics Extension 1",
+    "category": "Mathematics"
+  },
+  "15255": {
+    "name": "Mathematics Advanced",
+    "category": "Mathematics"
+  },
+  "15260": {
+    "name": "Mathematics Extension 2",
+    "category": "Mathematics"
+  },
+  "15270": {
+    "name": "Modern History",
+    "category": "HSIE"
+  },
+  "15280": {
+    "name": "History Extension",
+    "category": "HSIE"
+  },
+  "15290": {
+    "name": "Music 1",
+    "category": "Creative Arts"
+  },
+  "15300": {
+    "name": "Music 2",
+    "category": "Creative Arts"
+  },
+  "15310": {
+    "name": "Music Extension",
+    "category": "Creative Arts"
+  },
+  "15320": {
+    "name": "Personal Development, Health and Physical Education",
+    "category": "PDHPE"
+  },
+  "15330": {
+    "name": "Physics",
+    "category": "Science"
+  },
+  "15340": {
+    "name": "Senior Science",
+    "category": "Science"
+  },
+  "15345": {
+    "name": "Science Extension",
+    "category": "Science"
+  },
+  "15350": {
+    "name": "Society and Culture",
+    "category": "HSIE"
+  },
+  "15360": {
+    "name": "Software Design and Development",
+    "category": "Technology"
+  },
+  "15365": {
+    "name": "Software Engineering",
+    "category": "Technology"
+  },
+  "15370": {
+    "name": "Studies of Religion I",
+    "category": "HSIE"
+  },
+  "15380": {
+    "name": "Studies of Religion II",
+    "category": "HSIE"
+  },
+  "15390": {
+    "name": "Textiles and Design",
+    "category": "Technology"
+  },
+  "15400": {
+    "name": "Visual Arts",
+    "category": "Creative Arts"
+  },
+  "15500": {
+    "name": "Arabic Beginners",
+    "category": "Languages"
+  },
+  "15510": {
+    "name": "Arabic Continuers",
+    "category": "Languages"
+  },
+  "15520": {
+    "name": "Arabic Extension",
+    "category": "Languages"
+  },
+  "15530": {
+    "name": "Armenian Continuers",
+    "category": "Languages"
+  },
+  "15540": {
+    "name": "Chinese Beginners",
+    "category": "Languages"
+  },
+  "15550": {
+    "name": "Chinese Continuers",
+    "category": "Languages"
+  },
+  "15555": {
+    "name": "Heritage Chinese (Mandarin)",
+    "category": "Languages"
+  },
+  "15557": {
+    "name": "Chinese in Context",
+    "category": "Languages"
+  },
+  "15560": {
+    "name": "Chinese Background Speakers",
+    "category": "Languages"
+  },
+  "15565": {
+    "name": "Chinese and Literature",
+    "category": "Languages"
+  },
+  "15570": {
+    "name": "Chinese Extension",
+    "category": "Languages"
+  },
+  "15580": {
+    "name": "Classical Greek Continuers",
+    "category": "Languages"
+  },
+  "15590": {
+    "name": "Classical Greek Extension",
+    "category": "Languages"
+  },
+  "15600": {
+    "name": "Classical Hebrew Continuers",
+    "category": "Languages"
+  },
+  "15610": {
+    "name": "Classical Hebrew Extension",
+    "category": "Languages"
+  },
+  "15620": {
+    "name": "Croatian Continuers",
+    "category": "Languages"
+  },
+  "15630": {
+    "name": "Czech Continuers",
+    "category": "Languages"
+  },
+  "15640": {
+    "name": "Dutch Continuers",
+    "category": "Languages"
+  },
+  "15650": {
+    "name": "Estonian Continuers",
+    "category": "Languages"
+  },
+  "15660": {
+    "name": "Filipino Continuers",
+    "category": "Languages"
+  },
+  "15670": {
+    "name": "French Beginners",
+    "category": "Languages"
+  },
+  "15680": {
+    "name": "French Continuers",
+    "category": "Languages"
+  },
+  "15690": {
+    "name": "French Extension",
+    "category": "Languages"
+  },
+  "15700": {
+    "name": "German Beginners",
+    "category": "Languages"
+  },
+  "15710": {
+    "name": "German Continuers",
+    "category": "Languages"
+  },
+  "15720": {
+    "name": "German Extension",
+    "category": "Languages"
+  },
+  "15730": {
+    "name": "Hindi Continuers",
+    "category": "Languages"
+  },
+  "15740": {
+    "name": "Hungarian Continuers",
+    "category": "Languages"
+  },
+  "15750": {
+    "name": "Indonesian Beginners",
+    "category": "Languages"
+  },
+  "15760": {
+    "name": "Indonesian Continuers",
+    "category": "Languages"
+  },
+  "15765": {
+    "name": "Heritage Indonesian",
+    "category": "Languages"
+  },
+  "15767": {
+    "name": "Indonesian in Context",
+    "category": "Languages"
+  },
+  "15770": {
+    "name": "Indonesian Background Speakers",
+    "category": "Languages"
+  },
+  "15775": {
+    "name": "Indonesian and Literature",
+    "category": "Languages"
+  },
+  "15780": {
+    "name": "Indonesian Extension",
+    "category": "Languages"
+  },
+  "15790": {
+    "name": "Italian Beginners",
+    "category": "Languages"
+  },
+  "15800": {
+    "name": "Italian Continuers",
+    "category": "Languages"
+  },
+  "15810": {
+    "name": "Italian Extension",
+    "category": "Languages"
+  },
+  "15820": {
+    "name": "Japanese Beginners",
+    "category": "Languages"
+  },
+  "15830": {
+    "name": "Japanese Continuers",
+    "category": "Languages"
+  },
+  "15835": {
+    "name": "Heritage Japanese",
+    "category": "Languages"
+  },
+  "15837": {
+    "name": "Japanese in Context",
+    "category": "Languages"
+  },
+  "15840": {
+    "name": "Japanese Background Speakers",
+    "category": "Languages"
+  },
+  "15845": {
+    "name": "Japanese and Literature",
+    "category": "Languages"
+  },
+  "15850": {
+    "name": "Japanese Extension",
+    "category": "Languages"
+  },
+  "15860": {
+    "name": "Khmer Continuers",
+    "category": "Languages"
+  },
+  "15870": {
+    "name": "Korean Beginners",
+    "category": "Languages"
+  },
+  "15880": {
+    "name": "Korean Continuers",
+    "category": "Languages"
+  },
+  "15885": {
+    "name": "Heritage Korean",
+    "category": "Languages"
+  },
+  "15887": {
+    "name": "Korean in Context",
+    "category": "Languages"
+  },
+  "15890": {
+    "name": "Korean Background Speakers",
+    "category": "Languages"
+  },
+  "15895": {
+    "name": "Korean and Literature",
+    "category": "Languages"
+  },
+  "15900": {
+    "name": "Latin Continuers",
+    "category": "Languages"
+  },
+  "15910": {
+    "name": "Latin Extension",
+    "category": "Languages"
+  },
+  "15920": {
+    "name": "Latvian Continuers",
+    "category": "Languages"
+  },
+  "15930": {
+    "name": "Lithuanian Continuers",
+    "category": "Languages"
+  },
+  "15940": {
+    "name": "Macedonian Continuers",
+    "category": "Languages"
+  },
+  "15950": {
+    "name": "Malay Background Speakers",
+    "category": "Languages"
+  },
+  "15960": {
+    "name": "Maltese Continuers",
+    "category": "Languages"
+  },
+  "15970": {
+    "name": "Modern Greek Beginners",
+    "category": "Languages"
+  },
+  "15980": {
+    "name": "Modern Greek Continuers",
+    "category": "Languages"
+  },
+  "15990": {
+    "name": "Modern Greek Extension",
+    "category": "Languages"
+  },
+  "16000": {
+    "name": "Modern Hebrew Continuers",
+    "category": "Languages"
+  },
+  "16010": {
+    "name": "Persian Background Speakers",
+    "category": "Languages"
+  },
+  "16015": {
+    "name": "Persian Continuers",
+    "category": "Languages"
+  },
+  "16020": {
+    "name": "Polish Continuers",
+    "category": "Languages"
+  },
+  "16030": {
+    "name": "Portuguese Continuers",
+    "category": "Languages"
+  },
+  "16035": {
+    "name": "Punjabi Continuers",
+    "category": "Languages"
+  },
+  "16040": {
+    "name": "Russian Background Speakers",
+    "category": "Languages"
+  },
+  "16045": {
+    "name": "Russian Continuers",
+    "category": "Languages"
+  },
+  "16050": {
+    "name": "Serbian Continuers",
+    "category": "Languages"
+  },
+  "16070": {
+    "name": "Spanish Beginners",
+    "category": "Languages"
+  },
+  "16080": {
+    "name": "Spanish Continuers",
+    "category": "Languages"
+  },
+  "16090": {
+    "name": "Spanish Extension",
+    "category": "Languages"
+  },
+  "16100": {
+    "name": "Swedish Continuers",
+    "category": "Languages"
+  },
+  "16110": {
+    "name": "Tamil Continuers",
+    "category": "Languages"
+  },
+  "16120": {
+    "name": "Turkish Continuers",
+    "category": "Languages"
+  },
+  "16130": {
+    "name": "Ukrainian Continuers",
+    "category": "Languages"
+  },
+  "16140": {
+    "name": "Vietnamese Continuers",
+    "category": "Languages"
+  },
+  "16150": {
+    "name": "Accounting",
+    "category": "HSIE"
+  },
+  "16160": {
+    "name": "Electronics Technology",
+    "category": "Technology"
+  },
+  "16245": {
+    "name": "Business Services - Office Administration Examination",
+    "category": "VET"
+  },
+  "16305": {
+    "name": "Construction Examination",
+    "category": "VET"
+  },
+  "16365": {
+    "name": "Information Technology Examination",
+    "category": "VET"
+  },
+  "16425": {
+    "name": "Metal and Engineering Examination",
+    "category": "VET"
+  },
+  "16485": {
+    "name": "Primary Industries Examination",
+    "category": "VET"
+  },
+  "16515": {
+    "name": "Retail Operations Examination",
+    "category": "VET"
+  },
+  "16565": {
+    "name": "Hospitality Operations Examination",
+    "category": "VET"
+  },
+  "16665": {
+    "name": "Hospitality Examination",
+    "category": "VET"
+  },
+  "16695": {
+    "name": "Tourism Examination",
+    "category": "VET"
+  },
+  "16745": {
+    "name": "Business Services Examination",
+    "category": "VET"
+  },
+  "16845": {
+    "name": "Hospitality Examination",
+    "category": "VET"
+  },
+  "16935": {
+    "name": "Tourism Examination",
+    "category": "VET"
+  },
+  "16945": {
+    "name": "Entertainment Industry Examination",
+    "category": "VET"
+  },
+  "16955": {
+    "name": "Entertainment Examination",
+    "category": "VET"
+  },
+  "16995": {
+    "name": "Retail Operations Examination",
+    "category": "VET"
+  },
+  "17195": {
+    "name": "Primary Industries Examination",
+    "category": "VET"
+  },
+  "18095": {
+    "name": "Information Technology Examination",
+    "category": "VET"
+  },
+  "25010": {
+    "name": "Comparative Literature - Distinction Course",
+    "category": "Discontinued"
+  },
+  "25020": {
+    "name": "Cosmology - Distinction Course",
+    "category": "Discontinued"
+  },
+  "25030": {
+    "name": "Philosophy - Distinction Course",
+    "category": "Discontinued"
+  },
+  "26079": {
+    "name": "Automotive Examination",
+    "category": "VET"
+  },
+  "26098": {
+    "name": "Automotive Examination",
+    "category": "VET"
+  },
+  "26099": {
+    "name": "Automotive Examination",
+    "category": "VET"
+  },
+  "26199": {
+    "name": "Business Services Examination",
+    "category": "VET"
+  },
+  "26299": {
+    "name": "Construction Examination",
+    "category": "VET"
+  },
+  "26399": {
+    "name": "Electrotechnology Examination",
+    "category": "VET"
+  },
+  "26499": {
+    "name": "Entertainment Industry Examination",
+    "category": "VET"
+  },
+  "26579": {
+    "name": "Hospitality Examination",
+    "category": "VET"
+  },
+  "26599": {
+    "name": "Hospitality Examination",
+    "category": "VET"
+  },
+  "26699": {
+    "name": "Information Technology Examination",
+    "category": "VET"
+  },
+  "26799": {
+    "name": "Metal and Engineering Examination",
+    "category": "VET"
+  },
+  "26899": {
+    "name": "Primary Industries Examination",
+    "category": "VET"
+  },
+  "26999": {
+    "name": "Retail Services Examination",
+    "category": "VET"
+  },
+  "27099": {
+    "name": "Tourism and Events Examination",
+    "category": "VET"
+  },
+  "27199": {
+    "name": "Human Services Examination",
+    "category": "VET"
+  },
+  "27299": {
+    "name": "Financial Services Examination",
+    "category": "VET"
+  },
+  "27379": {
+    "name": "Information and Digital Technology Examination",
+    "category": "Technology"
+  },
+  "27398": {
+    "name": "Information and Digital Technology Examination",
+    "category": "Technology"
+  },
+  "27399": {
+    "name": "Information and Digital Technology Examination",
+    "category": "VET"
+  },
+  "27499": {
+    "name": "Tourism, Travel and Events Examination",
+    "category": "VET"
+  }
+}
