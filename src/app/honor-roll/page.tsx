@@ -90,11 +90,13 @@ function HonorRollContent() {
 
   useEffect(() => {
     let cancelled = false;
-    setLoading(true);
-    fetch(`/data/schools-${year}.json`).then(r => r.json()).then(d => { if (!cancelled) setSchools(d); }).catch(() => {});
-    fetch(`/data/courses-${year}.json`).then(r => r.json()).then(d => { if (!cancelled) setCourses(d); }).catch(() => {});
-
-    if (hasFilters) {
+    if (!hasFilters) {
+      setLoading(true);
+      setAllDetail(null); setSchoolDetail(null); setCourseStats(null);
+      fetch(`/data/schools-${year}.json`).then(r => r.json()).then(d => { if (!cancelled) { setSchools(d); setLoading(false); } }).catch(() => { if (!cancelled) setLoading(false); });
+      fetch(`/data/courses-${year}.json`).then(r => r.json()).then(d => { if (!cancelled) setCourses(d); }).catch(() => {});
+    } else {
+      setLoading(true);
       fetch(`/data/school-detail-${year}.json`).then(r => r.json())
         .then((dm: Record<string, SchoolDetail>) => {
           if (cancelled) return;
@@ -107,9 +109,6 @@ function HonorRollContent() {
           } else setCourseStats(null);
           setLoading(false);
         }).catch(() => { if (!cancelled) setLoading(false); });
-    } else {
-      setLoading(false);
-      setAllDetail(null); setSchoolDetail(null); setCourseStats(null);
     }
     return () => { cancelled = true; };
   }, [year, selSchool, selCourse, hasFilters]);
