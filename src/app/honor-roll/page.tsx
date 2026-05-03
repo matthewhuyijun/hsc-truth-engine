@@ -323,6 +323,7 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
   }, [sparoData, sparoSubjects]);
 
   const hasSparo = sparoSubjects.length > 0;
+  const [tab, setTab] = useState<'subjects' | 'students'>('subjects');
 
   return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -331,7 +332,20 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
       <StatCard label="State Ranks" value={String(detail.stats.stateRanks)} />
       <StatCard label="All-rounders" value={String(detail.stats.allRounders)} />
     </div>
-    <div>
+
+    <div className="flex items-center gap-2">
+      <button onClick={() => setTab('subjects')}
+        className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${tab === 'subjects' ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>
+        Subject Performance ({detail.courses.length})
+      </button>
+      <button onClick={() => setTab('students')}
+        className={`rounded-md px-3 py-1.5 text-sm font-medium transition-colors ${tab === 'students' ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>
+        Students ({detail.students.length})
+      </button>
+    </div>
+
+    {tab === 'subjects' && (<>
+      <div>
       <h2 className="text-lg font-semibold mb-1">Subject Performance ({detail.courses.length})</h2>
       {hasSparo && <p className="text-sm text-muted mb-3">Public school HSC marks from publicly available SPaRO reports. Ranked by school average.</p>}
     </div>
@@ -361,10 +375,12 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
         })}
       </div>
     </div>
+    </>)}
+    {tab === 'students' && (
     <div>
-      <h2 className="text-lg font-semibold mb-3">Students ({detail.students.length})</h2>
       <StudentsTable students={detail.students} onCourseClick={onCourse} highlightCourse={undefined} />
     </div>
+    )}
   </div>;
 }
 
