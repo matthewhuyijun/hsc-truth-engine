@@ -179,11 +179,11 @@ function HonorRollContent() {
       </section>
 
       {/* Content */}
-      {loading ? <LoadingView /> :
-       selSchool && selCourse ? <IntersectionView detail={schoolDetail} course={selCourse} stats={courseStats} year={year} /> :
+      {loading && <section className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8"><div className="text-xs text-muted py-2">Loading...</div></section>}
+      {selSchool && selCourse ? <IntersectionView detail={schoolDetail} course={selCourse} stats={courseStats} year={year} /> :
        selSchool ? <SchoolView detail={schoolDetail} name={selSchool} year={year} slug={slugify(selSchool)} sparoData={sparoData} onCourse={handleCourse} /> :
        selCourse ? <CourseView course={selCourse} stats={courseStats} year={year} allDetail={allDetail} sparoData={sparoData} onSchool={handleSchool} /> :
-       <DefaultView schools={schools} courses={courses} onSchool={handleSchool} onCourse={handleCourse} />}
+       !loading && <DefaultView schools={schools} courses={courses} onSchool={handleSchool} onCourse={handleCourse} />}
     </div>
   );
 }
@@ -323,10 +323,11 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
   const [courseSearch, setCourseSearch] = useState('');
 
   const filteredCourses = useMemo(() => {
+    if (!detail) return [];
     if (!courseSearch) return detail.courses;
     const q = courseSearch.toLowerCase();
     return detail.courses.filter(c => c.name.toLowerCase().includes(q));
-  }, [detail.courses, courseSearch]);
+  }, [detail, courseSearch]);
 
   if (!detail) return <EmptyView msg={`No data for ${name} in ${year}.`} />;
 
