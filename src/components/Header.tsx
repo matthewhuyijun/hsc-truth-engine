@@ -1,25 +1,28 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { usePathname } from "@/i18n/routing";
+import { Link } from "@/i18n/routing";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
-
-const navItems = [
-  { label: "Insights", href: "/insights" },
-  { label: "Calculator", href: "/calculator" },
-  { label: "Scaling", href: "/scaling-graphs" },
-  { label: "Honor Roll", href: "/honor-roll" },
-];
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 export function Header() {
+  const t = useTranslations("Header");
   const [mobileOpen, setMobileOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
     setMobileOpen(false);
   }, [pathname]);
+
+  const navItems = [
+    { label: t("insights"), href: "/insights" },
+    { label: t("calculator"), href: "/calculator" },
+    { label: t("scaling"), href: "/scaling-graphs" },
+    { label: t("honorRoll"), href: "/honor-roll" },
+  ];
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-md">
@@ -31,9 +34,9 @@ export function Header() {
           <span className="inline-flex h-6 w-6 items-center justify-center rounded bg-foreground text-background font-mono text-xs font-bold">
             &gt;_
           </span>
-          <span>HSC Data</span>
+          <span>{t("siteName")}</span>
           <span className="rounded border border-border/50 px-1.5 py-0.5 text-[10px] font-medium text-muted uppercase tracking-wider">
-            Beta
+            {t("beta")}
           </span>
         </Link>
 
@@ -43,9 +46,9 @@ export function Header() {
               key={item.href}
               href={item.href}
               className={`rounded-md px-3 py-1.5 text-sm transition-colors hover:text-foreground ${
-                  pathname === item.href
-                    ? "text-foreground bg-surface"
-                    : "text-muted"
+                pathname === item.href
+                  ? "text-foreground bg-surface"
+                  : "text-muted"
               }`}
             >
               {item.label}
@@ -54,11 +57,12 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
+          <LanguageToggle />
           <ThemeToggle />
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="sm:hidden inline-flex h-7 w-7 items-center justify-center rounded text-muted hover:text-foreground transition-colors"
-            aria-label="Toggle menu"
+            aria-label={t("toggleMenu")}
           >
             {mobileOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
           </button>

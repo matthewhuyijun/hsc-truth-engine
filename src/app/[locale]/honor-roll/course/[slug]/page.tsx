@@ -1,8 +1,8 @@
 'use client';
 
 import { Suspense, useState, useEffect, useMemo } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
-import Link from 'next/link';
+import { useSearchParams, useRouter } from "next/navigation";
+import { Link } from "@/i18n/routing";
 import { ArrowLeft, Search, Info } from 'lucide-react';
 import { getRenameHistory, resolveCourseNumbers } from '@/lib/course-aliases';
 import {
