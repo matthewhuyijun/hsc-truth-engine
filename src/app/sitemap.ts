@@ -41,75 +41,64 @@ function getCourseCodes(): string[] {
   }
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = "https://hscdata.org";
+const BASE_URL = "https://hscdata.org";
+const ZH_BASE = `${BASE_URL}/zh`;
 
-  const staticPages: MetadataRoute.Sitemap = [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 1,
+function hreflang(
+  enPath: string,
+  zhPath: string
+): { languages: Record<string, string> } {
+  return {
+    languages: {
+      en: `${BASE_URL}${enPath}`,
+      zh: `${ZH_BASE}${zhPath}`,
     },
-    {
-      url: `${baseUrl}/insights`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/calculator`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/scaling-graphs`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/honor-roll`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.8,
-    },
-    {
-      url: `${baseUrl}/changelog`,
-      lastModified: new Date(),
-      changeFrequency: "monthly",
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/honor-roll/school`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
-    {
-      url: `${baseUrl}/honor-roll/course`,
-      lastModified: new Date(),
-      changeFrequency: "weekly",
-      priority: 0.7,
-    },
+  };
+}
+
+function entry(
+  path: string,
+  opts: {
+    changeFrequency?: MetadataRoute.Sitemap[number]["changeFrequency"];
+    priority?: number;
+  } = {}
+): MetadataRoute.Sitemap[number] {
+  return {
+    url: `${BASE_URL}${path}`,
+    lastModified: new Date(),
+    changeFrequency: opts.changeFrequency ?? "monthly",
+    priority: opts.priority ?? 0.5,
+    alternates: hreflang(path, path),
+  };
+}
+
+export default function sitemap(): MetadataRoute.Sitemap {
+  const staticPaths = [
+    { path: "", priority: 1, cf: "weekly" as const },
+    { path: "/insights", priority: 0.9, cf: "monthly" as const },
+    { path: "/calculator", priority: 0.9, cf: "monthly" as const },
+    { path: "/scaling-graphs", priority: 0.8, cf: "monthly" as const },
+    { path: "/honor-roll", priority: 0.8, cf: "weekly" as const },
+    { path: "/changelog", priority: 0.5, cf: "monthly" as const },
+    { path: "/honor-roll/school", priority: 0.7, cf: "weekly" as const },
+    { path: "/honor-roll/course", priority: 0.7, cf: "weekly" as const },
   ];
 
+  const staticPages = staticPaths.map(({ path: p, priority, cf }) =>
+    entry(p, { changeFrequency: cf, priority })
+  );
+
   const schoolSlugs = getSchoolSlugs();
-  const schoolPages: MetadataRoute.Sitemap = schoolSlugs.map((slug) => ({
-    url: `${baseUrl}/honor-roll/school/${slug}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
+  const schoolPages = schoolSlugs.map((slug) => {
+    const p = `/honor-roll/school/${slug}`;
+    return entry(p, { priority: 0.6 });
+  });
 
   const courseCodes = getCourseCodes();
-  const coursePages: MetadataRoute.Sitemap = courseCodes.map((code) => ({
-    url: `${baseUrl}/honor-roll/course/${code}`,
-    lastModified: new Date(),
-    changeFrequency: "monthly",
-    priority: 0.6,
-  }));
+  const coursePages = courseCodes.map((code) => {
+    const p = `/honor-roll/course/${code}`;
+    return entry(p, { priority: 0.6 });
+  });
 
   return [...staticPages, ...schoolPages, ...coursePages];
 }
