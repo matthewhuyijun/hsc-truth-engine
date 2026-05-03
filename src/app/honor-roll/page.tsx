@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Award, Search, ChevronUp, ChevronDown, X, School, BookOpen } from 'lucide-react';
+import { Award, Search, ChevronUp, ChevronDown, X, School, BookOpen, Info } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -340,7 +340,7 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
         <div className={hasSparo ? 'col-span-3' : 'col-span-6'}>Course</div>
         <div className={`${hasSparo ? 'col-span-3' : 'col-span-3'} flex justify-end`}>B6/E4</div>
         <div className={`${hasSparo ? 'col-span-2' : 'col-span-3'} flex justify-end`}>State Ranks</div>
-        {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">School Avg vs State (Gov) <span className="inline-flex items-center justify-center rounded-full border border-border w-4 h-4 text-[10px] font-medium text-muted cursor-help" title="School averages from publicly available SPaRO reports. Rank by school average within this course.">?</span></div>}
+        {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">School Avg vs State (Gov) <button type="button" className="inline-flex cursor-help" title="School averages from publicly available SPaRO reports. Rank by school average within this course."><Info className="h-3.5 w-3.5 text-muted/70" /></button></div>}
       </div>
       <div className="divide-y divide-border">
         {detail.courses.map(c => {
@@ -519,8 +519,8 @@ function StudentsTable({ students, highlightCourse, onCourseClick }: {
 
     <div className="flex flex-wrap items-center gap-4 rounded-lg border border-border bg-surface px-3 py-2 text-xs text-muted">
       <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-2 rounded-full bg-amber-400 shrink-0" /> All-rounder</span>
-      <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" /> First in course</span>
       <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" /> State rank</span>
+      <span className="flex items-center gap-1.5"><span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" /> First in course</span>
       <span className="flex items-center gap-1.5 ml-auto">
         <span className="inline-flex items-center rounded-full border border-green-600 bg-green-600 px-1.5 py-0.5 text-[10px] font-medium text-white">Course (#1)</span>
         <span className="inline-flex items-center rounded-full border border-blue-600 bg-blue-600 px-1.5 py-0.5 text-[10px] font-medium text-white">Course (#N)</span>
@@ -538,6 +538,8 @@ function StudentsTable({ students, highlightCourse, onCourseClick }: {
             <div className="col-span-4 flex items-center gap-1.5 min-w-0">
               {st.isAllRounder && <span className="inline-block h-2 w-2 rounded-full bg-amber-400 shrink-0" title="All-rounder" />}
               <span className="text-sm font-medium truncate">{st.lastName}, {st.firstName}</span>
+              {st.stateRankCount > 0 && <span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" title="State rank" />}
+              {st.courses.some(c => c.rank === 1) && <span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" title="First in course" />}
             </div>
             <div className="col-span-6 flex flex-wrap items-center gap-1">
               {st.courses.map((c, i) => (
@@ -552,11 +554,7 @@ function StudentsTable({ students, highlightCourse, onCourseClick }: {
                     </span>
               ))}
             </div>
-            <div className="col-span-1 flex items-center justify-end gap-1">
-              {st.courses.some(c => c.rank === 1) && <span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" title="First in course" />}
-              {st.courses.some(c => c.rank > 1) && <span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" title="State rank" />}
-              <span className="text-sm text-muted font-mono">{st.b6Count}</span>
-            </div>
+            <div className="col-span-1 flex items-center justify-end"><span className="text-sm text-muted font-mono">{st.b6Count}</span></div>
             <div className="col-span-1 flex items-center justify-end"><span className="text-sm text-muted font-mono">{st.stateRankCount||'0'}</span></div>
           </div>
         ))}
