@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Search, X, ChevronDown, BarChart3 } from "lucide-react";
 import {
   getAllScalingCourses,
@@ -19,6 +20,7 @@ const MAX_COURSES = 8;
 const TABLE_COLORS = ["#3b82f6", "#8b5cf6", "#10b981", "#f59e0b", "#ec4899", "#6366f1", "#06b6d4", "#f97316"];
 
 export default function ScalingGraphsPage() {
+  const t = useTranslations("ScalingGraphs");
   const allCourses = useMemo(() => getAllScalingCourses(), []);
   const [selected, setSelected] = useState<string[]>([]);
   const [yearMode, setYearMode] = useState<YearMode>("last");
@@ -78,14 +80,14 @@ export default function ScalingGraphsPage() {
     return buildComparisonTable(selected, yearMode, graphMode);
   }, [selected, yearMode, graphMode]);
 
-  const xHeader = graphMode === "hsc" ? "HSC Mark" : "Percentile";
+  const xHeader = graphMode === "hsc" ? t("xAxisHSC") : t("xAxisPercentile");
 
   return (
     <div className="min-h-screen">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
-        <h1 className="text-3xl font-bold tracking-tight">Scaling Graphs</h1>
+        <h1 className="text-3xl font-bold tracking-tight">{t("heading")}</h1>
         <p className="mt-1 max-w-xl text-sm text-muted leading-relaxed">
-          Visualise how HSC marks translate to scaled marks. Select courses and compare scaling curves side-by-side.
+          {t("description")}
         </p>
 
         {/* Controls */}
@@ -93,7 +95,7 @@ export default function ScalingGraphsPage() {
           {/* Course Selector */}
           <div className="flex-1" ref={dropdownRef}>
             <label className="block text-xs font-medium text-muted mb-2">
-              Courses ({selected.length}/{MAX_COURSES})
+              {t("courseSelector", { selected: selected.length, max: MAX_COURSES })}
             </label>
 
             {selected.length > 0 && (
@@ -122,7 +124,7 @@ export default function ScalingGraphsPage() {
                 className="flex w-full items-center justify-between rounded-md border border-border bg-background px-3 py-2 text-left text-sm transition-colors hover:border-foreground/30 disabled:opacity-40 disabled:cursor-not-allowed"
               >
                 <span className="text-muted">
-                  {selected.length >= MAX_COURSES ? "Max 8 courses selected" : "Search to add courses..."}
+                  {selected.length >= MAX_COURSES ? t("maxCourses") : t("searchButton")}
                 </span>
                 <ChevronDown className="h-3.5 w-3.5 text-muted flex-shrink-0" />
               </button>
@@ -140,7 +142,7 @@ export default function ScalingGraphsPage() {
                           setSearchQuery(e.target.value);
                           setActiveIdx(0);
                         }}
-                        placeholder="Search courses..."
+                        placeholder={t("searchPlaceholder")}
                         className="flex-1 bg-transparent text-sm placeholder:text-muted/50 focus:outline-none"
                         onKeyDown={(e) => {
                           if (availableCourses.length === 0) return;
@@ -162,7 +164,7 @@ export default function ScalingGraphsPage() {
                   </div>
                   <div className="max-h-52 overflow-y-auto">
                     {availableCourses.length === 0 ? (
-                      <p className="px-3 py-4 text-sm text-muted/50 text-center">No courses found</p>
+                      <p className="px-3 py-4 text-sm text-muted/50 text-center">{t("noCoursesFound")}</p>
                     ) : (
                       availableCourses.map((course, i) => (
                         <button
@@ -186,7 +188,7 @@ export default function ScalingGraphsPage() {
           <div className="flex gap-3">
             {/* Graph mode */}
             <div>
-              <label className="block text-xs font-medium text-muted mb-2">Mode</label>
+              <label className="block text-xs font-medium text-muted mb-2">{t("modeLabel")}</label>
               <div className="flex rounded-md border border-border overflow-hidden">
                 {GRAPH_MODES.map((gm) => (
                   <button
@@ -198,7 +200,7 @@ export default function ScalingGraphsPage() {
                         : "bg-background text-muted hover:text-foreground"
                     }`}
                   >
-                    {gm.label}
+                    {gm.value === "percentile" ? t("modePercentToScaled") : t("modeHSCToScaled")}
                   </button>
                 ))}
               </div>
@@ -206,7 +208,7 @@ export default function ScalingGraphsPage() {
 
             {/* Year mode */}
             <div>
-              <label className="block text-xs font-medium text-muted mb-2">Year</label>
+              <label className="block text-xs font-medium text-muted mb-2">{t("yearLabel")}</label>
               <div className="flex rounded-md border border-border overflow-hidden">
                 {YEAR_MODES.map((ym) => (
                   <button
@@ -218,7 +220,7 @@ export default function ScalingGraphsPage() {
                         : "bg-background text-muted hover:text-foreground"
                     }`}
                   >
-                    {ym.label}
+                    {ym.value === "last" ? t("year2025") : t("year5yrAvg")}
                   </button>
                 ))}
               </div>
@@ -235,7 +237,7 @@ export default function ScalingGraphsPage() {
         {comparisonTable.length > 0 && (
           <div className="mt-8 rounded-lg border border-border overflow-hidden">
             <div className="bg-surface px-4 py-3 border-b border-border">
-              <h3 className="text-sm font-semibold text-foreground">Mark Comparison at Key Points</h3>
+              <h3 className="text-sm font-semibold text-foreground">{t("comparisonHeading")}</h3>
             </div>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
@@ -275,52 +277,34 @@ export default function ScalingGraphsPage() {
         {/* Interpretation */}
         {selected.length > 0 && (
           <div className="mt-8 rounded-lg border border-border p-5 space-y-3">
-            <h3 className="text-sm font-semibold text-foreground">How to Read This</h3>
+            <h3 className="text-sm font-semibold text-foreground">{t("interpretationHeading")}</h3>
             <ul className="space-y-2 text-sm text-muted leading-relaxed">
               {graphMode === "hsc" ? (
                 <>
-                  <li>
-                    <span className="text-foreground font-medium">Curve position:</span>{" "}
-                    A higher curve means stronger scaling. The y-axis shows per-unit scaled contribution to your ATAR aggregate.
-                  </li>
-                  <li>
-                    <span className="text-foreground font-medium">Curve steepness:</span>{" "}
-                    A steeper slope means small HSC mark improvements translate to larger scaled mark gains.
-                  </li>
-                  <li>
-                    <span className="text-foreground font-medium">Plateau at top:</span>{" "}
-                    Some curves flatten at the top end — the scaled maximum is capped by the highest historical scaled score.
-                  </li>
+                  <li>{t("interpHsc1")}</li>
+                  <li>{t("interpHsc2")}</li>
+                  <li>{t("interpHsc3")}</li>
                 </>
               ) : (
                 <>
-                  <li>
-                    <span className="text-foreground font-medium">Percentile interpretation:</span>{" "}
-                    Beyond the 75th percentile, curves reflect the upper tail of the cohort — steep sections here mean top students in this subject are pulling away from the pack.
-                  </li>
-                  <li>
-                    <span className="text-foreground font-medium">Curve separation:</span>{" "}
-                    The gap between curves at a given percentile shows how much more a top student in one subject contributes to ATAR versus another.
-                  </li>
+                  <li>{t("interpPer1")}</li>
+                  <li>{t("interpPer2")}</li>
                 </>
               )}
-              <li>
-                <span className="text-foreground font-medium">Year mode:</span>{" "}
-                "2025" uses the most recent data. "5-Year Avg" smooths out year-to-year fluctuations.
-              </li>
+              <li>{t("interpYear")}</li>
             </ul>
           </div>
         )}
 
         {/* Footer CTA */}
         <div className="mt-12 border-t border-border pt-8 text-center">
-          <p className="text-sm text-muted mb-3">Ready to estimate your ATAR?</p>
+          <p className="text-sm text-muted mb-3">{t("footerCta")}</p>
           <a
             href="/calculator"
             className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-2 text-sm font-medium text-foreground hover:bg-surface transition-colors"
           >
             <BarChart3 className="h-4 w-4" />
-            Open ATAR Calculator
+            {t("footerButton")}
           </a>
         </div>
       </div>

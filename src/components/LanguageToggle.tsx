@@ -2,11 +2,11 @@
 
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "@/i18n/routing";
-import { Languages } from "lucide-react";
 
-const options: { locale: string; label: string }[] = [
+const options = [
   { locale: "en", label: "EN" },
-  { locale: "zh", label: "中文" },
+  { locale: "zh", label: "简" },
+  { locale: "zh-Hant", label: "繁" },
 ];
 
 export function LanguageToggle() {

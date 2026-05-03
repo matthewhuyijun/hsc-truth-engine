@@ -11,30 +11,9 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-const CHANGES = [
-  {
-    date: "May 2026",
-    items: [
-      "Added Chinese (中文) localization — switch between English and Chinese via the header toggle. Translates all page content, UI labels, and SEO metadata (/zh/* routes).",
-      "SEO: dynamic metadata (title, description, Open Graph) now generated for every school and course detail page.",
-      "SEO: sitemap expanded to include all school detail pages, course detail pages, and changelog with hreflang alternates for bilingual indexing.",
-      "SEO: Open Graph social preview image added — dark-themed card shown when sharing links on social media.",
-      "SEO: BreadcrumbList structured data added to school and course detail pages for richer Google search results.",
-      "Fixed Band 1-6 incorrectly showing for Extension courses. Extension courses now correctly display E1-E4 band distribution for all years (2001-2025).",
-      "Added enrollment distribution and band performance charts to course detail views.",
-      "State rank mapping fixed — 2,200+ missing state ranks restored across school detail data.",
-      "Course name aliases expanded to 26 mappings covering all NESA course renames.",
-      "Legacy course codes (e.g. Mathematics → Mathematics Advanced) now merge into unified year-by-year data.",
-      "Honour Roll page rewritten with single-select year/school/course pickers and intersection views.",
-      "SPaRO school average data restored with rank badges and public school sourcing notes.",
-      "Added Compare page with bar charts, school maps, and category-based colour coding (currently hidden from nav).",
-      "Fixed enrollment distribution data — non_binary field was incorrectly storing total enrolment numbers.",
-    ],
-  },
-];
-
 export default async function ChangelogPage() {
   const t = await getTranslations("Changelog");
+  const releases = t.raw("releases") as { date: string; items: string[] }[];
 
   return (
     <div className="min-h-screen">
@@ -43,7 +22,7 @@ export default async function ChangelogPage() {
         <p className="mt-1 text-sm text-muted">{t("description")}</p>
 
         <div className="mt-8 space-y-8">
-          {CHANGES.map((release, i) => (
+          {(releases || []).map((release, i) => (
             <div key={i}>
               <h2 className="text-sm font-semibold text-muted uppercase tracking-wider">{release.date}</h2>
               <ul className="mt-3 space-y-2">

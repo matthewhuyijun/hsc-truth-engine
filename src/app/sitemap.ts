@@ -43,6 +43,7 @@ function getCourseCodes(): string[] {
 
 const BASE_URL = "https://hscdata.org";
 const ZH_BASE = `${BASE_URL}/zh`;
+const ZHHANT_BASE = `${BASE_URL}/zh-Hant`;
 
 function hreflang(
   enPath: string,
@@ -52,6 +53,7 @@ function hreflang(
     languages: {
       en: `${BASE_URL}${enPath}`,
       zh: `${ZH_BASE}${zhPath}`,
+      "zh-Hant": `${ZHHANT_BASE}${zhPath}`,
     },
   };
 }
