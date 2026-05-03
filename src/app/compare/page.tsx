@@ -1,9 +1,9 @@
 'use client';
 
 import { Suspense, useState, useEffect, useMemo, useRef } from 'react';
-import { X, School, BookOpen, BarChart3, ScatterChart, Search, Map as MapIcon } from 'lucide-react';
+import { X, School, BookOpen, BarChart3, Search, Map as MapIcon } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, ScatterChart as RScatterChart, Scatter, ZAxis, Cell } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 const SchoolMap = dynamic(() => import('./SchoolMap'), { ssr: false, loading: () => <div className="p-8 text-center text-muted">Loading map...</div> });
 
@@ -26,21 +26,19 @@ export default function ComparePage() {
 }
 
 function CompareContent() {
-  const [mode, setMode] = useState<'bar' | 'bubble' | 'map'>('bar');
+  const [mode, setMode] = useState<'bar' | 'map'>('bar');
   const [metric, setMetric] = useState<'band6' | 'stateRank' | 'sparo'>('band6');
   const [allCourses, setAllCourses] = useState<CourseEntry[]>([]);
   const [allSchools, setAllSchools] = useState<string[]>([]);
   const [popularity, setPopularity] = useState<Map<string, number>>(new Map());
   const [selSchools, setSelSchools] = useState<string[]>([]);
   const [selCourses, setSelCourses] = useState<string[]>([]);
-  const [yearFrom, setYearFrom] = useState('2017');
+  const [yearFrom, setYearFrom] = useState('2021');
   const [yearTo, setYearTo] = useState('2025');
   const [sparoData, setSparoData] = useState<Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null>(null);
   const [coords, setCoords] = useState<Record<string, [number, number]> | null>(null);
   const [loading, setLoading] = useState(false);
-
-  // Aggregated data: school -> course code -> value (summed over year range)
-  const [agg, setAgg] = useState<Map<string, Map<string, number>> | null>(null);
+  const [yearByYear, setYearByYear] = useState<Map<string, Map<string, Map<string, number>>> | null>(null);
 
   // Load metadata
   useEffect(() => {
@@ -59,7 +57,7 @@ function CompareContent() {
 
   // Fetch data when schools/years change
   useEffect(() => {
-    if (selSchools.length === 0) { setAgg(null); return; }
+    if (selSchools.length === 0) { setYearByYear(null); return; }
     let cancelled = false; setLoading(true);
     const years = YEARS.filter(y => y >= yearFrom && y <= yearTo);
 
@@ -68,32 +66,44 @@ function CompareContent() {
       .catch(() => ({ year: y, detail: {} as Record<string, SchoolDetail> }))
     )).then(results => {
       if (cancelled) return;
-      const m = new Map<string, Map<string, number>>();
-      for (const { detail } of results) {
+      const yby = new Map<string, Map<string, Map<string, number>>>();
+      for (const { year, detail } of results) {
+        if (!yby.has(year)) yby.set(year, new Map());
         for (const school of selSchools) {
           const slug = school.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
           const sd = detail[slug]; if (!sd) continue;
-          if (!m.has(school)) m.set(school, new Map());
+          if (!yby.get(year)!.has(school)) yby.get(year)!.set(school, new Map());
           for (const c of sd.courses) {
             const val = metric === 'band6' ? c.band6Count : c.stateRanks.length;
-            if (val > 0) m.get(school)!.set(c.code, (m.get(school)!.get(c.code) || 0) + val);
+            if (val > 0) yby.get(year)!.get(school)!.set(c.code, val);
           }
         }
       }
-      setAgg(m); setLoading(false);
+      setYearByYear(yby); setLoading(false);
     });
     return () => { cancelled = true; };
   }, [selSchools, yearFrom, yearTo, metric]);
 
   // Active courses (those with data in selected schools)
   const activeCourses = useMemo(() => {
-    if (!agg) return [];
+    if (!yearByYear) return [];
     const codes = new Set<string>();
-    for (const [, cm] of agg) for (const code of cm.keys()) codes.add(code);
+    for (const [, sm] of yearByYear) for (const [, cm] of sm) for (const code of cm.keys()) codes.add(code);
     return allCourses.filter(c => codes.has(c.code));
-  }, [agg, allCourses]);
+  }, [yearByYear, allCourses]);
 
-  const displayCourses = selCourses.length > 0 ? activeCourses.filter(c => selCourses.includes(c.code)) : activeCourses.slice(0, 12);
+  const displayCourses = selCourses.length > 0 ? activeCourses.filter(c => selCourses.includes(c.code)) : activeCourses;
+
+  // Aggregated data for map
+  const aggSum = useMemo(() => {
+    const m = new Map<string, Map<string, number>>();
+    if (!yearByYear) return m;
+    for (const [, sm] of yearByYear) for (const [school, cm] of sm) {
+      if (!m.has(school)) m.set(school, new Map());
+      for (const [code, val] of cm) m.get(school)!.set(code, (m.get(school)!.get(code) || 0) + val);
+    }
+    return m;
+  }, [yearByYear]);
 
   return (
     <div className="min-h-screen">
@@ -108,10 +118,10 @@ function CompareContent() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-3 space-y-2">
           <div className="flex items-center gap-3 flex-wrap">
             <div className="flex rounded-lg border border-border overflow-hidden">
-              {(['bar','bubble','map'] as const).map(m => {
-                const Icon = m === 'bar' ? BarChart3 : m === 'bubble' ? ScatterChart : MapIcon;
-                const label = m === 'bar' ? 'Bar' : m === 'bubble' ? 'Bubble' : 'Map';
-                return <button key={m} onClick={() => setMode(m)} className={`px-3 py-1.5 text-sm font-medium ${mode === m ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'} ${m !== 'bar' ? 'border-l border-border' : ''}`}>
+              {(['bar','map'] as const).map((m, i) => {
+                const Icon = m === 'bar' ? BarChart3 : MapIcon;
+                const label = m === 'bar' ? 'Bar' : 'Map';
+                return <button key={m} onClick={() => setMode(m)} className={`px-3 py-1.5 text-sm font-medium ${mode === m ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'} ${i > 0 ? 'border-l border-border' : ''}`}>
                   <Icon className="h-3.5 w-3.5 inline mr-1" />{label}</button>;
               })}
             </div>
@@ -143,22 +153,22 @@ function CompareContent() {
         </div>
 
         {/* Subject picker */}
-        {agg && activeCourses.length > 0 && (
+        {yearByYear && activeCourses.length > 0 && (
           <div>
             <span className="text-xs font-medium text-muted block mb-1">Subjects ({activeCourses.length})</span>
             <SubjectPicker courses={activeCourses} selected={selCourses} onToggle={c => setSelCourses(p => p.includes(c) ? p.filter(v => v !== c) : [...p, c])} />
           </div>
         )}
 
-        {!agg && (
+        {!yearByYear && (
           <div className="rounded-xl border border-border bg-surface p-8 text-center">
             <p className="text-sm text-muted">Select schools above to see comparison charts.</p>
           </div>
         )}
 
-        {agg && mode === 'bar' && <BarChartView schools={selSchools} courses={displayCourses} agg={agg} metric={metric} sparoData={sparoData} />}
-        {agg && mode === 'bubble' && <BubbleChartView schools={selSchools} courses={displayCourses} agg={agg} />}
-        {agg && mode === 'map' && <SchoolMap schools={selSchools} courses={activeCourses} schoolData={agg} coords={coords} selCourses={selCourses} />}
+        {yearByYear && mode === 'bar' && metric !== 'sparo' && <BarChartView schools={selSchools} courses={displayCourses} yearByYear={yearByYear} yearFrom={yearFrom} yearTo={yearTo} />}
+        {yearByYear && mode === 'bar' && metric === 'sparo' && <SparoLineView schools={selSchools} courses={displayCourses} sparoData={sparoData} />}
+        {yearByYear && mode === 'map' && <SchoolMap schools={selSchools} courses={activeCourses} schoolData={aggSum} coords={coords} selCourses={selCourses} />}
         {loading && <div className="text-xs text-muted">Loading data...</div>}
       </section>
     </div>
@@ -274,7 +284,7 @@ function SubjectPicker({ courses, selected, onToggle }: {
               <span>{c.name}</span>
             </button>)}
           </div>)
-        )}
+        }
       </div>
     </div>}
   </div>;
@@ -282,83 +292,82 @@ function SubjectPicker({ courses, selected, onToggle }: {
 
 // ─── Charts ──────────────────────────────────────────────────────────────────
 
-function BarChartView({ schools, courses, agg, metric, sparoData }: {
-  schools: string[]; courses: CourseEntry[]; agg: Map<string, Map<string, number>>;
-  metric: string; sparoData: Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null;
+function BarChartView({ schools, courses, yearByYear, yearFrom, yearTo }: {
+  schools: string[]; courses: CourseEntry[];
+  yearByYear: Map<string, Map<string, Map<string, number>>>;
+  yearFrom: string; yearTo: string;
 }) {
-  // Build data: one entry per school
-  const data = useMemo(() => schools.map(school => {
-    const cm = agg.get(school);
-    const entry: Record<string, string | number> = { school: school.length > 18 ? school.slice(0, 16) + '…' : school };
-    if (metric === 'sparo' && sparoData) {
-      // For SPaRO, get average per course from sparoData
-      const slug = school.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      const sd = sparoData[slug];
-      for (const c of courses) {
-        const subj = sd?.subjects?.find(s => s.subject === c.name);
-        entry[c.code] = subj ? subj.school_average : 0;
+  // Build data: one entry per (year, school) -> each subject is a dataKey  
+  const data = useMemo(() => {
+    const rows: Record<string, string | number>[] = [];
+    const years = YEARS.filter(y => y >= yearFrom && y <= yearTo);
+    for (const year of years) {
+      for (const school of schools) {
+        const row: Record<string, string | number> = { year, schoolFull: school };
+        const sm = yearByYear.get(year)?.get(school);
+        for (const c of courses) row[c.code] = sm?.get(c.code) || 0;
+        rows.push(row);
       }
-    } else if (cm) {
-      for (const c of courses) entry[c.code] = cm.get(c.code) || 0;
-    } else {
-      for (const c of courses) entry[c.code] = 0;
     }
-    return entry;
-  }), [schools, courses, agg, metric, sparoData]);
+    return rows;
+  }, [schools, courses, yearByYear, yearFrom, yearTo]);
+
+  if (data.length === 0) return <div className="p-8 text-center text-muted">No data.</div>;
 
   return <div className="rounded-xl border border-border bg-surface p-4">
-    <ResponsiveContainer width="100%" height={Math.max(300, schools.length * 80)}>
-      <BarChart data={data} layout="vertical" margin={{ top: 5, right: 20, left: 120, bottom: 5 }}>
+    <ResponsiveContainer width="100%" height={350}>
+      <BarChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 20 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-        <XAxis type="number" tick={{ fontSize: 11, fill: '#888' }} />
-        <YAxis type="category" dataKey="school" tick={{ fontSize: 11, fill: '#888' }} width={110} />
-        <Tooltip contentStyle={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: 8, fontSize: 12 }} />
-        {courses.map(c => (
-          <Bar key={c.code} dataKey={c.code} stackId="a" fill={CAT_COLORS[c.category] || '#888'} name={c.name} />
+        <XAxis dataKey="year" tick={{ fontSize: 11, fill: '#888' }} />
+        <YAxis tick={{ fontSize: 11, fill: '#888' }} />
+        <Tooltip contentStyle={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
+          formatter={(value) => [String(value || 0), '']}
+          labelFormatter={(label, payload) => {
+            const p = Array.isArray(payload) ? payload[0]?.payload as Record<string, unknown> | undefined : undefined;
+            const s = p?.['schoolFull'] as string || '';
+            return s ? `${s} (${label})` : label;
+          }} />
+        <Legend wrapperStyle={{ fontSize: 11 }} />
+        {courses.slice(0, 20).map(c => (
+          <Bar key={c.code} dataKey={c.code} stackId="a" fill={CAT_COLORS[c.category] || '#888'}
+            name={c.name.length > 25 ? c.name.slice(0, 23) + '…' : c.name} />
         ))}
       </BarChart>
     </ResponsiveContainer>
   </div>;
 }
 
-function BubbleChartView({ schools, courses, agg }: {
-  schools: string[]; courses: CourseEntry[]; agg: Map<string, Map<string, number>>;
+
+function SparoLineView({ schools, courses, sparoData }: {
+  schools: string[]; courses: CourseEntry[];
+  sparoData: Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null;
 }) {
+  if (!sparoData) return <div className="p-8 text-center text-muted">SPaRO data not available.</div>;
   const data = useMemo(() => {
-    const pts: { x: number; y: number; z: number; school: string; course: string }[] = [];
-    schools.forEach((school, si) => {
-      const cm = agg.get(school);
-      if (!cm) return;
-      courses.forEach((course, ci) => {
-        const v = cm.get(course.code) || 0;
-        if (v > 0) pts.push({ x: si, y: ci, z: v, school: school.length > 15 ? school.slice(0, 13) + '…' : school, course: course.name });
-      });
-    });
-    return pts;
-  }, [schools, courses, agg]);
-
-  if (data.length === 0) return <div className="p-8 text-center text-muted">No data for selected filters.</div>;
-
+    const rows: Record<string, string | number>[] = [];
+    for (const school of schools) {
+      const slug = school.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+      const sd = sparoData[slug]; if (!sd) continue;
+      for (const c of courses) {
+        const subj = sd.subjects?.find(s => s.subject === c.name);
+        if (subj) { const row: Record<string, string | number> = { school: school.slice(0, 15) }; row[c.code] = subj.school_average; rows.push(row); }
+      }
+    }
+    return rows;
+  }, [schools, courses, sparoData]);
   return <div className="rounded-xl border border-border bg-surface p-4">
-    <ResponsiveContainer width="100%" height={500}>
-      <RScatterChart margin={{ top: 10, right: 20, bottom: 60, left: 20 }}>
+    <ResponsiveContainer width="100%" height={400}>
+      <LineChart data={data} margin={{ top: 5, right: 20, left: 10, bottom: 20 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="#333" />
-        <XAxis type="number" dataKey="x" tick={false} label={{ value: 'Schools →', position: 'bottom', offset: 10, fill: '#888', fontSize: 12 }} />
-        <YAxis type="number" dataKey="y" tick={false} label={{ value: 'Subjects →', angle: -90, position: 'left', fill: '#888', fontSize: 12 }} />
-        <ZAxis type="number" dataKey="z" range={[5, 600]} />
-        <Tooltip contentStyle={{ background: '#1a1a1a', border: '1px solid #333', borderRadius: 8, fontSize: 12 }}
-          formatter={(value: unknown) => String(value)} />
-        <Scatter data={data} fill="#3b82f6" opacity={0.6}>
-          {data.map((_, i) => {
-            const d = data[i];
-            const courseEntry = courses.find(c => c.name === d.course);
-            return <Cell key={i} fill={CAT_COLORS[courseEntry?.category || ''] || '#3b82f6'} />;
-          })}
-        </Scatter>
-      </RScatterChart>
+        <XAxis dataKey="school" tick={{ fontSize: 11, fill: "#888" }} />
+        <YAxis domain={[60, 100]} tick={{ fontSize: 11, fill: "#888" }} />
+        <Tooltip contentStyle={{ background: "#1a1a1a", border: "1px solid #333", borderRadius: 8, fontSize: 12 }} />
+        <Legend wrapperStyle={{ fontSize: 11 }} />
+        {courses.slice(0, 20).map(c => (
+          <Line key={c.code} type="monotone" dataKey={c.code} stroke={CAT_COLORS[c.category] || "#888"} strokeWidth={2}
+            name={c.name.length > 25 ? c.name.slice(0, 23) + "…" : c.name} />
+        ))}
+      </LineChart>
     </ResponsiveContainer>
-    <div className="flex flex-wrap gap-3 mt-2 justify-center text-xs text-muted">
-      {schools.map((s, i) => <span key={s}>{i}: {s}</span>)}
-    </div>
   </div>;
 }

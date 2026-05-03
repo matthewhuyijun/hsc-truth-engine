@@ -435,7 +435,7 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
       <StatCard label="Band 6/E4" value={totalB6.toLocaleString()} />
       <StatCard label="State Ranks" value={String(stateRanks.length)} />
       <StatCard label="Top Schools" value={String(topSchools.length)} />
-      {stats && <StatCard label="Total Enrolled" value={stats.total.toLocaleString()} />}
+      {stats && <StatCard label="Total Enrolled" value={(stats.male + stats.female + stats.non_binary).toLocaleString()} />}
     </div>
 
     {tabs.length > 1 && (
@@ -491,7 +491,7 @@ function IntersectionView({ detail, course, stats, year }: {
       <StatCard label="Band 6/E4" value={ca ? String(ca.band6Count) : '0'} />
       <StatCard label="Students" value={String(sts.length)} />
       <StatCard label="State Ranks" value={ca ? String(ca.stateRanks.length) : '0'} />
-      {stats && stats.total > 0 && <StatCard label="Total Enrolled" value={stats.total.toLocaleString()} />}
+      {stats && (stats.male + stats.female + stats.non_binary) > 0 && <StatCard label="Total Enrolled" value={(stats.male + stats.female + stats.non_binary).toLocaleString()} />}
     </div>
     <div>
       <h2 className="text-lg font-semibold mb-3">Students ({sts.length})</h2>
