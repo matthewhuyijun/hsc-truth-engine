@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@types/leaflet": "^1.9.21",
+    "@vercel/analytics": "^2.0.1",
     "chinese-s2t": "^1.0.0",
     "katex": "^0.16.45",
     "leaflet": "^1.9.4",

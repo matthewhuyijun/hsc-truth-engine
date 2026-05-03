@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { Suspense } from "react";
+import { Analytics } from "@vercel/analytics/react";
 import { Header } from "@/components/Header";
 import { ScrollToTop } from "@/components/ScrollToTop";
 import { JsonLd } from "@/components/JsonLd";
@@ -66,6 +67,7 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider messages={messages}>
+      <Analytics />
       <Suspense fallback={null}>
         <ScrollToTop />
       </Suspense>
