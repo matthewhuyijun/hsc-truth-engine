@@ -129,7 +129,7 @@ function HonorRollContent() {
   return (
     <div className="min-h-screen">
       <section className="border-b border-border">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6">
           <div className="flex items-center gap-3 mb-3">
             <Award className="h-5 w-5 text-muted" />
             <span className="text-xs font-medium uppercase tracking-wider text-muted">Distinguished Achievers</span>
@@ -324,6 +324,13 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
 
   const hasSparo = sparoSubjects.length > 0;
   const [tab, setTab] = useState<'subjects' | 'students'>('subjects');
+  const [courseSearch, setCourseSearch] = useState('');
+
+  const filteredCourses = useMemo(() => {
+    if (!courseSearch) return detail.courses;
+    const q = courseSearch.toLowerCase();
+    return detail.courses.filter(c => c.name.toLowerCase().includes(q));
+  }, [detail.courses, courseSearch]);
 
   return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -345,11 +352,17 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
     </div>
 
     {tab === 'subjects' && (<>
-      <div>
-      <h2 className="text-lg font-semibold mb-1">Subject Performance ({detail.courses.length})</h2>
-      {hasSparo && <p className="text-sm text-muted mb-3">Public school HSC marks from publicly available SPaRO reports. Ranked by school average.</p>}
-    </div>
-    <div className="rounded-xl border border-border bg-surface overflow-hidden">
+      <div className="flex items-center gap-3 flex-wrap">
+        <h2 className="text-lg font-semibold">Subject Performance ({detail.courses.length})</h2>
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted" />
+          <input type="text" placeholder="Search courses..." value={courseSearch}
+            onChange={e => setCourseSearch(e.target.value)}
+            className="w-48 rounded-lg border border-border bg-surface py-1.5 pl-8 pr-3 text-sm placeholder:text-muted focus:outline-none focus:ring-2 focus:ring-foreground/10" />
+        </div>
+      </div>
+      {hasSparo && <p className="text-sm text-muted">Public school HSC marks from publicly available SPaRO reports. Ranked by school average.</p>}
+    <div className="rounded-xl border border-border bg-surface overflow-hidden mt-3">
       <div className={`grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted`}>
         <div className={hasSparo ? 'col-span-3' : 'col-span-6'}>Course</div>
         <div className={`${hasSparo ? 'col-span-3' : 'col-span-3'} flex justify-end`}>B6/E4</div>
@@ -357,7 +370,7 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
         {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">School Avg vs State (Gov) <button type="button" className="inline-flex cursor-help" title="Public school only. HSC marks from publicly available SPaRO reports. Ranked by school average within this course."><Info className="h-3.5 w-3.5 text-muted/70" /></button></div>}
       </div>
       <div className="divide-y divide-border">
-        {detail.courses.map(c => {
+        {filteredCourses.map(c => {
           const sp = sparoMap.get(c.name);
           const rk = sparoRank.get(c.name);
           return (
