@@ -457,6 +457,9 @@
       {
         "date": "May 2026",
         "items": [
+          "Honor Roll page banner and subtitle simplified to show only the page title, now properly using i18n translations.",
+          "Refactored shared ATAR/scaling data layer into course-data.ts and spline.ts to eliminate duplicated code across modules.",
+          "Scaling graph comparison table now includes the maximum scaled mark (100 / #1 student) — previously only showed percentiles p50–p99.",
           "Added Chinese (中文) localization — switch between English and Chinese via the header toggle. Translates all page content, UI labels, and SEO metadata (/zh/* routes).",
           "SEO: dynamic metadata (title, description, Open Graph) now generated for every school and course detail page.",
           "SEO: sitemap expanded to include all school detail pages, course detail pages, and changelog with hreflang alternates for bilingual indexing.",
