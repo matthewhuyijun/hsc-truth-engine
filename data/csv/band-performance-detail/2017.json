@@ -51,6 +51,14 @@
   },
   {
     "year": 2017,
+    "course": "Arabic Extension 1 unit (15520)",
+    "Band E4": 20.18,
+    "Band E3": 55.96,
+    "Band E2": 23.85,
+    "Band E1": 0
+  },
+  {
+    "year": 2017,
     "course": "Armenian Continuers 2 unit (15530)",
     "Band 6": 24,
     "Band 5": 48,
@@ -161,6 +169,14 @@
   },
   {
     "year": 2017,
+    "course": "Chinese Extension 1 unit (15570)",
+    "Band E4": 72.41,
+    "Band E3": 27.58,
+    "Band E2": 0,
+    "Band E1": 0
+  },
+  {
+    "year": 2017,
     "course": "Classical Greek Continuers 2 unit (15580)",
     "Band 6": 66.66,
     "Band 5": 18.51,
@@ -171,6 +187,14 @@
   },
   {
     "year": 2017,
+    "course": "Classical Greek Extension 1 unit (15590)",
+    "Band E4": 89.47,
+    "Band E3": 5.26,
+    "Band E2": 5.26,
+    "Band E1": 0
+  },
+  {
+    "year": 2017,
     "course": "Classical Hebrew Continuers 2 unit (15600)",
     "Band 6": 56.52,
     "Band 5": 17.39,
@@ -178,6 +202,14 @@
     "Band 3": 8.69,
     "Band 2": 0,
     "Band 1": 0
+  },
+  {
+    "year": 2017,
+    "course": "Classical Hebrew Extension 1 unit (15610)",
+    "Band E4": 61.53,
+    "Band E3": 30.76,
+    "Band E2": 7.69,
+    "Band E1": 0
   },
   {
     "year": 2017,
@@ -321,6 +353,22 @@
   },
   {
     "year": 2017,
+    "course": "English Extension 1 1 unit (15160)",
+    "Band E4": 30,
+    "Band E3": 63.51,
+    "Band E2": 5.81,
+    "Band E1": 0.66
+  },
+  {
+    "year": 2017,
+    "course": "English Extension 2 1 unit (15170)",
+    "Band E4": 20.57,
+    "Band E3": 56.99,
+    "Band E2": 22,
+    "Band E1": 0.41
+  },
+  {
+    "year": 2017,
     "course": "Entertainment Industry Examination 2 unit (26499)",
     "Band 6": 9.77,
     "Band 5": 29.11,
@@ -381,6 +429,14 @@
   },
   {
     "year": 2017,
+    "course": "French Extension 1 unit (15690)",
+    "Band E4": 40.24,
+    "Band E3": 53.04,
+    "Band E2": 6.7,
+    "Band E1": 0
+  },
+  {
+    "year": 2017,
     "course": "Geography 2 unit (15190)",
     "Band 6": 7.73,
     "Band 5": 34.6,
@@ -411,6 +467,14 @@
   },
   {
     "year": 2017,
+    "course": "German Extension 1 unit (15720)",
+    "Band E4": 41.37,
+    "Band E3": 58.62,
+    "Band E2": 0,
+    "Band E1": 0
+  },
+  {
+    "year": 2017,
     "course": "Hindi Continuers 2 unit (15730)",
     "Band 6": 20.83,
     "Band 5": 54.16,
@@ -418,6 +482,14 @@
     "Band 3": 0,
     "Band 2": 0,
     "Band 1": 0
+  },
+  {
+    "year": 2017,
+    "course": "History Extension 1 unit (15280)",
+    "Band E4": 21.65,
+    "Band E3": 58.13,
+    "Band E2": 18.16,
+    "Band E1": 2.04
   },
   {
     "year": 2017,
@@ -501,6 +573,14 @@
   },
   {
     "year": 2017,
+    "course": "Indonesian Extension 1 unit (15780)",
+    "Band E4": 44.44,
+    "Band E3": 44.44,
+    "Band E2": 11.11,
+    "Band E1": 0
+  },
+  {
+    "year": 2017,
     "course": "Industrial Technology 2 unit (15200)",
     "Band 6": 5.67,
     "Band 5": 16.8,
@@ -538,6 +618,14 @@
     "Band 3": 8.51,
     "Band 2": 4.96,
     "Band 1": 0
+  },
+  {
+    "year": 2017,
+    "course": "Italian Extension 1 unit (15810)",
+    "Band E4": 49.05,
+    "Band E3": 49.05,
+    "Band E2": 1.88,
+    "Band E1": 0
   },
   {
     "year": 2017,
@@ -611,6 +699,14 @@
   },
   {
     "year": 2017,
+    "course": "Japanese Extension 1 unit (15850)",
+    "Band E4": 37.03,
+    "Band E3": 53.08,
+    "Band E2": 9.25,
+    "Band E1": 0.61
+  },
+  {
+    "year": 2017,
     "course": "Khmer Continuers 2 unit (15860)",
     "Band 6": 0,
     "Band 5": 0,
@@ -671,6 +767,14 @@
   },
   {
     "year": 2017,
+    "course": "Latin Extension 1 unit (15910)",
+    "Band E4": 71.11,
+    "Band E3": 25.55,
+    "Band E2": 3.33,
+    "Band E1": 0
+  },
+  {
+    "year": 2017,
     "course": "Legal Studies 2 unit (15220)",
     "Band 6": 13.07,
     "Band 5": 31.15,
@@ -708,6 +812,22 @@
     "Band 3": 0,
     "Band 2": 0,
     "Band 1": 0
+  },
+  {
+    "year": 2017,
+    "course": "Mathematics Extension 1 2 unit (15250)",
+    "Band E4": 38.22,
+    "Band E3": 43.68,
+    "Band E2": 15.5,
+    "Band E1": 2.58
+  },
+  {
+    "year": 2017,
+    "course": "Mathematics Extension 2 2 unit (15260)",
+    "Band E4": 33.57,
+    "Band E3": 50.54,
+    "Band E2": 13.49,
+    "Band E1": 2.38
   },
   {
     "year": 2017,
@@ -761,6 +881,14 @@
   },
   {
     "year": 2017,
+    "course": "Modern Greek Extension 1 unit (15990)",
+    "Band E4": 63.88,
+    "Band E3": 36.11,
+    "Band E2": 0,
+    "Band E1": 0
+  },
+  {
+    "year": 2017,
     "course": "Modern Hebrew Continuers 2 unit (16000)",
     "Band 6": 65.11,
     "Band 5": 34.88,
@@ -778,6 +906,14 @@
     "Band 3": 15.17,
     "Band 2": 7.79,
     "Band 1": 5.73
+  },
+  {
+    "year": 2017,
+    "course": "Music Extension 1 unit (15310)",
+    "Band E4": 63.32,
+    "Band E3": 31.54,
+    "Band E2": 5.13,
+    "Band E1": 0
   },
   {
     "year": 2017,
@@ -948,6 +1084,14 @@
     "Band 3": 16.37,
     "Band 2": 3.5,
     "Band 1": 0
+  },
+  {
+    "year": 2017,
+    "course": "Spanish Extension 1 unit (16090)",
+    "Band E4": 18.86,
+    "Band E3": 58.49,
+    "Band E2": 20.75,
+    "Band E1": 1.88
   },
   {
     "year": 2017,

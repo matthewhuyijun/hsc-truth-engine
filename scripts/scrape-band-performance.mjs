@@ -37,8 +37,8 @@ async function scrapeBands(page, url) {
       };
 
       // Strategy 0: Extension band descriptors (Band E1-E4)
-      const bTags = document.querySelectorAll('b');
-      bTags.forEach(b => {
+      const bTagsExt = document.querySelectorAll('b');
+      bTagsExt.forEach(b => {
         const match = b.textContent.match(/Band[\s&nbsp;]*E\s*(\d+)/i);
         if (match && !result[`Band E${match[1]}`]) {
           const text = b.parentElement?.textContent || '';
