@@ -333,14 +333,14 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
     </div>
     <div>
       <h2 className="text-lg font-semibold mb-1">Subject Performance ({detail.courses.length})</h2>
-      {hasSparo && <p className="text-sm text-muted mb-3">HSC marks from publicly available SPaRO reports. Ranked by school average.</p>}
+      {hasSparo && <p className="text-sm text-muted mb-3">Public school HSC marks from publicly available SPaRO reports. Ranked by school average.</p>}
     </div>
     <div className="rounded-xl border border-border bg-surface overflow-hidden">
       <div className={`grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted`}>
         <div className={hasSparo ? 'col-span-3' : 'col-span-6'}>Course</div>
         <div className={`${hasSparo ? 'col-span-3' : 'col-span-3'} flex justify-end`}>B6/E4</div>
         <div className={`${hasSparo ? 'col-span-2' : 'col-span-3'} flex justify-end`}>State Ranks</div>
-        {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">School Avg vs State (Gov) <button type="button" className="inline-flex cursor-help" title="School averages from publicly available SPaRO reports. Rank by school average within this course."><Info className="h-3.5 w-3.5 text-muted/70" /></button></div>}
+        {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">School Avg vs State (Gov) <button type="button" className="inline-flex cursor-help" title="Public school only. HSC marks from publicly available SPaRO reports. Ranked by school average within this course."><Info className="h-3.5 w-3.5 text-muted/70" /></button></div>}
       </div>
       <div className="divide-y divide-border">
         {detail.courses.map(c => {
@@ -405,7 +405,7 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
 
     <div>
       <h2 className="text-lg font-semibold mb-3">Top Schools</h2>
-      {sparoData && <p className="mt-1 text-sm text-muted mb-3">HSC marks from publicly available SPaRO reports. Ranked by school average.</p>}
+      {sparoData && <p className="mt-1 text-sm text-muted mb-3">Public school HSC marks from publicly available SPaRO reports. Ranked by school average.</p>}
       <TableWrap>
         <TableHeader
           cols={sparoData ? ['#','School','B6/E4','School Avg vs State (Gov)'] : ['#','School','B6/E4']}
