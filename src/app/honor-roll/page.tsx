@@ -2,7 +2,7 @@
 
 import { Suspense, useState, useEffect, useMemo, useCallback } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
-import { Award, Search, ChevronUp, ChevronDown, X, School, BookOpen } from 'lucide-react';
+import { Award, Search, ChevronUp, ChevronDown, X, School, BookOpen, Info } from 'lucide-react';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -68,6 +68,7 @@ function HonorRollContent() {
   const [schoolDetail, setSchoolDetail] = useState<SchoolDetail | null>(null);
   const [courseStats, setCourseStats] = useState<CourseStats | null>(null);
   const [allDetail, setAllDetail] = useState<Record<string, SchoolDetail> | null>(null);
+  const [sparoData, setSparoData] = useState<Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null>(null);
   const [loading, setLoading] = useState(true);
   const hasFilters = !!(selSchool || selCourse);
 
@@ -75,6 +76,7 @@ function HonorRollContent() {
     fetch('/data/courses.json').then(r => r.json())
       .then((d: { code: string; name: string }[]) => setAllCourses(d.map(c => ({ code: c.code, name: c.name }))))
       .catch(() => {});
+    fetch('/data/sparo-schools.json').then(r => r.json()).then(setSparoData).catch(() => {});
   }, []);
 
   const syncUrl = useCallback((y: string, s: string | null, c: CourseMeta | null) => {
@@ -179,8 +181,8 @@ function HonorRollContent() {
       {/* Content */}
       {loading ? <LoadingView /> :
        selSchool && selCourse ? <IntersectionView detail={schoolDetail} course={selCourse} stats={courseStats} year={year} /> :
-       selSchool ? <SchoolView detail={schoolDetail} name={selSchool} year={year} onCourse={handleCourse} /> :
-       selCourse ? <CourseView course={selCourse} stats={courseStats} year={year} allDetail={allDetail} onSchool={handleSchool} /> :
+       selSchool ? <SchoolView detail={schoolDetail} name={selSchool} year={year} slug={slugify(selSchool)} sparoData={sparoData} onCourse={handleCourse} /> :
+       selCourse ? <CourseView course={selCourse} stats={courseStats} year={year} allDetail={allDetail} sparoData={sparoData} onSchool={handleSchool} /> :
        <DefaultView schools={schools} courses={courses} onSchool={handleSchool} onCourse={handleCourse} />}
     </div>
   );
@@ -288,10 +290,39 @@ function DefaultView({ schools, courses, onSchool, onCourse }: {
 
 // ─── School View ──────────────────────────────────────────────────────────────
 
-function SchoolView({ detail, name, year, onCourse }: {
-  detail: SchoolDetail | null; name: string; year: string; onCourse: (c: CourseMeta) => void;
+function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
+  detail: SchoolDetail | null; name: string; year: string; slug: string;
+  sparoData: Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null;
+  onCourse: (c: CourseMeta) => void;
 }) {
   if (!detail) return <EmptyView msg={`No data for ${name} in ${year}.`} />;
+
+  const sparoSchool = sparoData?.[slug];
+  const sparoSubjects = sparoSchool?.subjects || [];
+
+  // Build SPaRO lookup by subject name
+  const sparoMap = useMemo(() => {
+    const m = new Map<string, { school_average: number; state_average: number }>();
+    for (const s of sparoSubjects) m.set(s.subject, { school_average: s.school_average, state_average: s.state_average });
+    return m;
+  }, [sparoSubjects]);
+
+  // Build SPaRO rank map
+  const sparoRank = useMemo(() => {
+    if (!sparoData || sparoSubjects.length === 0) return new Map<string, number>();
+    const ranks = new Map<string, number>();
+    for (const subj of sparoSubjects) {
+      const averages = Object.entries(sparoData)
+        .filter(([, s]) => s.subjects.some(sb => sb.subject === subj.subject))
+        .map(([, s]) => s.subjects.find(sb => sb.subject === subj.subject)!)
+        .sort((a, b) => b.school_average - a.school_average);
+      const rank = averages.findIndex(a => a.school_average === subj.school_average) + 1;
+      ranks.set(subj.subject, rank > 0 ? rank : 0);
+    }
+    return ranks;
+  }, [sparoData, sparoSubjects]);
+
+  const hasSparo = sparoSubjects.length > 0;
 
   return <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-6 space-y-6">
     <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -301,22 +332,33 @@ function SchoolView({ detail, name, year, onCourse }: {
       <StatCard label="All-rounders" value={String(detail.stats.allRounders)} />
     </div>
     <div>
-      <h2 className="text-lg font-semibold mb-3">Subject Performance ({detail.courses.length})</h2>
-      <div className="rounded-xl border border-border bg-surface overflow-hidden">
-        <div className="grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted">
-          <div className="col-span-6">Course</div><div className="col-span-3 flex justify-end">B6/E4</div><div className="col-span-3 flex justify-end">State Ranks</div>
-        </div>
-        <div className="divide-y divide-border">
-          {detail.courses.map(c => (
+      <h2 className="text-lg font-semibold mb-1">Subject Performance ({detail.courses.length})</h2>
+      {hasSparo && <p className="text-sm text-muted mb-3">Avg HSC Mark data from SPaRO.</p>}
+    </div>
+    <div className="rounded-xl border border-border bg-surface overflow-hidden">
+      <div className={`grid grid-cols-12 gap-3 border-b border-border px-5 py-3 text-xs font-medium text-muted`}>
+        <div className={hasSparo ? 'col-span-3' : 'col-span-6'}>Course</div>
+        <div className={`${hasSparo ? 'col-span-3' : 'col-span-3'} flex justify-end`}>B6/E4</div>
+        <div className={`${hasSparo ? 'col-span-2' : 'col-span-3'} flex justify-end`}>State Ranks</div>
+        {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">School Avg vs State <Info className="h-3 w-3 text-muted/50" /></div>}
+      </div>
+      <div className="divide-y divide-border">
+        {detail.courses.map(c => {
+          const sp = sparoMap.get(c.name);
+          const rk = sparoRank.get(c.name);
+          return (
             <button key={c.code} onClick={() => onCourse({ code: c.code, name: c.name })} className="w-full text-left grid grid-cols-12 gap-3 px-5 py-3 hover:bg-surface-hover transition-colors">
-              <div className="col-span-6"><span className="text-sm font-medium">{c.name}</span></div>
-              <div className="col-span-3 flex justify-end"><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{c.band6Count.toLocaleString()}</span></div>
-              <div className="col-span-3 flex justify-end gap-1 flex-wrap">
+              <div className={hasSparo ? 'col-span-3' : 'col-span-6'}><span className="text-sm font-medium">{c.name}</span></div>
+              <div className={`${hasSparo ? 'col-span-3' : 'col-span-3'} flex justify-end`}><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{c.band6Count.toLocaleString()}</span></div>
+              <div className={`${hasSparo ? 'col-span-2' : 'col-span-3'} flex justify-end gap-1 flex-wrap`}>
                 {c.stateRanks.length > 0 ? c.stateRanks.map((r, i) => <span key={i} className="inline-flex items-center rounded-md bg-accent-dim px-1.5 py-0.5 text-xs font-mono text-muted">#{r}</span>) : <span className="text-sm text-muted/30 font-mono">—</span>}
               </div>
+              {hasSparo && <div className="col-span-4 flex justify-end items-center gap-1">
+                {sp ? <><span className="text-xs font-mono text-muted/70">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}
+              </div>}
             </button>
-          ))}
-        </div>
+          );
+        })}
       </div>
     </div>
     <div>
@@ -328,9 +370,11 @@ function SchoolView({ detail, name, year, onCourse }: {
 
 // ─── Course View ──────────────────────────────────────────────────────────────
 
-function CourseView({ course, stats, year, allDetail, onSchool }: {
+function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
   course: CourseMeta; stats: CourseStats | null; year: string;
-  allDetail: Record<string, SchoolDetail> | null; onSchool: (s: string) => void;
+  allDetail: Record<string, SchoolDetail> | null;
+  sparoData: Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null;
+  onSchool: (s: string) => void;
 }) {
   const stateRanks = useMemo(() => {
     if (!allDetail) return [] as { firstName: string; lastName: string; schoolName: string; rank: number }[];
@@ -361,16 +405,33 @@ function CourseView({ course, stats, year, allDetail, onSchool }: {
 
     <div>
       <h2 className="text-lg font-semibold mb-3">Top Schools</h2>
+      {sparoData && <p className="mt-1 text-sm text-muted mb-3">Avg HSC Mark from SPaRO.</p>}
       <TableWrap>
-        <TableHeader cols={['#','School','B6/E4']} widths={['col-span-1','col-span-9','col-span-2']} aligns={['','','justify-end']} />
+        <TableHeader
+          cols={sparoData ? ['#','School','B6/E4','School Avg vs State'] : ['#','School','B6/E4']}
+          widths={sparoData ? ['col-span-1','col-span-4','col-span-2','col-span-5'] : ['col-span-1','col-span-9','col-span-2']}
+          aligns={['','','justify-end',sparoData?'justify-end':'']}
+        />
         <div className="divide-y divide-border">
-          {topSchools.slice(0,30).map((s, idx) => (
+          {topSchools.slice(0,30).map((s, idx) => {
+            const sp = sparoData?.[s.slug]?.subjects?.find(sb => sb.subject === course.name);
+            const rk = sp ? (() => {
+              const all = Object.entries(sparoData || {})
+                .filter(([, sc]) => sc.subjects.some(sb => sb.subject === course.name))
+                .map(([, sc]) => sc.subjects.find(sb => sb.subject === course.name)!)
+                .sort((a, b) => b.school_average - a.school_average);
+              return all.findIndex(a => a.school_average === sp.school_average) + 1;
+            })() : null;
+            return (
             <button key={s.slug} onClick={() => onSchool(s.name)} className="w-full text-left grid grid-cols-12 gap-3 px-5 py-3 hover:bg-surface-hover transition-colors">
               <div className="col-span-1"><span className="text-xs text-muted font-mono">{idx+1}</span></div>
-              <div className="col-span-9"><span className="text-sm font-medium">{s.name}</span></div>
-              <div className="col-span-2 flex justify-end"><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{s.band6Count.toLocaleString()}</span></div>
+              <div className={sparoData ? 'col-span-4' : 'col-span-9'}><span className="text-sm font-medium">{s.name}</span></div>
+              <div className={`${sparoData ? 'col-span-2' : 'col-span-2'} flex justify-end`}><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{s.band6Count.toLocaleString()}</span></div>
+              {sparoData && <div className="col-span-5 flex justify-end items-center gap-1">
+                {sp ? <><span className="text-xs font-mono text-muted/70">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}
+              </div>}
             </button>
-          ))}
+          );})}
         </div>
       </TableWrap>
     </div>
