@@ -28,13 +28,14 @@ export default function ComparePage() {
 
 function CompareContent() {
   const [mode, setMode] = useState<'bar' | 'bubble'>('bar');
-  const [metric, setMetric] = useState<'band6' | 'stateRank'>('band6');
+  const [metric, setMetric] = useState<'band6' | 'stateRank' | 'sparo'>('band6');
   const [allCourses, setAllCourses] = useState<CourseEntry[]>([]);
   const [allSchools, setAllSchools] = useState<string[]>([]);
   const [selCourses, setSelCourses] = useState<string[]>([]);
   const [selSchools, setSelSchools] = useState<string[]>([]);
   const [selYears, setSelYears] = useState<string[]>(['2025','2024','2023','2022']);
   const [data, setData] = useState<Map<string, Map<string, Record<string, number>>> | null>(null);
+  const [sparoData, setSparoData] = useState<Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null>(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ function CompareContent() {
         Object.entries(d).map(([code, info]) => ({ code, name: info.name, category: info.category }))
       )).catch(() => {});
     fetch('/data/schools.json').then(r => r.json()).then(setAllSchools).catch(() => {});
+    fetch('/data/sparo-schools.json').then(r => r.json()).then(setSparoData).catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -118,6 +120,7 @@ function CompareContent() {
             <div className="flex rounded-lg border border-border overflow-hidden">
               <button onClick={() => setMetric('band6')} className={`px-3 py-1.5 text-sm font-medium ${metric === 'band6' ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>B6/E4</button>
               <button onClick={() => setMetric('stateRank')} className={`px-3 py-1.5 text-sm font-medium border-l border-border ${metric === 'stateRank' ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>State Ranks</button>
+              <button onClick={() => setMetric('sparo')} className={`px-3 py-1.5 text-sm font-medium border-l border-border ${metric === 'sparo' ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>School Avg</button>
             </div>
             <span className="text-xs text-muted">Pick schools below to start</span>
           </div>
@@ -170,7 +173,7 @@ function CompareContent() {
           <CompareGraph
             mode={mode} metric={metric}
             schools={selSchools} courses={filteredCourses}
-            schoolData={data} years={selYears}
+            schoolData={data} years={selYears} sparoData={sparoData}
             selCourses={selCourses} setSelCourses={setSelCourses}
             loading={loading}
           />
@@ -183,11 +186,12 @@ function CompareContent() {
 // ─── Graph Component ─────────────────────────────────────────────────────────
 
 function CompareGraph({
-  mode, metric, schools, courses, schoolData, years, selCourses, setSelCourses, loading,
+  mode, metric, schools, courses, schoolData, years, sparoData, selCourses, setSelCourses, loading,
 }: {
-  mode: 'bar' | 'bubble'; metric: 'band6' | 'stateRank';
+  mode: 'bar' | 'bubble'; metric: 'band6' | 'stateRank' | 'sparo';
   schools: string[]; courses: CourseEntry[]; schoolData: Map<string, Map<string, Record<string, number>>>;
-  years: string[]; selCourses: string[]; setSelCourses: (v: string[]) => void; loading: boolean;
+  years: string[]; sparoData: Record<string, { name: string; subjects: { subject: string; school_average: number; state_average: number }[] }> | null;
+  selCourses: string[]; setSelCourses: (v: string[]) => void; loading: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dims, setDims] = useState({ w: 800, h: 400 });
@@ -202,6 +206,18 @@ function CompareGraph({
   const graphW = dims.w - padding.left - padding.right;
   const graphH = dims.h - padding.top - padding.bottom;
 
+  // For SPaRO metric, build schoolAvg data from sparoData
+  const sparoMetrics = useMemo(() => {
+    if (metric !== 'sparo' || !sparoData) return null;
+    const m = new Map<string, Record<string, number>>();
+    for (const [slug, sd] of Object.entries(sparoData)) {
+      const perSubject: Record<string, number> = {};
+      for (const s of sd.subjects) perSubject[s.subject] = s.school_average;
+      m.set(sd.name, perSubject);
+    }
+    return m;
+  }, [sparoData, metric]);
+
   if (courses.length === 0) {
     return <div className="rounded-xl border border-border bg-surface p-8 text-center">
       <p className="text-sm text-muted">No course data for selected schools. Try selecting different schools.</p>
@@ -212,7 +228,7 @@ function CompareGraph({
     // Bar chart: schools as groups, courses as stacked/side-by-side bars per year
     const visibleCourses = selCourses.length > 0 ? courses.filter(c => selCourses.includes(c.code)) : courses.slice(0, 8);
     const barW = graphW / (schools.length * visibleCourses.length * years.length + schools.length * 2);
-    const maxVal = Math.max(1, ...Array.from(schoolData.values())
+    let maxVal = metric === 'sparo' ? 100 : Math.max(1, ...Array.from(schoolData.values())
       .flatMap(sm => Array.from(sm.values()))
       .flatMap(yd => Object.values(yd)));
 
@@ -240,17 +256,28 @@ function CompareGraph({
         {/* Bars */}
         {schools.map((school, si) => {
           const sm = schoolData.get(school);
-          if (!sm) return null;
+          // For sparo, look up by name
+          const sparoSlug = school.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+          const sparoSchool = metric === 'sparo' ? sparoData?.[sparoSlug] : null;
+          
+          if (!sm && !sparoSchool) return null;
           const groupX = padding.left + (graphW / schools.length) * si + graphW / schools.length * 0.1;
           const groupW = graphW / schools.length * 0.8;
           const subW = groupW / (visibleCourses.length * years.length + 1);
 
           return <g key={school}>
             {visibleCourses.map((course, ci) => {
-              const cy = sm.get(course.code);
+              let getVal = (year: string) => {
+                if (metric === 'sparo') {
+                  const subj = sparoSchool?.subjects?.find(s => s.subject === course.name);
+                  return subj ? subj.school_average : 0;
+                }
+                return sm?.get(course.code)?.[year] || 0;
+              };
               return years.map((year, yi) => {
-                let val = cy?.[year] || 0;
-                if (metric === 'stateRank') val = Math.max(0.3, val); // make tiny ranks visible
+                let val = getVal(year);
+                if (val === 0) return null;
+                if (metric === 'band6') val = Math.max(0.3, val);
                 const barH = (val / maxVal) * graphH;
                 const x = groupX + (ci * years.length + yi) * subW;
                 const y = padding.top + graphH - barH;
