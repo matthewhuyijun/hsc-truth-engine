@@ -59,6 +59,12 @@ export default async function InsightsPage() {
       myth: t("myth6Statement"),
       points: [t("myth6p1"), t("myth6p2"), t("myth6p3")],
     },
+    {
+      id: 7,
+      icon: BarChart3,
+      myth: t("myth7Statement"),
+      points: [t("myth7p1"), t("myth7p2"), t("myth7p3")],
+    },
   ];
 
   const timeline = [
@@ -143,7 +149,7 @@ export default async function InsightsPage() {
       statTerm: t("step10StatTerm"),
       formula: "P(x) = \\begin{cases} \\frac{x^3}{(1000\\alpha)^2} & 0 \\leq x \\leq 100\\alpha \\\\ 1 - \\frac{(100-x)^3}{(1000-1000\\alpha)^2} & 100\\alpha \\leq x \\leq 100 \\end{cases}",
       plain: t("step10Plain"),
-      points: [t("step10p1"), t("step10p2"), t("step10p3")],
+      points: [t("step10p1"), t("step10p2"), t("step10p3"), t("step10p4"), t("step10p5"), t("step10p6"), t("step10p7")],
     },
   ];
   return (

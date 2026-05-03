@@ -184,7 +184,15 @@
     "step10p3": "In 2025, only 49 students achieved 99.95 across the entire state",
     "footerCtaHeading": "Want to run the numbers yourself?",
     "footerCtaDesc": "Use the ATAR Calculator to estimate your aggregate based on historical scaling data from the 2025 UAC Scaling Report.",
-    "footerCtaButton": "Open Calculator"
+    "footerCtaButton": "Open Calculator",
+    "myth7Statement": "ATAR 99 means I'm in the top 1%",
+    "myth7p1": "ATAR ranks against the entire Year 12 age cohort — not just ATAR takers. About 43–45% of the age group doesn't sit the HSC or qualify for an ATAR.",
+    "myth7p2": "In 2025, 60,432 students received an ATAR (participation rate ~56%). The bottom ~45% of the age population isn't even in the ranking — your percentile gets \"pushed up\" by their absence.",
+    "myth7p3": "ATAR 99.00 ≈ top 1.7% of ATAR-eligible students. ATAR 90.00 ≈ top 17.3%. The gap between your ATAR number and your rank among candidates grows larger the further you go from 99.95.",
+    "step10p4": "ATAR maps candidate percentiles to population percentiles via a cubic spline: α = 1.5 − 2r, where r is the participation rate. In 2025, r ≈ 56%, giving α ≈ 0.38.",
+    "step10p5": "The median ATAR in 2025 was 70.75. Even the lowest ATAR (~30) already sits around the 45th percentile of the population — because everyone below simply didn't participate.",
+    "step10p6": "A candidate at the 99th percentile among ATAR takers receives roughly ATAR 99.40. At the 98th: ~98.80. The spline compresses the top end, which is why 99.00 corresponds to ~top 1.7% of candidates.",
+    "step10p7": "1,045 students achieved ATAR ≥ 99.00 in 2025. That's 1.7% of ATAR recipients — not 1%. The more candidates (participation rose from 57k to 60k), the further this gap grows."
   },
   "Calculator": {
     "heading": "ATAR Calculator",
