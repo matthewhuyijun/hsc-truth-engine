@@ -112,7 +112,11 @@ export function AtarCalculator() {
   const tableRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     function handleClick(e: MouseEvent) {
-      if (tableRef.current && !tableRef.current.contains(e.target as Node)) {
+      const target = e.target as Node;
+      if (
+        tableRef.current && !tableRef.current.contains(target) &&
+        !dropdownContainerRef.current?.contains(target)
+      ) {
         setDropdown(null);
         triggerRef.current = null;
       }
