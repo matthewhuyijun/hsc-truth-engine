@@ -35,13 +35,14 @@ function loadSexData(year) {
     if (!code) continue;
     const male = parseValue(row[2]);
     const female = parseValue(row[3]);
-    const total = parseValue(row[4]);
+    const non_binary = parseValue(row[4]);
+    const total = parseValue(row[5]);
     result[code] = {
       name: cleanName(name),
       total,
       male,
       female,
-      non_binary: 0,
+      non_binary,
     };
   }
   return result;

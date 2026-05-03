@@ -663,7 +663,7 @@ function TableHeader({ cols, widths, aligns }: { cols: string[]; widths: string[
 }
 
 function EnrollmentBlock({ stats }: { stats: CourseStats }) {
-  const total = stats.total > 0 ? stats.total : stats.male + stats.female + stats.non_binary;
+  const total = stats.male + stats.female + stats.non_binary;
   const pct = (v: number) => total > 0 ? Math.round((v / total) * 100) : 0;
   return <div className="rounded-xl border border-border bg-surface overflow-hidden">
     <div className="px-5 py-5">
