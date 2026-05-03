@@ -152,13 +152,11 @@ function CompareContent() {
           <SchoolPicker items={allSchools} popularity={popularity} selected={selSchools} onToggle={s => setSelSchools(p => p.includes(s) ? p.filter(v => v !== s) : [...p, s])} />
         </div>
 
-        {/* Subject picker */}
-        {yearByYear && activeCourses.length > 0 && (
-          <div>
-            <span className="text-xs font-medium text-muted block mb-1">Subjects ({activeCourses.length})</span>
-            <SubjectPicker courses={activeCourses} selected={selCourses} onToggle={c => setSelCourses(p => p.includes(c) ? p.filter(v => v !== c) : [...p, c])} />
-          </div>
-        )}
+        {/* Subject picker — always visible */}
+        <div>
+          <span className="text-xs font-medium text-muted block mb-1">Subjects{activeCourses.length > 0 ? ` (${activeCourses.length})` : ''}</span>
+          <SubjectPicker courses={activeCourses.length > 0 ? activeCourses : allCourses} selected={selCourses} onToggle={c => setSelCourses(p => p.includes(c) ? p.filter(v => v !== c) : [...p, c])} />
+        </div>
 
         {!yearByYear && (
           <div className="rounded-xl border border-border bg-surface p-8 text-center">
