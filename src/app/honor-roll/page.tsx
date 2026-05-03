@@ -136,7 +136,7 @@ function HonorRollContent() {
             {!selSchool && !selCourse ? 'Honor Roll' : selSchool && selCourse ? `${selSchool} · ${selCourse.name}` : selSchool || selCourse?.name}
           </h1>
           <p className="mt-2 text-sm text-muted">
-            {year} HSC Distinguished Achievers{selSchool && selCourse ? ` — ${selSchool}'s results in ${selCourse.name}` : ''}{!selSchool && !selCourse ? ' — click a school or course below to filter' : ''}
+            {year} HSC Distinguished Achievers{selSchool && selCourse ? ` — ${selSchool}'s results in ${selCourse.name}` : ''}
           </p>
         </div>
       </section>
@@ -149,16 +149,26 @@ function HonorRollContent() {
               className="rounded-lg border border-border bg-surface px-3 py-1.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-foreground/10">
               {ALL_YEARS.map(y => <option key={y} value={y}>{y}</option>)}
             </select>
-            {selSchool && (
+            {selSchool ? (
               <span className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-sm">
                 <School className="h-3.5 w-3.5 text-muted" />{selSchool}
                 <button onClick={() => handleSchool(null)} className="text-muted hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
               </span>
+            ) : (
+              <span className="text-xs text-muted/60">
+                <School className="h-3.5 w-3.5 inline mr-1 -mt-0.5" />
+                Click a school below to filter
+              </span>
             )}
-            {selCourse && (
+            {selCourse ? (
               <span className="inline-flex items-center gap-1 rounded-lg border border-border bg-surface px-2.5 py-1 text-sm">
                 <BookOpen className="h-3.5 w-3.5 text-muted" />{selCourse.name}
                 <button onClick={() => handleCourse(null)} className="text-muted hover:text-foreground"><X className="h-3.5 w-3.5" /></button>
+              </span>
+            ) : (
+              <span className="text-xs text-muted/60">
+                <BookOpen className="h-3.5 w-3.5 inline mr-1 -mt-0.5" />
+                Click a course below to filter
               </span>
             )}
             {hasFilters && <button onClick={clearAll} className="text-xs text-muted hover:text-foreground flex items-center gap-1"><X className="h-3 w-3" />Clear all</button>}
@@ -223,8 +233,7 @@ function DefaultView({ schools, courses, onSchool, onCourse }: {
             <button onClick={() => setTab('schools')} className={`px-3 py-1.5 text-sm font-medium ${isSchool ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>Schools</button>
             <button onClick={() => setTab('courses')} className={`px-3 py-1.5 text-sm font-medium border-l border-border ${!isSchool ? 'bg-foreground text-background' : 'text-muted hover:text-foreground'}`}>Courses</button>
           </div>
-          <span className="text-xs text-muted hidden sm:inline">Click a row to add filter</span>
-        </div>
+          </div>
         <div className="relative">
           <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
           <input type="text" placeholder="Search list..." value={search} onChange={e => setSearch(e.target.value)}
