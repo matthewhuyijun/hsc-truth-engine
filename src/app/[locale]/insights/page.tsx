@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/routing";
 import { KatexBlock } from "@/components/KatexRenderer";
-import { Terminal, AlertTriangle, CheckCircle, TrendingDown, TrendingUp, Users, History, Ruler, Award, BarChart3, Calculator, ChevronRight } from "lucide-react";
+import { Terminal, AlertTriangle, CheckCircle, TrendingDown, TrendingUp, Users, History, Ruler, Award, BarChart3, ChevronRight } from "lucide-react";
 import { JsonLd } from "@/components/JsonLd";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -344,26 +343,6 @@ export default async function InsightsPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* ===== FOOTER CTA ===== */}
-      <section className="border-t border-border py-16 bg-surface">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
-          <BarChart3 className="h-10 w-10 text-accent mx-auto mb-6" />
-          <h2 className="text-2xl font-bold tracking-tight mb-4">
-            {t("footerCtaHeading")}
-          </h2>
-          <p className="text-muted mb-8 max-w-xl mx-auto">
-            {t("footerCtaDesc")}
-          </p>
-          <Link
-            href="/calculator"
-            className="inline-flex items-center gap-2 rounded-lg bg-accent px-6 py-3 font-medium text-background shadow-lg shadow-accent/25 transition-all hover:bg-accent/90 hover:shadow-accent/40"
-          >
-            <Calculator className="h-4 w-4" />
-            {t("footerCtaButton")}
-          </Link>
         </div>
       </section>
       <JsonLd
