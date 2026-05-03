@@ -539,8 +539,6 @@ function StudentsTable({ students, highlightCourse, onCourseClick }: {
           <div key={st.lastName+st.firstName+idx} className="grid grid-cols-12 gap-3 px-5 py-3">
             <div className="col-span-4 flex items-center gap-1.5 min-w-0">
               {st.isAllRounder && <span className="inline-block h-2 w-2 rounded-full bg-amber-400 shrink-0" title="All-rounder" />}
-              {st.courses.some(c => c.rank === 1) && <span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" />}
-              {st.courses.some(c => c.rank > 1) && <span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" />}
               <span className="text-sm font-medium truncate">{st.lastName}, {st.firstName}</span>
             </div>
             <div className="col-span-6 flex flex-wrap items-center gap-1">
@@ -556,7 +554,11 @@ function StudentsTable({ students, highlightCourse, onCourseClick }: {
                     </span>
               ))}
             </div>
-            <div className="col-span-1 flex items-center justify-end"><span className="text-sm text-muted font-mono">{st.b6Count}</span></div>
+            <div className="col-span-1 flex items-center justify-end gap-1">
+              {st.courses.some(c => c.rank === 1) && <span className="inline-block h-2 w-2 rounded-full bg-green-500 shrink-0" title="First in course" />}
+              {st.courses.some(c => c.rank > 1) && <span className="inline-block h-2 w-2 rounded-full bg-blue-500 shrink-0" title="State rank" />}
+              <span className="text-sm text-muted font-mono">{st.b6Count}</span>
+            </div>
             <div className="col-span-1 flex items-center justify-end"><span className="text-sm text-muted font-mono">{st.stateRankCount||'0'}</span></div>
           </div>
         ))}
