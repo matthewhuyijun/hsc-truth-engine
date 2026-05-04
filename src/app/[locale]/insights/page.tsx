@@ -366,24 +366,21 @@ export default async function InsightsPage() {
         </div>
       </section>
 
-      {/* Closing */}
-      <section className="pt-8 pb-16 sm:pt-12 sm:pb-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4 mb-8">
-            <div className="flex-1 h-px bg-border" />
-            <span className="text-xs font-mono text-muted uppercase tracking-widest shrink-0">Conclusion</span>
-            <div className="flex-1 h-px bg-border" />
-          </div>
+      {/* Conclusion Divider */}
+      <div className="flex items-center gap-4 my-12">
+        <div className="flex-1 h-px bg-border" />
+        <span className="text-xs font-mono text-muted uppercase tracking-widest shrink-0">Conclusion</span>
+        <div className="flex-1 h-px bg-border" />
+      </div>
 
-          <div className="rounded-xl border border-border bg-surface overflow-hidden max-w-full">
-            <div className="p-6 lg:p-8 flex items-start">
-              <div>
-                <p className="text-sm text-foreground/80 leading-relaxed italic">{t("insightsClosing")}</p>
-              </div>
-            </div>
+      {/* Conclusion Card */}
+      <div className="rounded-xl border border-border bg-surface overflow-hidden max-w-full">
+        <div className="p-6 lg:p-8 flex items-start">
+          <div>
+            <p className="text-sm text-foreground/80 leading-relaxed italic">{t("insightsClosing")}</p>
           </div>
         </div>
-      </section>
+      </div>
 
       <JsonLd
         data={{
