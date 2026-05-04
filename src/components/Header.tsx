@@ -36,9 +36,6 @@ export function Header() {
             &gt;_
           </span>
           <span>{t("siteName")}</span>
-          <span className="rounded border border-border/50 px-1.5 py-0.5 text-[10px] font-medium text-muted uppercase tracking-wider">
-            {t("beta")}
-          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 sm:flex">

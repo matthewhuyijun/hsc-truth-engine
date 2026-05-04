@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
-import { ArrowRight, BarChart3, Calculator, Award } from "lucide-react";
+import { ArrowRight, BarChart3, Calculator, Award, TrendingUp } from "lucide-react";
 
 export default async function HomePage() {
   const t = await getTranslations("Home");
@@ -23,6 +23,12 @@ export default async function HomePage() {
       title: t("moduleHonorRollTitle"),
       description: t("moduleHonorRollDesc"),
       href: "/honor-roll" as const,
+    },
+    {
+      icon: TrendingUp,
+      title: t("moduleCompareTitle"),
+      description: t("moduleCompareDesc"),
+      href: "/compare" as const,
     },
   ];
 
@@ -68,7 +74,7 @@ export default async function HomePage() {
             {t("modulesHeading")}
           </h2>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-3">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             {modules.map((mod) => (
               <Link
                 key={mod.title}
