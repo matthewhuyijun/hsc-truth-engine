@@ -367,11 +367,21 @@ export default async function InsightsPage() {
       </section>
 
       {/* Closing */}
-      <section className="py-16">
+      <section className="py-16 sm:py-24">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <p className="text-sm text-muted/60 leading-relaxed max-w-3xl mx-auto text-center italic">
-            {t("insightsClosing")}
-          </p>
+          <div className="flex items-center gap-4 mb-8">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-xs font-mono text-muted uppercase tracking-widest shrink-0">Conclusion</span>
+            <div className="flex-1 h-px bg-border" />
+          </div>
+
+          <div className="rounded-xl border border-border bg-surface overflow-hidden max-w-full">
+            <div className="p-6 lg:p-8 flex items-start">
+              <div>
+                <p className="text-sm text-foreground/80 leading-relaxed italic">{t("insightsClosing")}</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
