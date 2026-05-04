@@ -31,6 +31,10 @@ function CompareContent() {
   const [popularity, setPopularity] = useState<Map<string, number>>(new Map());
   const [selSchools, setSelSchools] = useState<string[]>([]);
   const [selCourses, setSelCourses] = useState<string[]>([]);
+  const selCoursesRef = useRef(selCourses);
+  const selSchoolsRef = useRef(selSchools);
+  selCoursesRef.current = selCourses;
+  selSchoolsRef.current = selSchools;
   const [yearFrom, setYearFrom] = useState(2016);
   const [yearTo, setYearTo] = useState(2025);
   const [loading, setLoading] = useState(false);
@@ -161,10 +165,10 @@ function CompareContent() {
                 return (
                   <>
                     <div>
-                        <span className="text-xs font-medium text-muted block mb-1">{t('schoolsLabelCount', { count: activeSparoSchools.length })}{selCourses.length > 1 ? t('maxOneCourse') : ''}</span>
+                        <span className="text-xs font-medium text-muted block mb-1">{t('schoolsLabelCount', { count: activeSparoSchools.length })}{selCourses.length > 1 ? t('maxOneSchool') : ''}</span>
                         <SchoolPicker items={activeSparoSchools} popularity={popularity} selected={selSchools.filter(s => activeSparoSchools.includes(s))} addDisabled={selSchools.length >= 1 && selCourses.length > 1}
                         onToggle={s => setSelSchools(p => {
-                          if (selCourses.length > 1 && p.length >= 1 && !p.includes(s)) return p;
+                          if (selCoursesRef.current.length > 1 && p.length >= 1 && !p.includes(s)) return p;
                           return p.includes(s) ? p.filter(v => v !== s) : [...p, s];
                         })} />
                     </div>
@@ -172,7 +176,7 @@ function CompareContent() {
                       <span className="text-xs font-medium text-muted block mb-1">{t('coursesLabelCount', { count: sparoCourses.length })}{selSchools.length > 1 ? t('maxOneSchool') : ''}</span>
                       <CoursePicker courses={sparoCourses} selected={selCourses.filter(c => sparoCourses.some(sc => sc.code === c))} addDisabled={selCourses.length >= 1 && selSchools.length > 1}
                         onToggle={c => setSelCourses(p => {
-                          if (selSchools.length > 1 && p.length >= 1 && !p.includes(c)) return p;
+                          if (selSchoolsRef.current.length > 1 && p.length >= 1 && !p.includes(c)) return p;
                           return p.includes(c) ? p.filter(v => v !== c) : [...p, c];
                         })} />
                     </div>
@@ -329,12 +333,36 @@ function Checkbox({ checked, partial, size = 'md', onChange }: { checked: boolea
 
 function CleanTooltip({ active, payload, label, courses, multiSchool, multiCourse }: { active?: boolean; payload?: { dataKey: string; value: number; color: string; name?: string }[]; label?: string; courses: CourseEntry[]; multiSchool?: boolean; multiCourse?: boolean; }) {
   if (!active || !payload?.length) return null;
-  // When multiple courses selected, hide state average lines (they're also hidden on the chart)
   const sorted = [...payload].filter(p => p.value > 0 && !(multiCourse && String(p.dataKey).startsWith('state_'))).sort((a, b) => b.value - a.value);
-  // Exclude state_ lines from uniqueCodes — they were causing singleCourse=false even with 1 real course
-  const nonState = sorted.filter(p => !String(p.dataKey).startsWith('state_'));
-  const uniqueCodes = new Set(nonState.map(p => { const parts = (p.dataKey as string).split('__'); return parts.length > 1 ? parts[1] : parts[0]; }));
-  const singleCourse = uniqueCodes.size <= 1;
+
+  if (multiSchool && multiCourse === undefined) {
+    return (
+      <div className="bg-background border border-border rounded-lg px-3 py-2.5 shadow-lg text-xs min-w-[180px]">
+        <p className="text-muted text-[10px] uppercase tracking-wider mb-1">{label}</p>
+        {sorted.map(p => {
+          const parts = (p.dataKey as string).split('__');
+          const school = parts[0];
+          const code = parts[1];
+          const c = courses.find(x => x.code === code);
+          return (
+            <div key={p.dataKey}>
+              <p className="text-foreground font-semibold text-xs">{school}</p>
+              <div className="flex items-center justify-between gap-3 py-0.5 ml-3">
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: p.color }} />
+                  <span className="truncate">{c?.name || code}</span>
+                </div>
+                <span className="font-mono font-semibold tabular-nums text-foreground ml-2">
+                  {typeof p.value === 'number' ? (p.value % 1 ? p.value.toFixed(1) : p.value) : p.value}
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
   return (
     <div className="bg-background border border-border rounded-lg px-3 py-2.5 shadow-lg text-xs min-w-[210px]">
       <p className="text-muted font-medium mb-1.5">{label}</p>
@@ -349,10 +377,6 @@ function CleanTooltip({ active, payload, label, courses, multiSchool, multiCours
           displayName = p.name || p.dataKey;
         } else if (multiCourse !== undefined) {
           displayName = (multiSchool && !multiCourse && school) ? school : (c?.name || p.name || p.dataKey);
-        } else if (multiSchool && singleCourse && school) {
-          displayName = school;
-        } else if (multiSchool && school) {
-          displayName = `${c?.name || code} \u2014 ${school}`;
         } else {
           displayName = c?.name || p.name || p.dataKey;
         }
@@ -406,16 +430,16 @@ function CombinedChart({ schools, courses, yearByYear, yearFrom, yearTo, metric,
             <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.4} vertical={false} />
             <XAxis dataKey="year" tick={{ fontSize: 11, fill: 'var(--color-muted)' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 11, fill: 'var(--color-muted)' }} allowDecimals={metric === 'stateRank' ? false : undefined} axisLine={false} tickLine={false} />
-            <Tooltip content={<CleanTooltip courses={courses} multiSchool={schools.length > 1} />} cursor={{ fill: 'var(--color-surface)', opacity: 0.5 }} />
-            {visible.map(key => { const [school, code] = key.split('__'); const si = schools.indexOf(school); return <Bar key={key} dataKey={key} stackId={si} fill={colorMap.get(code) || '#888'} />; })}
+            <Tooltip shared={false} content={<CleanTooltip courses={courses} multiSchool={schools.length > 1} />} cursor={false} />
+            {visible.map(key => { const [school, code] = key.split('__'); return <Bar key={key} dataKey={key} stackId={school} fill={colorMap.get(code) || '#888'} />; })}
             {viewMode === 'top10' && rankedByTotal
               .filter(k => !displayPairs.includes(k) && !hidden.has(k))
-              .map(key => { const [school, code] = key.split('__'); const si = schools.indexOf(school); return <Bar key={key} dataKey={key} stackId={si} fill="#9ca3af" />; })}
+              .map(key => { const [school, code] = key.split('__'); return <Bar key={key} dataKey={key} stackId={school} fill="#9ca3af" />; })}
           </BarChart>
         </ResponsiveContainer>
       </div>
       <div className="flex flex-col sm:flex-row gap-4 border-t border-border pt-3">
-        {schools.map(school => { const schoolPairs = displayPairs.filter(k => k.startsWith(`${school}__`)); if (schoolPairs.length === 0) return null; const grouped: Record<string, string[]> = {}; for (const key of schoolPairs) { const [, code] = key.split('__'); const cat = courses.find(x => x.code === code)?.category || 'Other'; if (!grouped[cat]) grouped[cat] = []; grouped[cat].push(key); } const catsToShow = CAT_ORDER.filter(cat => grouped[cat]); return <div key={school} className="flex-1 min-w-0"><p className="text-xs font-semibold text-foreground mb-2 truncate">{school}</p><div className="flex gap-2 mb-1"><button onClick={() => setHidden(prev => { const n = new Set(prev); schoolPairs.forEach(k => n.delete(k)); return n; })} disabled={schoolPairs.every(k => !hidden.has(k))} className={`text-xs font-medium ${schoolPairs.every(k => !hidden.has(k)) ? 'text-muted/40 cursor-default' : 'text-muted hover:text-foreground'}`}>{t('selectAll')}</button><button onClick={() => setHidden(prev => { const n = new Set(prev); schoolPairs.forEach(k => n.add(k)); return n; })} disabled={schoolPairs.every(k => hidden.has(k))} className={`text-xs font-medium ${schoolPairs.every(k => hidden.has(k)) ? 'text-muted/40 cursor-default' : 'text-muted hover:text-foreground'}`}>{t('deselectAll')}</button></div><div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">{catsToShow.map(cat => { const keys = grouped[cat]; const allHidden = keys.every(k => hidden.has(k)); const partial = !allHidden && keys.some(k => hidden.has(k)); return <div key={cat}><label className="flex items-center gap-2 cursor-pointer hover:bg-surface-hover/50 rounded px-1 py-0.5 -mx-1 transition-colors" onClick={() => { keys.forEach(k => allHidden ? setHidden(prev => { const n = new Set(prev); n.delete(k); return n; }) : setHidden(prev => { const n = new Set(prev); n.add(k); return n; })); }}><Checkbox checked={!allHidden} partial={partial} onChange={() => {}} /><div className={`w-2.5 h-2.5 rounded-full shrink-0 ${allHidden ? 'opacity-25' : ''}`} style={{ backgroundColor: `hsl(${CAT_HUES[cat] ?? 0} 70% 50%)` }} /><span className="text-sm font-medium truncate">{cat}</span></label><div className="ml-5 space-y-0.5 mt-1">{keys.map(key => { const [, code] = key.split('__'); const c = courses.find(x => x.code === code); const h = hidden.has(key); const col = colorMap.get(code) || '#888'; return <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-surface-hover/50 rounded px-1 py-0.5 -mx-1 transition-colors" onClick={() => toggle(key)}><Checkbox checked={!h} size="sm" onChange={() => {}} /><div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: col, opacity: h ? 0.25 : 1 }} /><span className={`text-xs truncate ${h ? 'text-muted/50 line-through' : ''}`}>{c?.name || code}</span></label>; })}</div></div>; })}{viewMode === 'top10' && (() => { const otherForSchool = rankedByTotal.filter(k => k.startsWith(`${school}__`) && !displayPairs.includes(k)); if (otherForSchool.length === 0) return null; const allHidden = otherForSchool.every(k => hidden.has(k)); return <div className="mt-2"><label className="flex items-center gap-2 cursor-pointer hover:bg-surface-hover/50 rounded px-1 py-0.5 -mx-1 transition-colors" onClick={() => { otherForSchool.forEach(k => allHidden ? setHidden(prev => { const n = new Set(prev); n.delete(k); return n; }) : setHidden(prev => { const n = new Set(prev); n.add(k); return n; })); }}><Checkbox checked={!allHidden} onChange={() => {}} /><div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: '#9ca3af' }} /><span className="text-sm font-medium truncate">{t("othersCount", { count: otherForSchool.length })}</span></label><div className="ml-5 space-y-0.5 mt-1">{otherForSchool.map(key => { const [, code] = key.split('__'); const c = courses.find(x => x.code === code); const h = hidden.has(key); return <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-surface-hover/50 rounded px-1 py-0.5 -mx-1 transition-colors" onClick={() => toggle(key)}><Checkbox checked={!h} size="sm" onChange={() => {}} /><div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#9ca3af', opacity: h ? 0.25 : 1 }} /><span className={`text-xs truncate ${h ? 'text-muted/50 line-through' : ''}`}>{c?.name || code}</span></label>; })}</div></div>; })()}</div></div>; })}
+        {schools.map(school => { const schoolPairs = displayPairs.filter(k => k.startsWith(`${school}__`)); if (schoolPairs.length === 0) return null; const grouped: Record<string, string[]> = {}; for (const key of schoolPairs) { const [, code] = key.split('__'); const cat = courses.find(x => x.code === code)?.category || 'Other'; if (!grouped[cat]) grouped[cat] = []; grouped[cat].push(key); } const catsToShow = CAT_ORDER.filter(cat => grouped[cat]); return <div key={school} className="flex-1 min-w-0"><p className="text-xs font-semibold text-foreground mb-2 truncate">{school}</p><div className="flex gap-2 mb-1"><button onClick={() => setHidden(prev => { const n = new Set(prev); schoolPairs.forEach(k => n.delete(k)); return n; })} disabled={schoolPairs.every(k => !hidden.has(k))} className={`text-xs font-medium ${schoolPairs.every(k => !hidden.has(k)) ? 'text-muted/40 cursor-default' : 'text-muted hover:text-foreground'}`}>{t('selectAll')}</button><button onClick={() => setHidden(prev => { const n = new Set(prev); schoolPairs.forEach(k => n.add(k)); return n; })} disabled={schoolPairs.every(k => hidden.has(k))} className={`text-xs font-medium ${schoolPairs.every(k => hidden.has(k)) ? 'text-muted/40 cursor-default' : 'text-muted hover:text-foreground'}`}>{t('deselectAll')}</button></div><div className="space-y-2 max-h-[360px] overflow-y-auto pr-1">{catsToShow.map(cat => { const keys = grouped[cat]; const allHidden = keys.every(k => hidden.has(k)); const partial = !allHidden && keys.some(k => hidden.has(k)); return <div key={cat}><label className="flex items-center gap-2 cursor-pointer hover:bg-surface-hover/50 rounded px-1 py-0.5 -mx-1 transition-colors" onClick={() => { keys.forEach(k => allHidden ? setHidden(prev => { const n = new Set(prev); n.delete(k); return n; }) : setHidden(prev => { const n = new Set(prev); n.add(k); return n; })); }}><Checkbox checked={!allHidden} partial={partial} onChange={() => {}} /><div className={`w-2.5 h-2.5 rounded-full shrink-0 ${allHidden ? 'opacity-25' : ''}`} style={{ backgroundColor: `hsl(${CAT_HUES[cat] ?? 0} 70% 50%)` }} /><span className="text-sm font-medium truncate">{cat}</span></label><div className="ml-5 space-y-0.5 mt-1">{keys.map(key => { const [, code] = key.split('__'); const c = courses.find(x => x.code === code); const h = hidden.has(key); const col = colorMap.get(code) || '#888'; return <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-surface-hover/50 rounded px-1 py-0.5 -mx-1 transition-colors" onClick={() => toggle(key)}><Checkbox checked={!h} size="sm" onChange={() => {}} /><div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: col, opacity: h ? 0.25 : 1 }} /><span className={`text-xs truncate ${h ? 'text-muted/50 line-through' : ''}`}>{c?.name || code} <span className="tabular-nums text-muted/50">({globalTotals.get(key)})</span></span></label>; })}</div></div>; })}{viewMode === 'top10' && (() => { const otherForSchool = rankedByTotal.filter(k => k.startsWith(`${school}__`) && !displayPairs.includes(k)); if (otherForSchool.length === 0) return null; const allHidden = otherForSchool.every(k => hidden.has(k)); return <div className="mt-2"><label className="flex items-center gap-2 cursor-pointer hover:bg-surface-hover/50 rounded px-1 py-0.5 -mx-1 transition-colors" onClick={() => { otherForSchool.forEach(k => allHidden ? setHidden(prev => { const n = new Set(prev); n.delete(k); return n; }) : setHidden(prev => { const n = new Set(prev); n.add(k); return n; })); }}><Checkbox checked={!allHidden} onChange={() => {}} /><div className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: '#9ca3af' }} /><span className="text-sm font-medium truncate">{t("othersCount", { count: otherForSchool.length })}</span></label><div className="ml-5 space-y-0.5 mt-1">{otherForSchool.map(key => { const [, code] = key.split('__'); const c = courses.find(x => x.code === code); const h = hidden.has(key); return <label key={key} className="flex items-center gap-2 cursor-pointer hover:bg-surface-hover/50 rounded px-1 py-0.5 -mx-1 transition-colors" onClick={() => toggle(key)}><Checkbox checked={!h} size="sm" onChange={() => {}} /><div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: '#9ca3af', opacity: h ? 0.25 : 1 }} /><span className={`text-xs truncate ${h ? 'text-muted/50 line-through' : ''}`}>{c?.name || code} <span className="tabular-nums text-muted/50">({globalTotals.get(key)})</span></span></label>; })}</div></div>; })()}</div></div>; })}
       </div>
     </div>
   );
