@@ -373,11 +373,17 @@ export default async function InsightsPage() {
         <div className="flex-1 h-px bg-border" />
       </div>
 
-      {/* Conclusion Card */}
-      <div className="rounded-xl border border-border bg-surface overflow-hidden max-w-full">
-        <div className="p-6 lg:p-8 flex items-start">
-          <div>
-            <p className="text-sm text-foreground/80 leading-relaxed italic">{t("insightsClosing")}</p>
+      <div className="space-y-6 max-w-full overflow-hidden">
+        <div className="rounded-xl border border-border bg-surface overflow-hidden hover:border-accent/20 transition-colors">
+          <div className="grid gap-6 lg:grid-cols-2">
+            <div className="p-6 lg:p-8 border-b lg:border-b-0 lg:border-r border-border bg-terminal-bg/50 min-w-0 flex items-center justify-center">
+              <p className="text-xs text-muted font-mono uppercase tracking-wider">Epilogue</p>
+            </div>
+            <div className="p-6 lg:p-8 flex items-start min-w-0">
+              <div>
+                <p className="text-base font-medium text-foreground mb-4 leading-relaxed italic">{t("insightsClosing")}</p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
