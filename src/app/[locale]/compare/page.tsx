@@ -196,7 +196,7 @@ function CompareContent() {
           <>
             {!selSchools.length && <div className="rounded-xl border border-border bg-surface p-8 text-center"><p className="text-sm text-muted">{t('emptyPrompt')}</p></div>}
             {yearByYear && activeCourses.length > 0 && selSchools.length > 0 && (
-              <CombinedChart schools={selSchools} courses={activeCourses} yearByYear={yearByYear} yearFrom={yearFrom} yearTo={yearTo} metric={metric} defaultViewMode={defaultViewMode} />
+              <CombinedChart schools={selSchools} courses={allCourses} yearByYear={yearByYear} yearFrom={yearFrom} yearTo={yearTo} metric={metric} defaultViewMode={defaultViewMode} />
             )}
             {yearByYear && !loading && activeCourses.length === 0 && selSchools.length > 0 && (
               <div className="rounded-xl border border-border bg-surface p-8 text-center"><p className="text-sm text-muted">{t('noCourseData')}</p></div>
