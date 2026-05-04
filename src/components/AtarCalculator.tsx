@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo, useRef, useEffect, useLayoutEffect } from "react";
+import { useTranslations } from "next-intl";
 import { Trash2, Search, ChevronDown, AlertTriangle } from "lucide-react";
 import {
   getAllCourses,
@@ -13,6 +14,24 @@ import {
 
 const YEARS = ["2025", "2024", "2023", "2022", "2021", "2020", "2019"];
 const DEFAULT_ROWS = 5;
+const STORAGE_KEY = "atar-calculator-rows";
+
+function loadRows(): RowState[] {
+  if (typeof window === "undefined") return Array.from({ length: DEFAULT_ROWS }, () => createEmptyRow());
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+      const parsed = JSON.parse(data);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed.map((r: { course?: string; hscMark?: number }) => ({
+          course: r.course ?? "",
+          hscMark: typeof r.hscMark === "number" ? Math.round(r.hscMark) : 0,
+        }));
+      }
+    }
+  } catch {}
+  return Array.from({ length: DEFAULT_ROWS }, () => createEmptyRow());
+}
 
 interface RowState {
   course: string;
@@ -33,15 +52,20 @@ function createEmptyRow(): RowState {
 }
 
 export function AtarCalculator() {
-  const [rows, setRows] = useState<RowState[]>(() =>
-    Array.from({ length: DEFAULT_ROWS }, () => createEmptyRow())
-  );
+  const t = useTranslations("Calculator");
+  const [rows, setRows] = useState<RowState[]>(loadRows);
   const [dropdown, setDropdown] = useState<DropdownState | null>(null);
   const triggerRef = useRef<HTMLElement | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement | null>(null);
   const [yearView, setYearView] = useState<"all" | string>("all");
 
   const allCourses = useMemo(() => getAllCourses(), []);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(rows));
+    } catch {}
+  }, [rows]);
 
   const filterCourses = (q: string, rowIndex: number) => {
     const hasEnglishSelected = rows.some(
@@ -167,27 +191,17 @@ export function AtarCalculator() {
     <div className="space-y-8">
       {/* How to use */}
       <div className="space-y-2 text-sm text-muted leading-relaxed">
-        <h3 className="text-base font-semibold text-foreground">How to use this calculator</h3>
+        <h3 className="text-base font-semibold text-foreground">{t("howToHeading")}</h3>
         <ol className="list-decimal pl-5 space-y-1">
-          <li>
-            <strong className="text-foreground">Select your subjects:</strong>{" "}
-            Choose your 10 or more units of study from the dropdowns below.
-          </li>
-          <li>
-            <strong className="text-foreground">Enter your marks:</strong>{" "}
-            Enter your estimated HSC marks (out of 100). For 1-unit extension courses, double
-            your NESA mark (e.g. 45/50 → 90/100).
-          </li>
-          <li>
-            <strong className="text-foreground">Analyse the result:</strong>{" "}
-            The scaled marks and ATAR estimate based on past scaling data (2019–2025) are shown below.
-          </li>
+          <li>{t("step1Full")}</li>
+          <li>{t("step2Full")}</li>
+          <li>{t("step3Full")}</li>
         </ol>
       </div>
 
       {/* Year filter */}
       <div className="flex items-center gap-2">
-        <span className="text-xs font-medium text-muted">Year filter:</span>
+        <span className="text-xs font-medium text-muted">{t("yearFilter")}</span>
         <div className="flex flex-wrap gap-1">
           <button
             onClick={() => setYearView("all")}
@@ -197,7 +211,7 @@ export function AtarCalculator() {
                 : "border-border text-muted hover:text-foreground hover:border-foreground/30"
             }`}
           >
-            All
+            {t("all")}
           </button>
           {YEARS.map((year) => (
             <button
@@ -220,10 +234,10 @@ export function AtarCalculator() {
         <table className="w-full text-sm table-fixed">
           <thead>
             <tr className="border-b border-border text-muted">
-              <th className="w-8 px-2 py-2.5 text-center font-medium text-xs uppercase tracking-wider">#</th>
-              <th className="px-2 py-2.5 text-left font-medium text-xs uppercase tracking-wider">Course</th>
+              <th className="w-8 px-2 py-2.5 text-center font-medium text-xs uppercase tracking-wider">{t("tableNum")}</th>
+              <th className="px-2 py-2.5 text-left font-medium text-xs uppercase tracking-wider">{t("tableCourse")}</th>
               <th className="w-[13%] px-1 py-2.5 text-center font-medium text-xs uppercase tracking-wider">
-                HSC Mark
+                {t("tableHscMark")}
               </th>
               {yearView === "all"
                 ? YEARS.map((year) => (
@@ -243,20 +257,20 @@ export function AtarCalculator() {
             <tr className="border-b border-border">
               <th></th>
               <th className="px-2 py-1 text-left">
-                <span className="text-xs text-muted/50">Units auto-detected</span>
+                <span className="text-xs text-muted/50">{t("tableUnits")}</span>
               </th>
               <th className="px-1 py-1 text-center">
-                <span className="text-xs text-muted/50">/100</span>
+                <span className="text-xs text-muted/50">{t("tableOutOf")}</span>
               </th>
               {yearView === "all"
                 ? YEARS.map((year) => (
                     <th key={year} className="hidden sm:table-cell px-1 py-1 text-center">
-                      <span className="text-xs text-muted/50 font-mono">Scaled</span>
+                      <span className="text-xs text-muted/50 font-mono">{t("tableScaled")}</span>
                     </th>
                   ))
                 : (
                     <th className="px-1 py-1 text-center">
-                      <span className="text-xs text-muted/50 font-mono">Scaled</span>
+                      <span className="text-xs text-muted/50 font-mono">{t("tableScaled")}</span>
                     </th>
                   )}
             </tr>
@@ -282,7 +296,7 @@ export function AtarCalculator() {
                         style={{ width: dropdown?.rowIndex === i ? dropdown.width : "100%" }}
                       >
                         <span className={row.course ? "text-foreground truncate" : "text-muted/50 truncate"}>
-                          {row.course || "Select course..."}
+                          {row.course || t("selectCourse")}
                         </span>
                         <span className="text-xs text-muted/40 font-mono ml-1 flex-shrink-0">
                           {units !== undefined ? `${units}u` : ""}
@@ -300,7 +314,7 @@ export function AtarCalculator() {
                       )}
 
                       {excluded && (
-                        <span className="flex-shrink-0 text-xs text-amber-500 font-mono">excluded</span>
+                        <span className="flex-shrink-0 text-xs text-amber-500 font-mono">{t("excluded")}</span>
                       )}
                     </div>
                   </td>
@@ -312,11 +326,11 @@ export function AtarCalculator() {
                         type="number"
                         min="0"
                         max="100"
-                        step="0.5"
+                        step="1"
                         value={row.hscMark || ""}
                         onChange={(e) =>
                           updateRow(i, {
-                            hscMark: Math.min(100, Math.max(0, parseFloat(e.target.value) || 0)),
+                            hscMark: Math.min(100, Math.max(0, parseInt(e.target.value, 10) || 0)),
                           })
                         }
                         placeholder="—"
@@ -377,7 +391,7 @@ export function AtarCalculator() {
             {result && hasMarks && (
               <tr className="border-b border-border bg-surface-hover/30">
                 <td></td>
-                <td className="px-2 py-2.5 text-sm font-semibold text-foreground">Aggregate</td>
+                <td className="px-2 py-2.5 text-sm font-semibold text-foreground">{t("aggregate")}</td>
                 <td></td>
                 {yearView === "all"
                   ? YEARS.map((year) => {
@@ -407,7 +421,7 @@ export function AtarCalculator() {
             {result && hasMarks && (
               <tr className="border-b border-border bg-surface-hover/30">
                 <td></td>
-                <td className="px-2 py-2.5 text-sm font-semibold text-foreground">Est. ATAR</td>
+                <td className="px-2 py-2.5 text-sm font-semibold text-foreground">{t("estAtar")}</td>
                 <td></td>
                 {yearView === "all"
                   ? YEARS.map((year) => {
@@ -460,7 +474,7 @@ export function AtarCalculator() {
                 onChange={(e) =>
                   updateDropdown({ searchQuery: e.target.value, activeIdx: 0 })
                 }
-                placeholder="Search courses..."
+                placeholder={t("searchCourses")}
                 className="flex-1 bg-transparent text-sm placeholder:text-muted/50 focus:outline-none"
                 onKeyDown={(e) => {
                   if (dropdownFiltered.length === 0) return;
@@ -513,26 +527,25 @@ export function AtarCalculator() {
           onClick={addRow}
           className="inline-flex items-center gap-1.5 rounded-lg border border-border px-5 py-2 text-sm font-medium text-muted hover:text-foreground hover:border-foreground/30 transition-colors"
         >
-          + Add course
+          {t("addCourse")}
         </button>
       </div>
 
       {/* Notation */}
       <p className="text-xs text-muted/60 leading-relaxed">
-        <strong className="text-muted/80">a</strong> = insufficient scaling data, uses average of available years.
-        Math Ext 1 = 2 units when paired with Ext 2. Math Advanced excluded when Ext 1 + 2 selected.
+        {t("notation")}
       </p>
 
       {/* ATAR Result */}
       {hasMarks && result && (
         <div className="rounded-lg border border-border bg-surface p-8 text-center">
-          <p className="text-sm text-muted">Your estimated ATAR is:</p>
+          <p className="text-sm text-muted">{t("emptyAtar")}</p>
           <p className="text-5xl font-bold font-mono tabular-nums tracking-tight mt-1">
             {result.atar.toFixed(2)}
           </p>
           {result.atarRange.min > 0 && (
             <p className="mt-2 text-sm text-muted font-mono">
-              Range: {result.atarRange.min.toFixed(2)} – {result.atarRange.max.toFixed(2)}
+              {t("atarRange")} {result.atarRange.min.toFixed(2)} – {result.atarRange.max.toFixed(2)}
             </p>
           )}
         </div>
@@ -540,13 +553,21 @@ export function AtarCalculator() {
 
       {!hasMarks && (
         <div className="rounded-lg border border-border bg-surface p-8 text-center">
-          <p className="text-sm text-muted">Your estimated ATAR is:</p>
+          <p className="text-sm text-muted">{t("emptyAtar")}</p>
           <p className="text-5xl font-bold font-mono text-muted/20 mt-1">—</p>
         </div>
       )}
 
       {/* Warnings */}
-      {result && result.warnings.length > 0 && (
+      {result && result.warnings.length > 0 && (() => {
+        const warningMap: Record<string, string> = {
+          "English Extension 2 requires English Extension 1.": t("warningEngExt2"),
+          "English Extension 1 requires English Advanced.": t("warningEngExt1"),
+          "Mathematics Advanced excluded: Extension 1 and Extension 2 take priority (max 4 calc units).": t("warningMathAdvanced"),
+          "You need at least 10 units to be eligible for an ATAR.": t("warningNeed10Units"),
+          "You need at least 2 units of English to be eligible for an ATAR.": t("warningNeedEnglish"),
+        };
+        return (
         <div className="space-y-2">
           {result.warnings.filter((w, i, a) => a.indexOf(w) === i).map((warning, i) => (
             <div
@@ -554,17 +575,18 @@ export function AtarCalculator() {
               className="flex items-start gap-2 rounded-lg border border-amber-500/20 bg-amber-500/5 p-3"
             >
               <AlertTriangle className="h-4 w-4 text-amber-500 flex-shrink-0 mt-0.5" />
-              <p className="text-sm text-amber-600 dark:text-amber-400">{warning}</p>
+              <p className="text-sm text-amber-600 dark:text-amber-400">{warningMap[warning] ?? warning}</p>
             </div>
           ))}
         </div>
-      )}
+        );
+      })()}
 
       {/* Best 10 breakdown */}
       {result && hasMarks && result.courses.some((c) => c.unitsCounted > 0) && (
         <div className="rounded-lg border border-border p-5">
           <h4 className="text-xs font-medium uppercase tracking-wider text-muted mb-3">
-            Best 10 Unit Breakdown
+            {t("best10Heading")}
           </h4>
           <div className="grid gap-2 sm:grid-cols-2">
             {result.courses
@@ -587,18 +609,16 @@ export function AtarCalculator() {
       {/* Disclaimer */}
       <div className="rounded-lg border border-border/50 px-4 py-3 space-y-2">
         <p className="text-xs text-muted/60 leading-relaxed">
-          Uses UAC scaling data 2019–2025. Marks entered out of 100 for all courses
-          (extension: double NESA mark). Results are estimates using historical statistics.
-          For the most theoretically accurate ATAR estimate, use{" "}
+          {t("disclaimerBefore")}{" "}
           <a
             href="https://www.uac.edu.au/atar-compass"
             target="_blank"
             rel="noopener noreferrer"
             className="underline hover:text-foreground"
           >
-            UAC ATAR Compass
+            {t("disclaimerLink")}
           </a>
-          {" "}— the official calculator. Not affiliated with NESA or UAC.
+          {t("disclaimerAfter")}
         </p>
       </div>
     </div>

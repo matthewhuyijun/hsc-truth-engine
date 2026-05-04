@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Search, X, ChevronDown, BarChart3 } from "lucide-react";
+import { Search, X, ChevronDown } from "lucide-react";
 import {
   getAllScalingCourses,
   generateCurve,
@@ -297,18 +297,6 @@ export default function ScalingGraphsPage() {
             </ul>
           </div>
         )}
-
-        {/* Footer CTA */}
-        <div className="mt-12 border-t border-border pt-8 text-center">
-          <p className="text-sm text-muted mb-3">{t("footerCta")}</p>
-          <a
-            href="/calculator"
-            className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-2 text-sm font-medium text-foreground hover:bg-surface transition-colors"
-          >
-            <BarChart3 className="h-4 w-4" />
-            {t("footerButton")}
-          </a>
-        </div>
       </div>
     </div>
   );
