@@ -431,7 +431,7 @@ function CombinedChart({ schools, courses, yearByYear, yearFrom, yearTo, metric,
             <XAxis dataKey="year" tick={{ fontSize: 11, fill: 'var(--color-muted)' }} axisLine={false} tickLine={false} />
             <YAxis tick={{ fontSize: 11, fill: 'var(--color-muted)' }} allowDecimals={metric === 'stateRank' ? false : undefined} axisLine={false} tickLine={false} />
             <Tooltip shared={false} content={<CleanTooltip courses={courses} multiSchool={schools.length > 1} />} cursor={false} />
-            {visible.map(key => { const [school, code] = key.split('__'); return <Bar key={key} dataKey={key} stackId={school} fill={colorMap.get(code) || '#888'} />; })}
+            {visible.map(key => { const [school, code] = key.split('__'); return <Bar key={key} dataKey={key} stackId={school} fill={colorMap.get(code) || '#888'} minPointSize={0.0001} />; })}
             {viewMode === 'top10' && rankedByTotal
               .filter(k => !displayPairs.includes(k) && !hidden.has(k))
               .map(key => { const [school, code] = key.split('__'); return <Bar key={key} dataKey={key} stackId={school} fill="#9ca3af" />; })}

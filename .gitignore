@@ -43,8 +43,17 @@ next-env.d.ts
 # research PDFs (large binary files)
 research/**/*.pdf
 
-# OS
-.DS_Store
+# python
+__pycache__/
+
+# backup/derived files in public data
+public/data/*.bak
+
+# AI coding tools (local dev environment)
+.agents/
+.claude/
+.kiro/
+.trae/
 
 # HSCninja scraped data (do NOT commit)
 data/hscninja/
