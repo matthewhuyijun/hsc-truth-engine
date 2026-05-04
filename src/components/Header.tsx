@@ -22,6 +22,7 @@ export function Header() {
     { label: t("calculator"), href: "/calculator" },
     { label: t("scaling"), href: "/scaling-graphs" },
     { label: t("honorRoll"), href: "/honor-roll" },
+    { label: t("compare"), href: "/compare" },
   ];
 
   return (
