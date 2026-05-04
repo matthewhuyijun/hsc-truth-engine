@@ -119,6 +119,7 @@
     "pipelineNesaDomain": "NESA Domain — What happens inside NESA",
     "pipelineUacTakesOver": "UAC takes over",
     "pipelineUacDomain": "UAC Domain — What happens inside UAC",
+    "conclusion": "Conclusion",
     "step01Title": "School Assessment",
     "step01StatTerm": "Rank Vector",
     "step01Plain": "Your school submits a list of where everyone sits — first, second, third. That's it. The actual numbers are thrown away.",

@@ -119,6 +119,7 @@
     "pipelineNesaDomain": "NESA 管辖 — NESA 内部发生的事",
     "pipelineUacTakesOver": "UAC 接手",
     "pipelineUacDomain": "UAC 管辖 — UAC 内部发生的事",
+    "conclusion": "结语",
     "step01Title": "校内评估",
     "step01StatTerm": "排名向量",
     "step01Plain": "学校提交每个人的校内分数和排名。实际分数不会被直接使用，但你的相对排名和差距会被保留。",

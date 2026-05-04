@@ -363,18 +363,14 @@ export default async function InsightsPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* Conclusion */}
-      <section className="py-16 sm:py-24">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-{/* Divider */}
+          {/* Divider */}
           <div className="flex items-center gap-4 my-12">
             <div className="flex-1 h-px bg-border" />
-            <span className="text-xs font-mono text-muted uppercase tracking-widest shrink-0">Conclusion</span>
+            <span className="text-xs font-mono text-muted uppercase tracking-widest shrink-0">{t("conclusion")}</span>
             <div className="flex-1 h-px bg-border" />
           </div>
+
           <div className="space-y-6 max-w-full overflow-hidden">
             <div className="rounded-xl border border-border bg-surface overflow-hidden hover:border-accent/20 transition-colors">
               <div className="p-6 lg:p-8 flex items-start">
