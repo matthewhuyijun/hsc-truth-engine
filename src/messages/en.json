@@ -466,6 +466,7 @@
       {
         "date": "May 2026",
         "items": [
+          "ATAR Calculator redesign: unified typography (all numbers use consistent tabular-nums font), estimated ATAR result merged into main table container, and green/red background highlighting for highest/lowest yearly ATAR estimates — matching HSCninja design patterns.",
           "Honor Roll page banner and subtitle simplified to show only the page title, now properly using i18n translations.",
           "Refactored shared ATAR/scaling data layer into course-data.ts and spline.ts to eliminate duplicated code across modules.",
           "Scaling graph comparison table now includes the maximum scaled mark (100 / #1 student) — previously only showed percentiles p50–p99.",
@@ -482,10 +483,7 @@
           "Honour Roll page rewritten with single-select year/school/course pickers and intersection views.",
           "SPaRO school average data restored with rank badges and public school sourcing notes.",
           "Added full bilingual Compare section — compare schools by Band 6/E4 counts, state rank counts, or SPaRO school averages over time (2019–2025) with interactive line charts and selection constraints.",
-          "Fixed enrollment distribution data — non_binary field was incorrectly storing total enrolment numbers.",
-          "Scaling graph comparison table now includes the maximum scaled mark (100 / #1 student) — previously only showed percentiles p50–p99.",
-          "Refactored shared ATAR/scaling data layer into course-data.ts and spline.ts to eliminate duplicated code across modules.",
-          "Honor Roll page banner and subtitle simplified to show only the page title, now properly using i18n translations."
+          "Fixed enrollment distribution data — non_binary field was incorrectly storing total enrolment numbers."
         ]
       }
     ]

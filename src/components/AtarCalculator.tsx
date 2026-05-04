@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect, useLayoutEffect } from "react";
 import { useTranslations } from "next-intl";
-import { Trash2, Search, ChevronDown, AlertTriangle } from "lucide-react";
+import { Trash2, Search, ChevronDown, AlertTriangle, Check } from "lucide-react";
 import {
   getAllCourses,
   calculateAtar,
@@ -217,7 +217,7 @@ export function AtarCalculator() {
             <button
               key={year}
               onClick={() => setYearView(year)}
-              className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium font-mono transition-colors border ${
+              className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium tabular-nums transition-colors border ${
                 yearView === year
                   ? "bg-foreground text-background border-foreground"
                   : "border-border text-muted hover:text-foreground hover:border-foreground/30"
@@ -243,34 +243,34 @@ export function AtarCalculator() {
                 ? YEARS.map((year) => (
                     <th
                       key={year}
-                      className="hidden sm:table-cell w-[8%] px-1 py-2.5 text-center font-mono text-xs text-muted"
+                      className="hidden sm:table-cell w-[8%] px-1 py-2.5 text-center font-sans tabular-nums text-xs text-muted"
                     >
                       {year}
                     </th>
                   ))
                 : (
-                    <th className="px-1 py-2.5 text-center font-mono text-xs text-muted">
+                    <th className="px-1 py-2.5 text-center font-sans tabular-nums text-xs text-muted">
                       {yearView}
                     </th>
                   )}
             </tr>
-            <tr className="border-b border-border">
+            <tr className="border-b border-border text-muted">
               <th></th>
-              <th className="px-2 py-1 text-left">
-                <span className="text-xs text-muted/50">{t("tableUnits")}</span>
+              <th className="px-2 py-2.5 text-left font-medium text-xs uppercase tracking-wider">
+                {t("tableUnits")}
               </th>
-              <th className="px-1 py-1 text-center">
-                <span className="text-xs text-muted/50">{t("tableOutOf")}</span>
+              <th className="px-1 py-2.5 text-center font-medium text-xs uppercase tracking-wider">
+                {t("tableOutOf")}
               </th>
               {yearView === "all"
                 ? YEARS.map((year) => (
-                    <th key={year} className="hidden sm:table-cell px-1 py-1 text-center">
-                      <span className="text-xs text-muted/50 font-mono">{t("tableScaled")}</span>
+                    <th key={year} className="hidden sm:table-cell px-1 py-2.5 text-center font-sans tabular-nums text-xs text-muted">
+                      {t("tableScaled")}
                     </th>
                   ))
                 : (
-                    <th className="px-1 py-1 text-center">
-                      <span className="text-xs text-muted/50 font-mono">{t("tableScaled")}</span>
+                    <th className="px-1 py-2.5 text-center font-sans tabular-nums text-xs text-muted">
+                      {t("tableScaled")}
                     </th>
                   )}
             </tr>
@@ -283,13 +283,20 @@ export function AtarCalculator() {
 
               return (
                 <tr key={i} className="border-b border-border/50">
-                  <td className="px-2 py-2.5 text-center text-xs text-muted/60 font-mono">
+                  <td className="px-2 py-2.5 text-center text-xs text-muted/60 font-sans tabular-nums">
                     {i + 1}
                   </td>
 
                   {/* Course Select */}
                   <td className="px-2 py-2.5">
                     <div className="flex items-center gap-1.5">
+                      <Check
+                        className={`h-3.5 w-3.5 flex-shrink-0 ${
+                          courseResult && courseResult.unitsCounted > 0
+                            ? "text-emerald-500"
+                            : "invisible"
+                        }`}
+                      />
                       <button
                         onClick={(e) => toggleDropdown(i, e.currentTarget)}
                         className="flex items-center justify-between rounded border border-border bg-background px-2.5 py-1.5 text-left text-sm hover:border-foreground/30 transition-colors min-w-0"
@@ -298,11 +305,16 @@ export function AtarCalculator() {
                         <span className={row.course ? "text-foreground truncate" : "text-muted/50 truncate"}>
                           {row.course || t("selectCourse")}
                         </span>
-                        <span className="text-xs text-muted/40 font-mono ml-1 flex-shrink-0">
-                          {units !== undefined ? `${units}u` : ""}
-                        </span>
                         <ChevronDown className="h-3.5 w-3.5 text-muted/40 ml-1 flex-shrink-0" />
                       </button>
+
+                      {units !== undefined && (
+                        <span className="text-xs text-muted/40 font-sans flex-shrink-0">
+                          {courseResult && courseResult.unitsCounted > 0
+                            ? `${courseResult.unitsCounted}/${units}u`
+                            : `${units}u`}
+                        </span>
+                      )}
 
                       {row.course && (
                         <button
@@ -314,7 +326,7 @@ export function AtarCalculator() {
                       )}
 
                       {excluded && (
-                        <span className="flex-shrink-0 text-xs text-amber-500 font-mono">{t("excluded")}</span>
+                        <span className="flex-shrink-0 text-xs text-amber-500 font-sans">{t("excluded")}</span>
                       )}
                     </div>
                   </td>
@@ -335,7 +347,7 @@ export function AtarCalculator() {
                         }
                         placeholder="—"
                         disabled={!row.course}
-                        className="w-16 rounded border border-border bg-background px-2 py-1.5 text-center font-mono text-sm focus:border-foreground/30 focus:outline-none disabled:opacity-30"
+                        className="w-16 rounded border border-border bg-background px-2 py-1.5 text-center font-sans tabular-nums text-sm focus:border-foreground/30 focus:outline-none disabled:opacity-30"
                       />
                     </div>
                   </td>
@@ -347,20 +359,20 @@ export function AtarCalculator() {
                         if (!row.hscMark || !yd) {
                           return (
                             <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
-                              <span className="text-sm text-muted/30 font-mono">—</span>
+                              <span className="text-sm text-muted/30 font-sans">—</span>
                             </td>
                           );
                         }
                         if (!yd.courseExists && courseResult?.perYearScaled.some((ys) => ys.courseExists)) {
                           return (
                             <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
-                              <span className="text-sm text-muted/40 font-mono">a</span>
+                              <span className="text-sm text-muted/40 font-sans">a</span>
                             </td>
                           );
                         }
                         return (
                           <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
-                            <span className="font-mono text-sm tabular-nums">
+                            <span className="font-sans text-sm tabular-nums">
                               {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
                             </span>
                           </td>
@@ -371,13 +383,13 @@ export function AtarCalculator() {
                         if (!row.hscMark || !yd) {
                           return (
                             <td className="px-1 py-2.5 text-center">
-                              <span className="text-sm text-muted/30 font-mono">—</span>
+                              <span className="text-sm text-muted/30 font-sans">—</span>
                             </td>
                           );
                         }
                         return (
                           <td className="px-1 py-2.5 text-center">
-                            <span className="font-mono text-sm tabular-nums">
+                            <span className="font-sans text-sm tabular-nums">
                               {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
                             </span>
                           </td>
@@ -398,7 +410,7 @@ export function AtarCalculator() {
                       const yr = result.yearResults.find((r) => r.year === year);
                       return (
                         <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
-                          <span className="font-mono text-sm font-medium tabular-nums">
+                          <span className="font-sans text-sm font-medium tabular-nums">
                             {yr?.aggregate ? yr.aggregate.toFixed(1) : "—"}
                           </span>
                         </td>
@@ -408,7 +420,7 @@ export function AtarCalculator() {
                       const yr = result.yearResults.find((r) => r.year === yearView);
                       return (
                         <td className="px-1 py-2.5 text-center">
-                          <span className="font-mono text-sm font-medium tabular-nums">
+                          <span className="font-sans text-sm font-medium tabular-nums">
                             {yr?.aggregate ? yr.aggregate.toFixed(1) : "—"}
                           </span>
                         </td>
@@ -418,38 +430,85 @@ export function AtarCalculator() {
             )}
 
             {/* Est. ATAR Row */}
-            {result && hasMarks && (
-              <tr className="border-b border-border bg-surface-hover/30">
-                <td></td>
-                <td className="px-2 py-2.5 text-sm font-semibold text-foreground">{t("estAtar")}</td>
-                <td></td>
-                {yearView === "all"
-                  ? YEARS.map((year) => {
-                      const yr = result.yearResults.find((r) => r.year === year);
-                      const atarVal = yr?.atar;
-                      return (
-                        <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
-                          <span className="font-mono text-sm font-semibold tabular-nums">
-                            {atarVal !== undefined && atarVal > 0 ? atarVal.toFixed(2) : "—"}
-                          </span>
-                        </td>
-                      );
-                    })
-                  : (() => {
-                      const yr = result.yearResults.find((r) => r.year === yearView);
-                      const atarVal = yr?.atar;
-                      return (
-                        <td className="px-1 py-2.5 text-center">
-                          <span className="font-mono text-sm font-semibold tabular-nums">
-                            {atarVal !== undefined && atarVal > 0 ? atarVal.toFixed(2) : "—"}
-                          </span>
-                        </td>
-                      );
-                    })()}
-              </tr>
-            )}
+            {result && hasMarks && (() => {
+              const atars = yearView === "all"
+                ? YEARS.map((y) => { const yr = result.yearResults.find((r) => r.year === y); return yr?.atar; })
+                : [result.yearResults.find((r) => r.year === yearView)?.atar];
+              const validAtars = atars.filter((v): v is number => v !== undefined && v > 0);
+              const maxA = validAtars.length > 1 ? Math.max(...validAtars) : 0;
+              const minA = validAtars.length > 1 ? Math.min(...validAtars) : 0;
+              const hasRange = validAtars.length > 1 && maxA !== minA;
+
+              return (
+                <tr className="border-b border-border bg-surface-hover/30">
+                  <td></td>
+                  <td className="px-2 py-2.5 text-sm font-semibold text-foreground">{t("estAtar")}</td>
+                  <td></td>
+                  {yearView === "all"
+                    ? YEARS.map((year) => {
+                        const yr = result.yearResults.find((r) => r.year === year);
+                        const atarVal = yr?.atar;
+                        const isMax = hasRange && atarVal === maxA;
+                        const isMin = hasRange && atarVal === minA;
+                        return (
+                          <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
+                            <span className={
+                              isMax
+                                ? "inline-flex rounded-md px-2 py-0.5 font-sans text-sm font-semibold tabular-nums bg-emerald-500/15"
+                                : isMin
+                                  ? "inline-flex rounded-md px-2 py-0.5 font-sans text-sm font-semibold tabular-nums bg-red-500/10"
+                                  : "font-sans text-sm font-semibold tabular-nums"
+                            }>
+                              {atarVal !== undefined && atarVal > 0 ? atarVal.toFixed(2) : "—"}
+                            </span>
+                          </td>
+                        );
+                      })
+                    : (() => {
+                        const yr = result.yearResults.find((r) => r.year === yearView);
+                        const atarVal = yr?.atar;
+                        return (
+                          <td className="px-1 py-2.5 text-center">
+                            <span className="font-sans text-sm font-semibold tabular-nums">
+                              {atarVal !== undefined && atarVal > 0 ? atarVal.toFixed(2) : "—"}
+                            </span>
+                          </td>
+                        );
+                      })()}
+                </tr>
+              );
+            })()}
           </tbody>
         </table>
+
+        {/* ATAR Result */}
+        {hasMarks && result && (
+          <div className="text-center py-6 border-t border-border">
+            <p className="text-base font-medium text-foreground">{t("emptyAtar")}</p>
+            <p className="text-6xl font-bold font-sans tabular-nums tracking-tight mt-2">
+              {result.atar.toFixed(2)}
+            </p>
+            {result.atarRange.min > 0 && (
+              <div className="mt-3 flex items-center justify-center gap-2 text-sm">
+                <span className="text-muted">{t("atarRange")}</span>
+                <span className="rounded-md bg-red-500/10 px-2 py-0.5 font-sans font-medium tabular-nums">
+                  {result.atarRange.min.toFixed(2)}
+                </span>
+                <span className="text-muted">–</span>
+                <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 font-sans font-medium tabular-nums">
+                  {result.atarRange.max.toFixed(2)}
+                </span>
+              </div>
+            )}
+          </div>
+        )}
+
+        {!hasMarks && (
+          <div className="text-center py-6 border-t border-border">
+            <p className="text-base font-medium text-foreground">{t("emptyAtar")}</p>
+            <p className="text-6xl font-bold font-sans tabular-nums tracking-tight mt-2 text-muted/20">—</p>
+          </div>
+        )}
       </div>
 
       {/* Dropdown overlay (fixed position, kept in sync via RAF) */}
@@ -513,7 +572,7 @@ export function AtarCalculator() {
                   } disabled:opacity-30 disabled:cursor-not-allowed`}
                 >
                   <span className="truncate">{name}</span>
-                  <span className="text-xs text-muted/50 font-mono ml-2 flex-shrink-0">{u}u</span>
+                  <span className="text-xs text-muted/50 font-sans tabular-nums ml-2 flex-shrink-0">{u}u</span>
                 </button>
               );
             })}
@@ -535,28 +594,6 @@ export function AtarCalculator() {
       <p className="text-xs text-muted/60 leading-relaxed">
         {t("notation")}
       </p>
-
-      {/* ATAR Result */}
-      {hasMarks && result && (
-        <div className="rounded-lg border border-border bg-surface p-8 text-center">
-          <p className="text-sm text-muted">{t("emptyAtar")}</p>
-          <p className="text-5xl font-bold font-mono tabular-nums tracking-tight mt-1">
-            {result.atar.toFixed(2)}
-          </p>
-          {result.atarRange.min > 0 && (
-            <p className="mt-2 text-sm text-muted font-mono">
-              {t("atarRange")} {result.atarRange.min.toFixed(2)} – {result.atarRange.max.toFixed(2)}
-            </p>
-          )}
-        </div>
-      )}
-
-      {!hasMarks && (
-        <div className="rounded-lg border border-border bg-surface p-8 text-center">
-          <p className="text-sm text-muted">{t("emptyAtar")}</p>
-          <p className="text-5xl font-bold font-mono text-muted/20 mt-1">—</p>
-        </div>
-      )}
 
       {/* Warnings */}
       {result && result.warnings.length > 0 && (() => {
@@ -582,45 +619,6 @@ export function AtarCalculator() {
         );
       })()}
 
-      {/* Best 10 breakdown */}
-      {result && hasMarks && result.courses.some((c) => c.unitsCounted > 0) && (
-        <div className="rounded-lg border border-border p-5">
-          <h4 className="text-xs font-medium uppercase tracking-wider text-muted mb-3">
-            {t("best10Heading")}
-          </h4>
-          <div className="grid gap-2 sm:grid-cols-2">
-            {result.courses
-              .filter((c) => c.unitsCounted > 0)
-              .map((c) => (
-                <div
-                  key={c.course}
-                  className="flex items-center justify-between rounded border border-border bg-background px-3 py-2 text-sm"
-                >
-                  <span className="font-medium truncate">{c.course}</span>
-                  <span className="text-xs font-mono text-muted tabular-nums ml-2 flex-shrink-0">
-                    {c.unitsCounted}/{c.units}u
-                  </span>
-                </div>
-              ))}
-          </div>
-        </div>
-      )}
-
-      {/* Disclaimer */}
-      <div className="rounded-lg border border-border/50 px-4 py-3 space-y-2">
-        <p className="text-xs text-muted/60 leading-relaxed">
-          {t("disclaimerBefore")}{" "}
-          <a
-            href="https://www.uac.edu.au/atar-compass"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="underline hover:text-foreground"
-          >
-            {t("disclaimerLink")}
-          </a>
-          {t("disclaimerAfter")}
-        </p>
-      </div>
     </div>
   );
 }
