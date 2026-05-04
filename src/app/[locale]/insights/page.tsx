@@ -38,7 +38,7 @@ export default async function InsightsPage() {
       id: 3,
       icon: TrendingDown,
       myth: t("myth3Statement"),
-      points: [t("myth3p1"), t("myth3p2"), t("myth3p3")],
+      points: [t("myth3p1"), t("myth3p2"), t("myth3p3"), t("myth3p4")],
     },
     {
       id: 4,
@@ -90,7 +90,7 @@ export default async function InsightsPage() {
       statTerm: t("step03StatTerm"),
       formula: "M_i = a r_i^2 + b r_i + c",
       plain: t("step03Plain"),
-      points: [t("step03p1"), t("step03p2"), t("step03p3")],
+      points: [t("step03p1"), t("step03p2"), t("step03p3"), t("step03p4")],
     },
     {
       step: "04",
@@ -365,6 +365,16 @@ export default async function InsightsPage() {
           </div>
         </div>
       </section>
+
+      {/* Closing */}
+      <section className="py-16">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <p className="text-sm text-muted/60 leading-relaxed max-w-3xl mx-auto text-center italic">
+            {t("insightsClosing")}
+          </p>
+        </div>
+      </section>
+
       <JsonLd
         data={{
           "@context": "https://schema.org",

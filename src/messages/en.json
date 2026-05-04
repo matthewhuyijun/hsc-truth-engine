@@ -193,7 +193,8 @@
     "myth7Statement": "ATAR 99 means I'm in the top 1%",
     "myth7p1": "ATAR ranks against the entire Year 12 age cohort — not just ATAR takers. About 43–45% of the age group doesn't sit the HSC or qualify for an ATAR.",
     "myth7p2": "In 2025, 60,432 students received an ATAR (participation rate ~56%). The bottom ~45% of the age population isn't even in the ranking — your percentile gets \"pushed up\" by their absence.",
-    "myth7p3": "ATAR 99.00 ≈ top 1.7% of ATAR-eligible students. ATAR 90.00 ≈ top 17.3%. The gap between your ATAR number and your rank among candidates grows larger the further you go from 99.95."
+    "myth7p3": "ATAR 99.00 ≈ top 1.7% of ATAR-eligible students. ATAR 90.00 ≈ top 17.3%. The gap between your ATAR number and your rank among candidates grows larger the further you go from 99.95.",
+    "insightsClosing": "This page covers only a snippet of the mathematics — numerous edge cases, safeguards, and statistical adjustments in NESA and UAC processes are not detailed here. The system tries very hard to be fair. The only thing you can change is your own performance."
   },
   "Calculator": {
     "heading": "ATAR Calculator",
