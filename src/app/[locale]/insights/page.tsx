@@ -198,7 +198,7 @@ export default async function InsightsPage() {
                 className="group relative rounded-xl border border-border bg-surface overflow-hidden hover:border-accent/30 transition-colors"
               >
                 {/* Myth header */}
-                <div className="border-b border-border bg-rose-500/[0.03] dark:bg-rose-500/[0.05] p-6">
+                <div className="border-b border-border bg-rose-500/[0.03] dark:bg-rose-500/[0.05] p-6 min-h-[150px] flex flex-col justify-between">
                   <div className="flex items-center gap-2 mb-4">
                     <span className="inline-flex items-center rounded px-2 py-0.5 text-xs font-bold uppercase tracking-wider bg-rose-500/10 text-rose-600 dark:text-rose-400">
                       {t("mythN", { n: m.id })}
