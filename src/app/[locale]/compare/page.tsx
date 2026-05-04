@@ -120,70 +120,9 @@ function CompareContent() {
           </div>
 
           {metric !== 'sparo' ? (
-            <>
-              <div>
-                <span className="text-xs font-medium text-muted block mb-1">{t('schoolsLabel')}</span>
-                <SchoolPicker items={allSchools} popularity={popularity} selected={selSchools} onToggle={s => setSelSchools(p => p.includes(s) ? p.filter(v => v !== s) : [...p, s])} />
-              </div>
-              <div>
-                <span className="text-xs font-medium text-muted block mb-1">{t('years')}</span>
-                <IntervalSlider min={YEAR_MIN} max={YEAR_MAX} value={[yearFrom, yearTo]} onChange={([f, t]) => { setYearFrom(f); setYearTo(t); }} />
-              </div>
-            </>
+            <SparoFreeControls t={t} allSchools={allSchools} popularity={popularity} selSchools={selSchools} setSelSchools={setSelSchools} yearFrom={yearFrom} yearTo={yearTo} setYearFrom={setYearFrom} setYearTo={setYearTo} />
           ) : (
-            <>
-              {sparoYearly && (() => {
-                const sparoSchools = allSchools.filter(s => {
-                  const slug = s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                  return sparoYearly[slug];
-                });
-                const normName = (n: string) => n.toLowerCase().replace(/[()]/g, '').trim();
-                const hasCourseInSchool = (slug: string, courseName: string): boolean => {
-                  const sd = sparoYearly[slug];
-                  if (!sd) return false;
-                  const years = Object.keys(sd.years || {});
-                  return years.some(y => sd.years[y]?.some(subj => normName(subj.subject) === normName(courseName)));
-                };
-                // Active schools: only those with data for AT LEAST ONE selected course
-                const activeSparoSchools = selCourses.length > 0
-                  ? sparoSchools.filter(s => {
-                      const slug = s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                      return selCourses.some(code => {
-                        const c = allCourses.find(x => x.code === code);
-                        return c && hasCourseInSchool(slug, c.name);
-                      });
-                    })
-                  : sparoSchools;
-                // Courses: only show those with data in AT LEAST ONE selected school
-                const courseSchools = selSchools.length > 0 ? selSchools.filter(s => sparoSchools.includes(s)) : sparoSchools;
-                const sparoCourses = allCourses.filter(c => {
-                  return courseSchools.some(s => {
-                    const slug = s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-                    return hasCourseInSchool(slug, c.name);
-                  });
-                });
-                return (
-                  <>
-                    <div>
-                        <span className="text-xs font-medium text-muted block mb-1">{t('schoolsLabelCount', { count: activeSparoSchools.length })}{selCourses.length > 1 ? t('maxOneSchool') : ''}</span>
-                        <SchoolPicker items={activeSparoSchools} popularity={popularity} selected={selSchools.filter(s => activeSparoSchools.includes(s))} addDisabled={selSchools.length >= 1 && selCourses.length > 1}
-                        onToggle={s => setSelSchools(p => {
-                          if (selCoursesRef.current.length > 1 && p.length >= 1 && !p.includes(s)) return p;
-                          return p.includes(s) ? p.filter(v => v !== s) : [...p, s];
-                        })} />
-                    </div>
-                    <div>
-                      <span className="text-xs font-medium text-muted block mb-1">{t('coursesLabelCount', { count: sparoCourses.length })}{selSchools.length > 1 ? t('maxOneSchool') : ''}</span>
-                      <CoursePicker courses={sparoCourses} selected={selCourses.filter(c => sparoCourses.some(sc => sc.code === c))} addDisabled={selCourses.length >= 1 && selSchools.length > 1}
-                        onToggle={c => setSelCourses(p => {
-                          if (selSchoolsRef.current.length > 1 && p.length >= 1 && !p.includes(c)) return p;
-                          return p.includes(c) ? p.filter(v => v !== c) : [...p, c];
-                        })} />
-                    </div>
-                  </>
-                );
-              })()}
-            </>
+            <SparoControls t={t} allSchools={allSchools} allCourses={allCourses} popularity={popularity} selSchools={selSchools} setSelSchools={setSelSchools} selCourses={selCourses} setSelCourses={setSelCourses} selCoursesRef={selCoursesRef} selSchoolsRef={selSchoolsRef} sparoYearly={sparoYearly} />
           )}
         </div>
       </section>
@@ -288,6 +227,100 @@ function IntervalSlider({ min, max, value, onChange }: { min: number; max: numbe
   );
 }
 
+function SparoFreeControls({ t, allSchools, popularity, selSchools, setSelSchools, yearFrom, yearTo, setYearFrom, setYearTo }: { t: ReturnType<typeof useTranslations<"Compare">>; allSchools: string[]; popularity: Map<string, number>; selSchools: string[]; setSelSchools: React.Dispatch<React.SetStateAction<string[]>>; yearFrom: number; yearTo: number; setYearFrom: (y: number) => void; setYearTo: (y: number) => void; }) {
+  return (
+    <>
+      <div>
+        <span className="text-xs font-medium text-muted block mb-1">{t('schoolsLabel')}</span>
+        <SchoolPicker items={allSchools} popularity={popularity} selected={selSchools} onToggle={s => setSelSchools(prev => prev.includes(s) ? prev.filter(v => v !== s) : [...prev, s])} />
+      </div>
+      <div>
+        <span className="text-xs font-medium text-muted block mb-1">{t('years')}</span>
+        <IntervalSlider min={YEAR_MIN} max={YEAR_MAX} value={[yearFrom, yearTo]} onChange={([f, t]) => { setYearFrom(f); setYearTo(t); }} />
+      </div>
+    </>
+  );
+}
+
+function SparoControlsInner({ t, allSchools, allCourses, popularity, selSchools, onToggleSchool, selCourses, onToggleCourse, sparoYearly }: { t: ReturnType<typeof useTranslations<"Compare">>; allSchools: string[]; allCourses: CourseEntry[]; popularity: Map<string, number>; selSchools: string[]; onToggleSchool: (s: string) => void; selCourses: string[]; onToggleCourse: (c: string) => void; sparoYearly: Record<string, { name: string; years: Record<string, { subject: string; school_average: number; state_average: number }[]> }>; }) {
+  const normName = (n: string) => n.toLowerCase().replace(/[()]/g, '').trim();
+
+  const sparoSchools = useMemo(() => allSchools.filter(s => {
+    const slug = s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    return sparoYearly[slug];
+  }), [allSchools, sparoYearly]);
+
+  const hasCourseInSchool = useCallback((slug: string, courseName: string): boolean => {
+    const sd = sparoYearly[slug];
+    if (!sd) return false;
+    const years = Object.keys(sd.years || {});
+    return years.some(y => sd.years[y]?.some(subj => normName(subj.subject) === normName(courseName)));
+  }, [sparoYearly]);
+
+  const activeSparoSchools = useMemo(() => {
+    if (selCourses.length === 0) return sparoSchools;
+    return sparoSchools.filter(s => {
+      const slug = s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      return selCourses.some(code => {
+        const c = allCourses.find(x => x.code === code);
+        return c && hasCourseInSchool(slug, c.name);
+      });
+    });
+  }, [selCourses, sparoSchools, allCourses, hasCourseInSchool]);
+
+  const courseSchools = useMemo(() => {
+    if (selSchools.length === 0) return sparoSchools;
+    return selSchools.filter(s => sparoSchools.includes(s));
+  }, [selSchools, sparoSchools]);
+
+  const sparoCourses = useMemo(() =>
+    allCourses.filter(c => courseSchools.some(s => {
+      const slug = s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      return hasCourseInSchool(slug, c.name);
+    })),
+    [allCourses, courseSchools, hasCourseInSchool]
+  );
+
+  return (
+    <>
+      <div>
+        <span className="text-xs font-medium text-muted block mb-1">{t('schoolsLabelCount', { count: activeSparoSchools.length })}{selCourses.length > 1 ? t('maxOneSchool') : ''}</span>
+        <SchoolPicker items={activeSparoSchools} popularity={popularity} selected={selSchools.filter(s => activeSparoSchools.includes(s))} addDisabled={selSchools.length >= 1 && selCourses.length > 1}
+        onToggle={onToggleSchool} />
+      </div>
+      <div>
+        <span className="text-xs font-medium text-muted block mb-1">{t('coursesLabelCount', { count: sparoCourses.length })}{selSchools.length > 1 ? t('maxOneSchool') : ''}</span>
+        <CoursePicker courses={sparoCourses} selected={selCourses.filter(c => sparoCourses.some(sc => sc.code === c))} addDisabled={selCourses.length >= 1 && selSchools.length > 1}
+          onToggle={onToggleCourse} />
+      </div>
+    </>
+  );
+}
+
+function SparoControls({ t, allSchools, allCourses, popularity, selSchools, setSelSchools, selCourses, setSelCourses, selSchoolsRef, selCoursesRef, sparoYearly }: { t: ReturnType<typeof useTranslations<"Compare">>; allSchools: string[]; allCourses: CourseEntry[]; popularity: Map<string, number>; selSchools: string[]; setSelSchools: React.Dispatch<React.SetStateAction<string[]>>; selCourses: string[]; setSelCourses: React.Dispatch<React.SetStateAction<string[]>>; selSchoolsRef: React.MutableRefObject<string[]>; selCoursesRef: React.MutableRefObject<string[]>; sparoYearly: Record<string, { name: string; years: Record<string, { subject: string; school_average: number; state_average: number }[]> }> | null; }) {
+  const onToggleSchool = useCallback((s: string) => {
+    setSelSchools(p => {
+      if (selCoursesRef.current.length > 1 && p.length >= 1 && !p.includes(s)) return p;
+      return p.includes(s) ? p.filter(v => v !== s) : [...p, s];
+    });
+  }, [selCoursesRef]);
+  const onToggleCourse = useCallback((c: string) => {
+    setSelCourses(p => {
+      if (selSchoolsRef.current.length > 1 && p.length >= 1 && !p.includes(c)) return p;
+      return p.includes(c) ? p.filter(v => v !== c) : [...p, c];
+    });
+  }, [selSchoolsRef]);
+  if (!sparoYearly) return null;
+  return (
+    <SparoControlsInner
+      t={t} allSchools={allSchools} allCourses={allCourses} popularity={popularity}
+      selSchools={selSchools}
+      onToggleSchool={onToggleSchool}
+      selCourses={selCourses}
+      onToggleCourse={onToggleCourse}
+      sparoYearly={sparoYearly} />
+  );
+}
 function SchoolPicker({ items, popularity, selected, onToggle, addDisabled }: { items: string[]; popularity: Map<string, number>; selected: string[]; onToggle: (s: string) => void; addDisabled?: boolean; }) {
   const t = useTranslations("Compare");
   const [open, setOpen] = useState(false); const [search, setSearch] = useState(''); const cr = useRef<HTMLDivElement | null>(null);
@@ -503,7 +536,7 @@ function SparoChart({ schools, selCourses, courses, sparoYearly }: { schools: st
                 const c = courses.find(x => x.code === code);
                 const key = schools.length > 1 ? `${school}__${code}` : code;
                 const label = schools.length > 1 && selCourses.length === 1 ? (school.length > 10 ? school.slice(0, 9) + '…' : school) : schools.length > 1 ? `${c?.name || code} (${school.length > 10 ? school.slice(0, 9) + '…' : school})` : c?.name || code;
-                return <Line key={key} type="monotone" dataKey={key} name={label} stroke={lineColor(si * selCourses.length + ci)} strokeWidth={2} dot={{ r: 3 }} connectNulls />;
+                return <Line key={key} type="monotone" dataKey={key} name={label} stroke={lineColor(si * selCourses.length + ci)} strokeWidth={2} dot={false} activeDot={{ r: 4, strokeWidth: 1, stroke: "var(--background)" }} connectNulls />;
               })
             )}
             {selCourses.map(code => {
