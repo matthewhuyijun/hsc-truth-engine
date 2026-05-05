@@ -162,7 +162,9 @@ export function calculateAtar(inputs: CourseInput[]): CalculatorResult {
     AVAILABLE_YEARS.forEach((year) => {
       const cd = _getCourseData(inp.course, year);
       if (cd) {
-        const sm = calculateScaledMarkForYear(inp.course, year, inp.hscMark);
+        // Normalize: 1-unit courses have marks out of 50, convert to /100 scale
+        const normalizedMark = units === 1 ? inp.hscMark * 2 : inp.hscMark;
+        const sm = calculateScaledMarkForYear(inp.course, year, normalizedMark);
         existingScaledMarks.push(sm);
         perYearScaled.push({ year, scaledMark: sm, courseExists: true });
       }
