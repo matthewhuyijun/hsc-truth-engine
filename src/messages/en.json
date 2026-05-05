@@ -466,6 +466,15 @@
     "comingSoon": "More updates coming.",
     "releases": [
       {
+        "date": "6 May 2026",
+        "items": [
+          "Scaling data completeness: ~580 previously-missing course entries restored across 2010-2025, including all small-enrolment language and extension courses. The Calculator and Scaling Graphs now handle niche subjects like Classical Hebrew Continuers, Macedonian Continuers, and Indonesian Extension — previously these returned empty results.",
+          "Scaling data pipeline rewritten with unified PDF parser (extract_scaling_v2.py) that auto-detects format variants across all years, handles multi-line course names, and captures courses with fewer than 40 students (no percentile data — uses z-score fallback).",
+          "Scaling data now spans 19 years (2007-2025) with 212 unique courses and 1,825 total course-year entries — up from ~150 courses and ~1,300 entries.",
+          "Small-enrolment courses (<40 students) now appear in the Calculator and Graph dropdowns with z-score based estimates instead of failing silently."
+        ]
+      },
+      {
         "date": "May 2026",
         "items": [
           "ATAR Calculator redesign: unified typography (all numbers use consistent tabular-nums font), estimated ATAR result merged into main table container, and green/red background highlighting for highest/lowest yearly ATAR estimates — matching HSCninja design patterns.",
