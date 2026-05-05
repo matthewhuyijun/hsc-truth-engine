@@ -231,6 +231,7 @@
     "addCourse": "+ Add course",
     "notation": "a = insufficient scaling data, uses average of available years. Math Ext 1 = 2 units when paired with Ext 2. Math Advanced excluded when Ext 1 + 2 selected.",
     "emptyAtar": "Your estimated ATAR is:",
+    "needMoreUnits": "Add more courses — you need at least 10 units.",
     "atarRange": "Range:",
     "best10Heading": "Best 10 Unit Breakdown",
     "disclaimerBefore": "Uses UAC scaling data 2019–2025. Marks entered out of 100 for all courses (extension: double NESA mark). Results are estimates using historical statistics. For the most theoretically accurate ATAR estimate, use",

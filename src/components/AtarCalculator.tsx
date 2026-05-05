@@ -337,15 +337,18 @@ export function AtarCalculator() {
                       <input
                         type="number"
                         min="0"
-                        max="100"
+                        max={row.course ? resolveUnits(row.course, activeInputsForUnits) === 1 ? 50 : 100 : 100}
                         step="1"
                         value={row.hscMark || ""}
                         onChange={(e) =>
                           updateRow(i, {
-                            hscMark: Math.min(100, Math.max(0, parseInt(e.target.value, 10) || 0)),
+                            hscMark: Math.min(
+                              row.course ? (resolveUnits(row.course, activeInputsForUnits) === 1 ? 50 : 100) : 100,
+                              Math.max(0, parseInt(e.target.value, 10) || 0)
+                            ),
                           })
                         }
-                        placeholder="—"
+                        placeholder={row.course ? (resolveUnits(row.course, activeInputsForUnits) === 1 ? "/50" : "/100") : "—"}
                         disabled={!row.course}
                         className="w-16 rounded border border-border bg-background px-2 py-1.5 text-center font-sans tabular-nums text-sm focus:border-foreground/30 focus:outline-none disabled:opacity-30"
                       />
@@ -478,11 +481,27 @@ export function AtarCalculator() {
                 </tr>
               );
             })()}
+
+            {/* Add course row */}
+            <tr className="border-b border-border/30">
+              <td></td>
+              <td colSpan={2} className="px-2 py-2">
+                <button
+                  onClick={addRow}
+                  className="w-full flex items-center justify-center gap-1.5 rounded border border-dashed border-border/50 px-3 py-1.5 text-sm text-muted/50 hover:text-muted hover:border-muted/30 transition-colors"
+                >
+                  + {t("addCourse")}
+                </button>
+              </td>
+              {yearView === "all"
+                ? YEARS.map((year) => <td key={year} className="hidden sm:table-cell"></td>)
+                : <td></td>}
+            </tr>
           </tbody>
         </table>
 
         {/* ATAR Result */}
-        {hasMarks && result && (
+        {hasMarks && result && result.totalUnits >= 10 && (
           <div className="text-center py-6 border-t border-border">
             <p className="text-sm text-muted">{t("emptyAtar")}</p>
             <p className="text-5xl font-normal font-sans tabular-nums tracking-tight mt-1 text-foreground">
@@ -498,10 +517,18 @@ export function AtarCalculator() {
           </div>
         )}
 
+        {hasMarks && result && result.totalUnits < 10 && (
+          <div className="text-center py-6 border-t border-border">
+            <p className="text-sm text-muted">{t("emptyAtar")}</p>
+            <p className="mt-2 text-sm text-muted/60">
+              {t("needMoreUnits")}
+            </p>
+          </div>
+        )}
+
         {!hasMarks && (
           <div className="text-center py-6 border-t border-border">
-            <p className="text-base font-medium text-foreground">{t("emptyAtar")}</p>
-            <p className="text-6xl font-bold font-sans tabular-nums tracking-tight mt-2 text-muted/20">—</p>
+            <p className="text-sm text-muted">{t("emptyAtar")}</p>
           </div>
         )}
       </div>
@@ -574,16 +601,6 @@ export function AtarCalculator() {
           </div>
         </div>
       )}
-
-      {/* Add course button */}
-      <div className="flex justify-center">
-        <button
-          onClick={addRow}
-          className="inline-flex items-center gap-1.5 rounded-lg border border-border px-5 py-2 text-sm font-medium text-muted hover:text-foreground hover:border-foreground/30 transition-colors"
-        >
-          {t("addCourse")}
-        </button>
-      </div>
 
       {/* Notation */}
       <p className="text-xs text-muted/60 leading-relaxed">

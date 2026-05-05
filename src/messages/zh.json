@@ -231,6 +231,7 @@
     "addCourse": "+ 添加课程",
     "notation": "a = 缩放数据不足，使用可用年份均值。Math Ext 1 在与 Ext 2 同选时计 2 单元。Math Advanced 在 Ext 1 + 2 同选时被排除。",
     "emptyAtar": "你的预估 ATAR 是：",
+    "needMoreUnits": "请添加更多课程——你需要至少 10 个单元。",
     "atarRange": "范围：",
     "best10Heading": "最佳 10 单元明细",
     "disclaimerBefore": "使用 2019–2025 年 UAC 缩放数据。所有课程分数以满分 100 输入（Extension：NESA 分数翻倍）。结果为基于历史统计的估算。如需理论上最准确的 ATAR 估算，请使用",
