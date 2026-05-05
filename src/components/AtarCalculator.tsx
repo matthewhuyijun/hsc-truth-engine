@@ -8,6 +8,7 @@ import {
   calculateAtar,
   resolveUnits,
   shouldExcludeCourse,
+  aggregateToAtarForYear,
   type CourseInput,
   type CalculatorResult,
 } from "@/lib/atar";
@@ -58,6 +59,7 @@ export function AtarCalculator() {
   const triggerRef = useRef<HTMLElement | null>(null);
   const dropdownContainerRef = useRef<HTMLDivElement | null>(null);
   const [yearView, setYearView] = useState<"all" | string>("all");
+  const [showAtarEq, setShowAtarEq] = useState(true);
 
   const allCourses = useMemo(() => getAllCourses(), []);
 
@@ -235,6 +237,31 @@ export function AtarCalculator() {
         </div>
       </div>
 
+      {/* ATAR Eq / Scaled toggle */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-muted">{t("showing")}</span>
+        <button
+          onClick={() => setShowAtarEq(!showAtarEq)}
+          className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors border ${
+            showAtarEq
+              ? "bg-foreground text-background border-foreground"
+              : "border-border text-muted hover:text-foreground hover:border-foreground/30"
+          }`}
+        >
+          {t("atarEquivalent")}
+        </button>
+        <button
+          onClick={() => setShowAtarEq(!showAtarEq)}
+          className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors border ${
+            !showAtarEq
+              ? "bg-foreground text-background border-foreground"
+              : "border-border text-muted hover:text-foreground hover:border-foreground/30"
+          }`}
+        >
+          {t("scaledMarks")}
+        </button>
+      </div>
+
       {/* Table */}
       <div className="rounded-lg border border-border overflow-x-auto" ref={tableRef}>
         <table className="w-full text-sm table-fixed">
@@ -366,9 +393,25 @@ export function AtarCalculator() {
                         }
                         return (
                           <td key={year} className="hidden sm:table-cell px-1 py-2.5 text-center">
-                            <span className="font-sans text-sm tabular-nums">
-                              {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
-                            </span>
+                            {showAtarEq ? (
+                              (() => {
+                                const atarEq = yd.scaledMark > 0
+                                  ? aggregateToAtarForYear(yd.scaledMark * 10, year)
+                                  : 0;
+                                if (atarEq <= 0) return <span className="text-sm text-muted/30 font-sans">—</span>;
+                                const isHigh = atarEq >= 90;
+                                return (
+                                  <span className="inline-flex items-center gap-1 font-sans text-sm tabular-nums">
+                                    <span className={`inline-block w-2 h-2 rounded-full border-2 ${isHigh ? "border-emerald-500" : "border-red-400"}`} />
+                                    {atarEq.toFixed(2)}
+                                  </span>
+                                );
+                              })()
+                            ) : (
+                              <span className="font-sans text-sm tabular-nums">
+                                {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
+                              </span>
+                            )}
                           </td>
                         );
                       })
@@ -383,9 +426,25 @@ export function AtarCalculator() {
                         }
                         return (
                           <td className="px-1 py-2.5 text-center">
-                            <span className="font-sans text-sm tabular-nums">
-                              {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
-                            </span>
+                            {showAtarEq ? (
+                              (() => {
+                                const atarEq = yd.scaledMark > 0
+                                  ? aggregateToAtarForYear(yd.scaledMark * 10, yearView)
+                                  : 0;
+                                if (atarEq <= 0) return <span className="text-sm text-muted/30 font-sans">—</span>;
+                                const isHigh = atarEq >= 90;
+                                return (
+                                  <span className="inline-flex items-center gap-1 font-sans text-sm tabular-nums">
+                                    <span className={`inline-block w-2 h-2 rounded-full border-2 ${isHigh ? "border-emerald-500" : "border-red-400"}`} />
+                                    {atarEq.toFixed(2)}
+                                  </span>
+                                );
+                              })()
+                            ) : (
+                              <span className="font-sans text-sm tabular-nums">
+                                {yd.scaledMark > 0 ? yd.scaledMark.toFixed(1) : "—"}
+                              </span>
+                            )}
                           </td>
                         );
                       })()}

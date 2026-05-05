@@ -80,7 +80,7 @@ function calculateScaledMarkForYear(courseName: string, year: string, hscMark: n
   return Math.round(scaled * 10) / 10;
 }
 
-function aggregateToAtarForYear(aggregate: number, year: string): number {
+export function aggregateToAtarForYear(aggregate: number, year: string): number {
   const points: { atar: number; agg: number }[] = [];
   for (const [atarStr, yearData] of Object.entries(atarMapping)) {
     const agg = (yearData as Record<string, number>)[year];
