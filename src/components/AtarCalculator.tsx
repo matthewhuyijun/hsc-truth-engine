@@ -495,7 +495,7 @@ export function AtarCalculator() {
         {hasMarks && result && result.totalUnits >= 10 && (
           <div className="text-center py-6 border-t border-border">
             <p className="text-sm text-muted">{t("emptyAtar")}</p>
-            <p className="text-5xl font-normal font-sans tabular-nums tracking-tight mt-1 text-foreground">
+            <p className="text-5xl font-semibold font-sans tabular-nums tracking-tight mt-1 text-foreground">
               {result.atar.toFixed(2)}
             </p>
             {result.atarRange.min > 0 && (
