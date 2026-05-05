@@ -42,9 +42,19 @@ export const PERCENTILE_LABELS: Record<string, number> = { p25: 25, p50: 50, p75
 
 export function getAllCourses(): string[] {
   const names = new Set<string>();
-  for (const yearData of Object.values(ALL_YEARS_DATA)) {
-    for (const c of yearData.courses) {
+  // Only include courses that exist in the latest year (2025)
+  const latest = ALL_YEARS_DATA["2025"];
+  if (latest) {
+    for (const c of latest.courses) {
       names.add(normalizeCourseName(c.course));
+    }
+  }
+  // Fallback: include all years if 2025 not available
+  if (names.size === 0) {
+    for (const yearData of Object.values(ALL_YEARS_DATA)) {
+      for (const c of yearData.courses) {
+        names.add(normalizeCourseName(c.course));
+      }
     }
   }
   return Array.from(names).sort();
