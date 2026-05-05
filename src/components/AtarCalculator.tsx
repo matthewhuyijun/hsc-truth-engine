@@ -260,26 +260,6 @@ export function AtarCalculator() {
                     </th>
                   )}
             </tr>
-            <tr className="border-b border-border text-muted">
-              <th></th>
-              <th className="px-2 py-2.5 text-left font-medium text-xs uppercase tracking-wider">
-                {t("tableUnits")}
-              </th>
-              <th className="px-1 py-2.5 text-center font-medium text-xs uppercase tracking-wider">
-                {t("tableOutOf")}
-              </th>
-              {yearView === "all"
-                ? YEARS.map((year) => (
-                    <th key={year} className="hidden sm:table-cell px-1 py-2.5 text-center font-sans tabular-nums text-xs text-muted">
-                      {t("tableScaled")}
-                    </th>
-                  ))
-                : (
-                    <th className="px-1 py-2.5 text-center font-sans tabular-nums text-xs text-muted">
-                      {t("tableScaled")}
-                    </th>
-                  )}
-            </tr>
           </thead>
           <tbody>
             {rows.map((row, i) => {
