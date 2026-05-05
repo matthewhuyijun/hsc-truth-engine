@@ -207,8 +207,8 @@ export function AtarCalculator() {
         </ol>
       </div>
 
-      {/* Year filter */}
-      <div className="flex items-center gap-2">
+      {/* Year filter + ATAR Eq / Scaled toggle */}
+      <div className="flex items-center gap-3 flex-wrap">
         <span className="text-xs font-medium text-muted">{t("yearFilter")}</span>
         <div className="flex flex-wrap gap-1">
           <button
@@ -235,11 +235,7 @@ export function AtarCalculator() {
             </button>
           ))}
         </div>
-      </div>
-
-      {/* ATAR Eq / Scaled toggle */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-muted">{t("showing")}</span>
+        <span className="text-xs font-medium text-muted ml-2">{t("showing")}</span>
         <button
           onClick={() => setShowAtarEq(!showAtarEq)}
           className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors border ${
