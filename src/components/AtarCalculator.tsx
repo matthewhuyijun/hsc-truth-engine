@@ -99,7 +99,13 @@ export function AtarCalculator() {
 
   function removeCourse(idx: number, e: React.MouseEvent) {
     e.stopPropagation();
-    updateRow(idx, createEmptyRow());
+    if (idx < 5) {
+      // First 5 rows: clear to empty (can't have fewer than 5 rows)
+      updateRow(idx, createEmptyRow());
+    } else {
+      // 6th row and beyond: remove entirely
+      setRows((prev) => prev.filter((_, i) => i !== idx));
+    }
   }
 
   function addRow() {
@@ -333,7 +339,7 @@ export function AtarCalculator() {
 
                   {/* HSC Mark */}
                   <td className="px-1 py-2.5">
-                    <div className="flex items-center justify-center">
+                    <div className="flex items-center justify-center gap-1">
                       <input
                         type="number"
                         min="0"
@@ -348,10 +354,15 @@ export function AtarCalculator() {
                             ),
                           })
                         }
-                        placeholder={row.course ? (resolveUnits(row.course, activeInputsForUnits) === 1 ? "/50" : "/100") : "—"}
+                        placeholder="—"
                         disabled={!row.course}
-                        className="w-16 rounded border border-border bg-background px-2 py-1.5 text-center font-sans tabular-nums text-sm focus:border-foreground/30 focus:outline-none disabled:opacity-30"
+                        className="w-14 rounded border border-border bg-background px-2 py-1.5 text-center font-sans tabular-nums text-sm focus:border-foreground/30 focus:outline-none disabled:opacity-30"
                       />
+                      {row.course && (
+                        <span className="text-xs text-muted/50 font-sans flex-shrink-0">
+                          /{resolveUnits(row.course, activeInputsForUnits) === 1 ? "50" : "100"}
+                        </span>
+                      )}
                     </div>
                   </td>
 

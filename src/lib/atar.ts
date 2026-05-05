@@ -270,7 +270,7 @@ export function calculateAtar(inputs: CourseInput[]): CalculatorResult {
     .reduce((sum, c) => sum + c.units, 0);
 
   if (totalUnits < 10) {
-    warnings.push("You need at least 10 units to be eligible for an ATAR.");
+    // Warning now shown in the UI instead — ATAR result hidden when <10 units
   }
 
   const hasEnglish = coursesWithCount.some((cr) => isEnglishCourse(cr.course) && !cr.excluded);
