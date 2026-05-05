@@ -82,6 +82,10 @@ export function Header() {
               {item.label}
             </Link>
           ))}
+          <div className="flex items-center gap-3 px-4 py-3 border-b border-border/50">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
         </nav>
       )}
     </header>
