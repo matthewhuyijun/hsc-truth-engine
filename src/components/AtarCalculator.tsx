@@ -484,20 +484,15 @@ export function AtarCalculator() {
         {/* ATAR Result */}
         {hasMarks && result && (
           <div className="text-center py-6 border-t border-border">
-            <p className="text-base font-medium text-foreground">{t("emptyAtar")}</p>
-            <p className="text-6xl font-bold font-sans tabular-nums tracking-tight mt-2">
+            <p className="text-sm text-muted">{t("emptyAtar")}</p>
+            <p className="text-5xl font-normal font-sans tabular-nums tracking-tight mt-1 text-foreground">
               {result.atar.toFixed(2)}
             </p>
             {result.atarRange.min > 0 && (
-              <div className="mt-3 flex items-center justify-center gap-2 text-sm">
-                <span className="text-muted">{t("atarRange")}</span>
-                <span className="rounded-md bg-red-500/10 px-2 py-0.5 font-sans font-medium tabular-nums">
-                  {result.atarRange.min.toFixed(2)}
-                </span>
-                <span className="text-muted">–</span>
-                <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 font-sans font-medium tabular-nums">
-                  {result.atarRange.max.toFixed(2)}
-                </span>
+              <div className="mt-2 flex items-center justify-center gap-1.5 text-sm text-muted font-sans tabular-nums">
+                <span>{result.atarRange.min.toFixed(2)}</span>
+                <span className="text-muted/40">–</span>
+                <span>{result.atarRange.max.toFixed(2)}</span>
               </div>
             )}
           </div>
