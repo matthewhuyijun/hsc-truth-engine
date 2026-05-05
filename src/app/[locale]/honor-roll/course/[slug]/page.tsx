@@ -1093,13 +1093,14 @@ function CourseEnrollmentSection({
 }) {
   const hasBands = courseStats.bands && Object.keys(courseStats.bands).length > 0;
   const bandOrder = ['6', '5', '4', '3', '2', '1'] as const;
+  const genderTotal = courseStats.female + courseStats.male + courseStats.non_binary;
 
   return (
     <section className="px-4 sm:px-6 lg:px-8 py-8">
       <div className="mb-4">
         <h2 className="text-lg font-semibold tracking-tight">Course Statistics</h2>
         <p className="mt-1 text-sm text-muted">
-          {courseStats.total.toLocaleString()} students enrolled in {year}.
+          {genderTotal.toLocaleString()} students enrolled in {year}.
         </p>
       </div>
 
@@ -1109,16 +1110,16 @@ function CourseEnrollmentSection({
           <div className="flex h-4 rounded overflow-hidden bg-accent-dim mb-3">
             <div
               className="h-full bg-foreground transition-all"
-              style={{ width: `${Math.max(courseStats.total > 0 ? (courseStats.female / courseStats.total) * 100 : 0, 0.5)}%`, opacity: 0.8 }}
+              style={{ width: `${Math.max(genderTotal > 0 ? (courseStats.female / genderTotal) * 100 : 0, 0.5)}%`, opacity: 0.8 }}
             />
             <div
               className="h-full bg-foreground transition-all"
-              style={{ width: `${Math.max(courseStats.total > 0 ? (courseStats.male / courseStats.total) * 100 : 0, 0.5)}%`, opacity: 0.5 }}
+              style={{ width: `${Math.max(genderTotal > 0 ? (courseStats.male / genderTotal) * 100 : 0, 0.5)}%`, opacity: 0.5 }}
             />
             {courseStats.non_binary > 0 && (
               <div
                 className="h-full bg-foreground transition-all"
-                style={{ width: `${Math.max((courseStats.non_binary / courseStats.total) * 100, 0.5)}%`, opacity: 0.22 }}
+                style={{ width: `${Math.max((courseStats.non_binary / genderTotal) * 100, 0.5)}%`, opacity: 0.22 }}
               />
             )}
           </div>
@@ -1128,7 +1129,7 @@ function CourseEnrollmentSection({
               { label: 'Male', value: courseStats.male, opacity: 0.5 },
               ...(courseStats.non_binary > 0 ? [{ label: 'Non-binary', value: courseStats.non_binary, opacity: 0.22 as number }] : []),
             ].map(item => {
-              const pct = courseStats.total > 0 ? Math.round((item.value / courseStats.total) * 100) : 0;
+              const pct = genderTotal > 0 ? Math.round((item.value / genderTotal) * 100) : 0;
               return (
                 <span key={item.label} className="inline-flex items-center gap-1.5 text-xs">
                   <span className="w-2 h-2 rounded-sm shrink-0 bg-foreground" style={{ opacity: item.opacity }} />
@@ -1164,7 +1165,7 @@ function CourseEnrollmentSection({
                 const pct = courseStats.bands![`Band ${band}`] || 0;
                 const count = band === '6' && band6Count != null
                   ? band6Count
-                  : courseStats.total > 0 ? Math.round(courseStats.total * pct / 100) : 0;
+                  : genderTotal > 0 ? Math.round(genderTotal * pct / 100) : 0;
                 const opacities = [0.80, 0.64, 0.48, 0.34, 0.22, 0.12];
                 return (
                   <span key={band} className="inline-flex items-center gap-1.5 text-xs">

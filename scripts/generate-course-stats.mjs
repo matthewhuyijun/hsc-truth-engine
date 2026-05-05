@@ -35,7 +35,7 @@ function loadSexData(year) {
     if (!code) continue;
     const male = parseValue(row[2]);
     const female = parseValue(row[3]);
-    const total = parseValue(row[4]);
+    const total = parseValue(row[4]) || (male + female);
     result[code] = {
       name: cleanName(name),
       total,
