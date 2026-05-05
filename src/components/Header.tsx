@@ -55,8 +55,10 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <LanguageToggle />
-          <ThemeToggle />
+          <div className="hidden sm:flex items-center gap-2">
+            <LanguageToggle />
+            <ThemeToggle />
+          </div>
           <button
             onClick={() => setMobileOpen(!mobileOpen)}
             className="sm:hidden inline-flex h-7 w-7 items-center justify-center rounded text-muted hover:text-foreground transition-colors"
@@ -82,7 +84,7 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <div className="flex items-center gap-3 px-4 py-3 border-b border-border/50">
+          <div className="flex sm:hidden items-center gap-3 px-4 py-3 border-b border-border/50">
             <LanguageToggle />
             <ThemeToggle />
           </div>
