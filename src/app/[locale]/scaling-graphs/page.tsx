@@ -9,6 +9,7 @@ import {
   buildComparisonTable,
   YEAR_MODES,
   GRAPH_MODES,
+  ALL_SCALING_YEARS,
   type CourseCurve,
   type ComparisonRow,
   type YearMode,
@@ -25,6 +26,7 @@ export default function ScalingGraphsPage() {
   const [selected, setSelected] = useState<string[]>([]);
   const [yearMode, setYearMode] = useState<YearMode>("last");
   const [graphMode, setGraphMode] = useState<GraphMode>("percentile");
+  const [selectedYear, setSelectedYear] = useState<string>("2025");
   const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeIdx, setActiveIdx] = useState(0);
@@ -71,14 +73,14 @@ export default function ScalingGraphsPage() {
 
   const curves: CourseCurve[] = useMemo(() => {
     return selected
-      .map((course) => generateCurve(course, yearMode, graphMode))
+      .map((course) => generateCurve(course, yearMode, graphMode, selectedYear))
       .filter((c) => c.points.length > 0);
-  }, [selected, yearMode, graphMode]);
+  }, [selected, yearMode, graphMode, selectedYear]);
 
   const comparisonTable: ComparisonRow[] = useMemo(() => {
     if (selected.length === 0) return [];
-    return buildComparisonTable(selected, yearMode, graphMode);
-  }, [selected, yearMode, graphMode]);
+    return buildComparisonTable(selected, yearMode, graphMode, selectedYear);
+  }, [selected, yearMode, graphMode, selectedYear]);
 
   const xHeader = graphMode === "hsc" ? t("xAxisHSC") : t("xAxisPercentile");
 
@@ -220,10 +222,22 @@ export default function ScalingGraphsPage() {
                         : "bg-background text-muted hover:text-foreground"
                     }`}
                   >
-                    {ym.value === "last" ? t("year2025") : t("year5yrAvg")}
+                    {ym.value === "last" ? t("year2025") : ym.value === "avg5" ? t("year5yrAvg") : t("yearPick")}
                   </button>
                 ))}
               </div>
+              {yearMode === "year" && (
+                <select
+                  value={selectedYear}
+                  onChange={(e) => setSelectedYear(e.target.value)}
+                  className="mt-2 w-full rounded-md border border-border bg-surface px-2.5 py-1.5 text-xs font-medium
+                    focus:outline-none focus:ring-2 focus:ring-foreground/10"
+                >
+                  {ALL_SCALING_YEARS.map((y) => (
+                    <option key={y} value={y}>{y}</option>
+                  ))}
+                </select>
+              )}
             </div>
           </div>
         </div>

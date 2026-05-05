@@ -32,11 +32,18 @@ export function getAllScalingCourses(): string[] {
 }
 
 const LAST_YEAR = "2025";
+const FIRST_YEAR = "2007";
 const AVG_YEARS = ["2021", "2022", "2023", "2024", "2025"];
+
+export const ALL_SCALING_YEARS = Array.from(
+  { length: parseInt(LAST_YEAR) - parseInt(FIRST_YEAR) + 1 },
+  (_, i) => String(parseInt(FIRST_YEAR) + i)
+);
 
 export const YEAR_MODES = [
   { value: "last", label: "2025" },
   { value: "avg5", label: "5-Year Avg" },
+  { value: "year", label: "Year" },
 ] as const;
 
 export const GRAPH_MODES = [
@@ -44,7 +51,7 @@ export const GRAPH_MODES = [
   { value: "hsc", label: "HSC → Scaled" },
 ] as const;
 
-export type YearMode = "last" | "avg5";
+export type YearMode = "last" | "avg5" | "year";
 export type GraphMode = "hsc" | "percentile";
 
 function getParamsForYear(courseName: string, year: string): ScalingParams | null {
@@ -70,8 +77,9 @@ function averageParams(paramsList: ScalingParams[]): ScalingParams {
   };
 }
 
-export function getScalingParams(courseName: string, mode: YearMode): ScalingParams | null {
+export function getScalingParams(courseName: string, mode: YearMode, selectedYear?: string): ScalingParams | null {
   if (mode === "last") return getParamsForYear(courseName, LAST_YEAR);
+  if (mode === "year" && selectedYear) return getParamsForYear(courseName, selectedYear);
   const paramsList: ScalingParams[] = [];
   for (const year of AVG_YEARS) {
     const p = getParamsForYear(courseName, year);
@@ -90,9 +98,12 @@ function computeScaledMarkZScore(hscMark: number, params: ScalingParams): number
   return Math.round(scaled * 10) / 10;
 }
 
-function getHscAnchorPoints(courseName: string, mode: YearMode): ReturnType<typeof getPercentileAnchorsForYear> {
+function getHscAnchorPoints(courseName: string, mode: YearMode, selectedYear?: string): ReturnType<typeof getPercentileAnchorsForYear> {
   if (mode === "last") {
     return getPercentileAnchorsForYear(courseName, LAST_YEAR);
+  }
+  if (mode === "year" && selectedYear) {
+    return getPercentileAnchorsForYear(courseName, selectedYear);
   }
   const allAnchors = [];
   for (const year of AVG_YEARS) {
@@ -117,8 +128,8 @@ function getHscAnchorPoints(courseName: string, mode: YearMode): ReturnType<type
   return averaged;
 }
 
-function generateHscPoints(courseName: string, mode: YearMode): CurvePoint[] {
-  const anchors = getHscAnchorPoints(courseName, mode);
+function generateHscPoints(courseName: string, mode: YearMode, selectedYear?: string): CurvePoint[] {
+  const anchors = getHscAnchorPoints(courseName, mode, selectedYear);
   if (anchors) {
     const spline = buildMonotoneSpline(anchors);
     const pts: CurvePoint[] = [];
@@ -129,7 +140,7 @@ function generateHscPoints(courseName: string, mode: YearMode): CurvePoint[] {
     return pts;
   }
   // fallback to z-score
-  const params = getScalingParams(courseName, mode);
+  const params = getScalingParams(courseName, mode, selectedYear);
   if (!params) return [];
   const pts: CurvePoint[] = [];
   for (let hsc = 0; hsc <= 100; hsc += 1) {
@@ -151,8 +162,9 @@ function getPercentilePointsForYear(courseName: string, year: string): CurvePoin
   }));
 }
 
-export function getPercentileCurve(courseName: string, mode: YearMode): CurvePoint[] | null {
+export function getPercentileCurve(courseName: string, mode: YearMode, selectedYear?: string): CurvePoint[] | null {
   if (mode === "last") return getPercentilePointsForYear(courseName, LAST_YEAR);
+  if (mode === "year" && selectedYear) return getPercentilePointsForYear(courseName, selectedYear);
   const allPoints: Map<number, number[]> = new Map();
   let count = 0;
   for (const year of AVG_YEARS) {
@@ -174,11 +186,11 @@ export function getPercentileCurve(courseName: string, mode: YearMode): CurvePoi
   });
 }
 
-export function generateCurve(courseName: string, yearMode: YearMode, graphMode: GraphMode): CourseCurve {
+export function generateCurve(courseName: string, yearMode: YearMode, graphMode: GraphMode, selectedYear?: string): CourseCurve {
   if (graphMode === "percentile") {
-    const points = getPercentileCurve(courseName, yearMode);
+    const points = getPercentileCurve(courseName, yearMode, selectedYear);
     if (points) return { course: courseName, points };
-    const params = getScalingParams(courseName, yearMode);
+    const params = getScalingParams(courseName, yearMode, selectedYear);
     if (!params) return { course: courseName, points: [] };
     return {
       course: courseName,
@@ -189,7 +201,7 @@ export function generateCurve(courseName: string, yearMode: YearMode, graphMode:
       }).filter((p) => p.scaled > 0),
     };
   }
-  return { course: courseName, points: generateHscPoints(courseName, yearMode) };
+  return { course: courseName, points: generateHscPoints(courseName, yearMode, selectedYear) };
 }
 
 export function mergeCurvesForRecharts(curves: CourseCurve[]): Array<{ x: number } & Record<string, number>> {
@@ -235,13 +247,14 @@ export interface ComparisonRow {
 export function buildComparisonTable(
   courseNames: string[],
   yearMode: YearMode,
-  graphMode: GraphMode
+  graphMode: GraphMode,
+  selectedYear?: string
 ): ComparisonRow[] {
   if (graphMode === "percentile") {
     const xPoints = [50, 75, 90, 99, 100];
     return xPoints.map((x) => {
       const values = courseNames.map((course) => {
-        const curve = getPercentileCurve(course, yearMode);
+        const curve = getPercentileCurve(course, yearMode, selectedYear);
         const scaled = curve?.find((pt) => pt.x === x)?.scaled ?? 0;
         return { course, scaled };
       });
@@ -250,12 +263,12 @@ export function buildComparisonTable(
   }
   return TABLE_HSC_MARKS.map((hsc) => {
     const values = courseNames.map((course) => {
-      const anchors = getHscAnchorPoints(course, yearMode);
+      const anchors = getHscAnchorPoints(course, yearMode, selectedYear);
       let scaled = 0;
       if (anchors) {
         scaled = Math.round(buildMonotoneSpline(anchors)(hsc / 2) * 10) / 10;
       } else {
-        const params = getScalingParams(course, yearMode);
+        const params = getScalingParams(course, yearMode, selectedYear);
         scaled = params ? computeScaledMarkZScore(hsc, params) : 0;
       }
       return { course, scaled };
