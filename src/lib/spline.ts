@@ -10,7 +10,8 @@ export function buildMonotoneSpline(anchors: HscScaledAnchor[]): (hscHalf: numbe
 
   const delta = new Array(n - 1);
   for (let i = 0; i < n - 1; i++) {
-    delta[i] = (ys[i + 1] - ys[i]) / (xs[i + 1] - xs[i]);
+    const dx = xs[i + 1] - xs[i];
+    delta[i] = dx !== 0 ? (ys[i + 1] - ys[i]) / dx : 0;
   }
 
   const m = new Array(n);
@@ -31,6 +32,7 @@ export function buildMonotoneSpline(anchors: HscScaledAnchor[]): (hscHalf: numbe
     for (let i = 0; i < n - 1; i++) {
       if (hscHalf >= xs[i] && hscHalf <= xs[i + 1]) {
         const h = xs[i + 1] - xs[i];
+        if (h === 0) return ys[i]; // collapsed segment
         const t = (hscHalf - xs[i]) / h;
         const t2 = t * t;
         const t3 = t2 * t;

@@ -73,8 +73,7 @@ export function getPercentileAnchorsForYear(courseName: string, year: string): H
     (c) => normalizeCourseName(c.course) === normalized
   );
   if (!course) return null;
-  return [
-    { hscHalf: 0, scaled: 0 },
+  const raw: HscScaledAnchor[] = [
     { hscHalf: course.hsc.p25, scaled: course.scaled.p25 },
     { hscHalf: course.hsc.p50, scaled: course.scaled.p50 },
     { hscHalf: course.hsc.p75, scaled: course.scaled.p75 },
@@ -82,4 +81,18 @@ export function getPercentileAnchorsForYear(courseName: string, year: string): H
     { hscHalf: course.hsc.p99, scaled: course.scaled.p99 },
     { hscHalf: course.hsc.max, scaled: course.scaled.max },
   ];
+  // Deduplicate consecutive anchors with the same hscHalf —
+  // small-cohort courses can have p99==max (same HSC half-mark).
+  // Keep the later anchor (higher percentile) since its scaled
+  // mark is at least as high and better represents the upper tail.
+  const deduped: HscScaledAnchor[] = [];
+  for (const a of raw) {
+    const prev = deduped[deduped.length - 1];
+    if (prev && prev.hscHalf === a.hscHalf) {
+      deduped[deduped.length - 1] = a; // replace with later anchor
+    } else {
+      deduped.push(a);
+    }
+  }
+  return deduped;
 }

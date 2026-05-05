@@ -1,4 +1,5 @@
 import { buildMonotoneSpline } from "./spline";
+import type { HscScaledAnchor } from "./spline";
 import {
   PERCENTILE_DATA,
   PERCENTILE_KEYS,
@@ -119,12 +120,16 @@ function getHscAnchorPoints(courseName: string, mode: YearMode): ReturnType<type
 
 function generateHscPoints(courseName: string, mode: YearMode): CurvePoint[] {
   const anchors = getHscAnchorPoints(courseName, mode);
-  if (anchors) {
+  if (anchors && anchors.length > 0) {
     const spline = buildMonotoneSpline(anchors);
     const pts: CurvePoint[] = [];
-    for (let hsc = 0; hsc <= 100; hsc += 1) {
-      const scaled = Math.round(spline(hsc / 2) * 10) / 10;
-      if (scaled > 0 || hsc === 0) pts.push({ x: hsc, scaled });
+    // Only within data range (p25 to max) — no extrapolation.
+    const hhMin = anchors[0].hscHalf;
+    const hhMax = anchors[anchors.length - 1].hscHalf;
+    for (let i = 0; i <= Math.round((hhMax - hhMin) * 10); i++) {
+      const hh = hhMin + i * 0.1;
+      const scaled = Math.round(spline(hh) * 10) / 10;
+      pts.push({ x: Math.round(hh * 20) / 10, scaled });
     }
     return pts;
   }
@@ -176,18 +181,43 @@ export function getPercentileCurve(courseName: string, mode: YearMode): CurvePoi
 
 export function generateCurve(courseName: string, yearMode: YearMode, graphMode: GraphMode): CourseCurve {
   if (graphMode === "percentile") {
-    const points = getPercentileCurve(courseName, yearMode);
-    if (points) return { course: courseName, points };
+    const anchors = getPercentileCurve(courseName, yearMode);
+    if (anchors && anchors.length > 0) {
+      // Build spline from percentile anchors and generate a smooth curve
+      // spanning only the data range — no extrapolation.
+      const splineAnchors: HscScaledAnchor[] = anchors.map((p) => ({
+        hscHalf: p.x,
+        scaled: p.scaled,
+      }));
+      const spline = buildMonotoneSpline(splineAnchors);
+      const pts: CurvePoint[] = [];
+      const xMin = splineAnchors[0].hscHalf;
+      const xMax = splineAnchors[splineAnchors.length - 1].hscHalf;
+      for (let x = xMin; x <= xMax; x += 1) {
+        const scaled = Math.round(spline(x) * 10) / 10;
+        pts.push({ x, scaled });
+      }
+      return { course: courseName, points: pts };
+    }
+    // fallback when no percentile data exists
     const params = getScalingParams(courseName, yearMode);
     if (!params) return { course: courseName, points: [] };
-    return {
-      course: courseName,
-      points: [25, 50, 75, 90, 99, 100].map((x) => {
+    const estAnchors: HscScaledAnchor[] = [
+      { hscHalf: 0, scaled: 0 },
+      ...[25, 50, 75, 90, 99, 100].map((x) => {
         const hscEst = params.hsc_mean + 0.5 * params.hsc_sd * (x === 25 ? -0.67 : x === 50 ? 0 : x === 75 ? 0.67 : x === 90 ? 1.28 : x === 99 ? 2.33 : 3.0);
         const hscMark = Math.round(Math.min(100, Math.max(0, hscEst * 2)) * 10) / 10;
-        return { x, scaled: computeScaledMarkZScore(hscMark, params) };
-      }).filter((p) => p.scaled > 0),
-    };
+        return { hscHalf: x, scaled: computeScaledMarkZScore(hscMark, params) };
+      }).filter((a) => a.scaled > 0),
+    ];
+    if (estAnchors.length === 0) return { course: courseName, points: [] };
+    const spline = buildMonotoneSpline(estAnchors);
+    const pts: CurvePoint[] = [];
+    for (let x = 0; x <= 100; x += 1) {
+      const scaled = Math.round(spline(x) * 10) / 10;
+      if (scaled > 0 || x === 0) pts.push({ x, scaled });
+    }
+    return { course: courseName, points: pts };
   }
   return { course: courseName, points: generateHscPoints(courseName, yearMode) };
 }
@@ -252,8 +282,16 @@ export function buildComparisonTable(
     const values = courseNames.map((course) => {
       const anchors = getHscAnchorPoints(course, yearMode);
       let scaled = 0;
-      if (anchors) {
-        scaled = Math.round(buildMonotoneSpline(anchors)(hsc / 2) * 10) / 10;
+      if (anchors && anchors.length > 0) {
+        const hscHalf = hsc / 2;
+        // Only use the spline within the data range; fall back to z-score
+        // for marks outside the empirical anchors.
+        if (hscHalf >= anchors[0].hscHalf && hscHalf <= anchors[anchors.length - 1].hscHalf) {
+          scaled = Math.round(buildMonotoneSpline(anchors)(hscHalf) * 10) / 10;
+        } else {
+          const params = getScalingParams(course, yearMode);
+          scaled = params ? computeScaledMarkZScore(hsc, params) : 0;
+        }
       } else {
         const params = getScalingParams(course, yearMode);
         scaled = params ? computeScaledMarkZScore(hsc, params) : 0;
