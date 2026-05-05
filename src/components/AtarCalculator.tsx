@@ -207,9 +207,30 @@ export function AtarCalculator() {
         </ol>
       </div>
 
-      {/* Year filter + ATAR Eq / Scaled toggle */}
+      {/* ATAR Eq / Scaled toggle + Year filter */}
       <div className="flex items-center gap-3 flex-wrap">
-        <span className="text-xs font-medium text-muted">{t("yearFilter")}</span>
+        <span className="text-xs font-medium text-muted">{t("showing")}</span>
+        <button
+          onClick={() => setShowAtarEq(!showAtarEq)}
+          className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors border ${
+            showAtarEq
+              ? "bg-foreground text-background border-foreground"
+              : "border-border text-muted hover:text-foreground hover:border-foreground/30"
+          }`}
+        >
+          {t("atarEquivalent")}
+        </button>
+        <button
+          onClick={() => setShowAtarEq(!showAtarEq)}
+          className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors border ${
+            !showAtarEq
+              ? "bg-foreground text-background border-foreground"
+              : "border-border text-muted hover:text-foreground hover:border-foreground/30"
+          }`}
+        >
+          {t("scaledMarks")}
+        </button>
+        <span className="text-xs font-medium text-muted ml-2">{t("yearFilter")}</span>
         <div className="flex flex-wrap gap-1">
           <button
             onClick={() => setYearView("all")}
@@ -235,27 +256,6 @@ export function AtarCalculator() {
             </button>
           ))}
         </div>
-        <span className="text-xs font-medium text-muted ml-2">{t("showing")}</span>
-        <button
-          onClick={() => setShowAtarEq(!showAtarEq)}
-          className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors border ${
-            showAtarEq
-              ? "bg-foreground text-background border-foreground"
-              : "border-border text-muted hover:text-foreground hover:border-foreground/30"
-          }`}
-        >
-          {t("atarEquivalent")}
-        </button>
-        <button
-          onClick={() => setShowAtarEq(!showAtarEq)}
-          className={`shrink-0 rounded-lg px-2.5 py-1 text-xs font-medium transition-colors border ${
-            !showAtarEq
-              ? "bg-foreground text-background border-foreground"
-              : "border-border text-muted hover:text-foreground hover:border-foreground/30"
-          }`}
-        >
-          {t("scaledMarks")}
-        </button>
       </div>
 
       {/* Table */}
