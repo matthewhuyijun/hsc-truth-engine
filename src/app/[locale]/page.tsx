@@ -1,6 +1,6 @@
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
-import { ArrowRight, BarChart3, Calculator, Award, TrendingUp } from "lucide-react";
+import { ArrowRight, BarChart3, Calculator, Award, TrendingUp, LineChart } from "lucide-react";
 
 export default async function HomePage() {
   const t = await getTranslations("Home");
@@ -17,6 +17,12 @@ export default async function HomePage() {
       title: t("moduleCalculatorTitle"),
       description: t("moduleCalculatorDesc"),
       href: "/calculator" as const,
+    },
+    {
+      icon: LineChart,
+      title: t("moduleScalingGraphsTitle"),
+      description: t("moduleScalingGraphsDesc"),
+      href: "/scaling-graphs" as const,
     },
     {
       icon: Award,
@@ -56,7 +62,8 @@ export default async function HomePage() {
               <ArrowRight className="h-4 w-4" />
             </Link>
             <Link
-              href="/calculator"
+              href="#tools"
+              scroll={true}
               className="inline-flex items-center gap-2 rounded-lg border border-border px-5 py-2.5 text-sm font-medium transition-colors hover:bg-surface"
             >
               {t("ctaSecondary")}
@@ -65,7 +72,7 @@ export default async function HomePage() {
         </div>
       </section>
 
-      <section className="snap-start min-h-screen flex items-center border-b border-border">
+      <section id="tools" className="snap-start min-h-screen flex items-center border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 w-full">
           <span className="text-xs font-medium uppercase tracking-wider text-muted">
             {t("modulesBadge")}
@@ -74,7 +81,7 @@ export default async function HomePage() {
             {t("modulesHeading")}
           </h2>
 
-          <div className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="mt-10 grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5">
             {modules.map((mod) => (
               <Link
                 key={mod.title}
