@@ -26,7 +26,7 @@ function isEnglishCourse(courseName: string): boolean {
 export function resolveUnits(courseName: string, allInputs: { course: string; hscMark: number }[]): number {
   if (courseName === MATH_EXT_1) {
     const hasExt2 = allInputs.some(
-      (inp) => inp.course === MATH_EXT_2 && inp.hscMark > 0
+      (inp) => inp.course === MATH_EXT_2
     );
     return hasExt2 ? 2 : 1;
   }
@@ -40,10 +40,10 @@ export function resolveUnits(courseName: string, allInputs: { course: string; hs
 export function shouldExcludeCourse(courseName: string, allInputs: { course: string; hscMark: number }[]): boolean {
   if (courseName === MATH_ADVANCED) {
     const hasExt1 = allInputs.some(
-      (inp) => inp.course === MATH_EXT_1 && inp.hscMark > 0
+      (inp) => inp.course === MATH_EXT_1
     );
     const hasExt2 = allInputs.some(
-      (inp) => inp.course === MATH_EXT_2 && inp.hscMark > 0
+      (inp) => inp.course === MATH_EXT_2
     );
     if (hasExt1 && hasExt2) return true;
   }
