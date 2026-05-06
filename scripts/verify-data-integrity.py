@@ -12,7 +12,10 @@ from collections import defaultdict
 
 CSV_DIR = os.path.join(os.path.dirname(__file__), '..', 'data', 'csv')
 PUBLIC_DIR = os.path.join(os.path.dirname(__file__), '..', 'public', 'data')
+ARCHIVE_DIR = os.path.join(CSV_DIR, 'archive-distinguished')
 YEARS = ['2017', '2018', '2019', '2020', '2021', '2022', '2023', '2024', '2025']
+ARCHIVE_YEARS = ['2001', '2002', '2003', '2004', '2005', '2006', '2007', '2008',
+                 '2009', '2010', '2011', '2012', '2013', '2014', '2015', '2016']
 
 def header_key(variants):
     """Return a function that extracts value from row trying multiple header names."""
@@ -90,6 +93,171 @@ def parse_top_achievers(year):
                 results[(fn, ln, sn)][cn] = place
     return results
 
+
+# ========== Archive JSON Parser (pre-2017) ==========
+
+def parse_archive_year(year):
+    """
+    Parse archive-distinguished/{year}.json and return:
+      archive_students: {school_name: [(first, last, frozenset(codes)), ...]}
+      archive_total: total individual course entries across all schools
+    Archive format: [["Student Name", "School Name", "course1, course2, ..."], ...]
+    Skip rows that look like page-header ranges (col1 contains ' to ' or no comma in name).
+    """
+    path = os.path.join(ARCHIVE_DIR, f'{year}.json')
+    if not os.path.exists(path):
+        return None, 0
+
+    with open(path, encoding='utf-8') as f:
+        rows = json.load(f)
+
+    school_map = defaultdict(list)  # school_name -> [(first, last, frozenset(codes))]
+    total_courses = 0
+
+    for row in rows:
+        if not row or len(row) < 3:
+            continue
+        name_str = str(row[0]) if row[0] else ''
+        school_str = str(row[1]) if row[1] else ''
+        courses_str = str(row[2]) if row[2] else ''
+
+        if not name_str or not school_str:
+            continue
+        # Skip page-header / range rows
+        if ' to ' in school_str or ' to ' in name_str:
+            continue
+        if ',' not in name_str:
+            continue
+
+        parts = name_str.split(',', 1)
+        if len(parts) < 2:
+            continue
+        last = parts[0].strip()
+        first = parts[1].strip()
+
+        # Extract 5-digit course codes
+        codes = []
+        for part in courses_str.split(','):
+            part = part.strip()
+            if part.isdigit() and len(part) == 5:
+                codes.append(part)
+
+        if not codes:
+            continue
+
+        school_map[school_str.strip()].append((first, last, frozenset(codes)))
+        total_courses += len(codes)
+
+    return dict(school_map), total_courses
+
+
+# ========== Pre-2017 Archive Verification ==========
+
+def verify_archive_year(year):
+    print(f"\n{'─'*60}")
+    print(f" Archive {year}")
+    print(f"{'─'*60}")
+
+    errors = 0
+    warnings = 0
+
+    json_path = os.path.join(PUBLIC_DIR, f'school-detail-{year}.json')
+    if not os.path.exists(json_path):
+        print(f"  ✗ MISSING: {json_path}")
+        return 1, 0
+
+    with open(json_path) as f:
+        json_data = json.load(f)
+
+    archive_schools, archive_total = parse_archive_year(year)
+    if archive_schools is None:
+        print(f"  ✗ MISSING: archive-distinguished/{year}.json")
+        return 1, 0
+
+    # Build JSON lookup: school_name -> { (first,last): set(codes) }
+    json_student_codes = defaultdict(lambda: defaultdict(set))
+    # Also track unique student count and total course entries per school
+    json_unique = defaultdict(set)
+    json_total = defaultdict(int)
+
+    for slug, school in json_data.items():
+        sname = school['name']
+        for st in school.get('students', []):
+            key = (st['firstName'], st['lastName'])
+            json_unique[sname].add(key)
+            for c in st.get('courses', []):
+                json_student_codes[sname][key].add(c['code'])
+                json_total[sname] += 1
+
+    # Per-school verification
+    school_errors = 0
+    for sname, archive_students in archive_schools.items():
+        # 1. Student count match
+        json_student_keys = json_unique.get(sname, set())
+        archive_student_keys = set((f, l) for f, l, _ in archive_students)
+
+        missing = archive_student_keys - json_student_keys
+        if missing:
+            if school_errors < 3:
+                for f, l in list(missing)[:3]:
+                    print(f"  ✗ [{sname}] student in archive but NOT in JSON: {f} {l}")
+            school_errors += 1
+
+        extra = json_student_keys - archive_student_keys
+        if extra:
+            if school_errors < 3:
+                for f, l in list(extra)[:3]:
+                    print(f"  ⚠ [{sname}] student in JSON but NOT in archive: {f} {l}")
+            school_errors += 1
+
+        # 2. Per-student course code verification
+        for first, last, archive_codes in archive_students:
+            key = (first, last)
+            json_codes = json_student_codes.get(sname, {}).get(key, set())
+            missing_codes = archive_codes - json_codes
+            if missing_codes:
+                if school_errors < 5:
+                    print(f"  ✗ [{sname}] {first} {last}: archive has codes {sorted(archive_codes)} but JSON has {sorted(json_codes)}")
+                school_errors += 1
+            extra_codes = json_codes - archive_codes
+            if extra_codes:
+                if school_errors < 5:
+                    print(f"  ⚠ [{sname}] {first} {last}: JSON has extra codes {sorted(extra_codes)} not in archive")
+                school_errors += 1
+
+        # 3. Total course count match
+        json_school_total = json_total.get(sname, 0)
+        archive_school_total = sum(len(codes) for _, _, codes in archive_students)
+        if json_school_total != archive_school_total:
+            if school_errors < 3:
+                print(f"  ✗ [{sname}] total course entries: JSON={json_school_total} archive={archive_school_total}")
+            school_errors += 1
+
+    # Cross-school: any school in JSON but not in archive?
+    archive_school_names = set(archive_schools.keys())
+    json_school_names = set(json_unique.keys())
+    extra_schools = json_school_names - archive_school_names
+    if extra_schools:
+        print(f"  ⚠ {len(extra_schools)} school(s) in JSON but not in archive (new schools?)")
+        warnings += 1
+
+    # Summary
+    total_unique_archive = sum(len(v) for v in archive_schools.values())
+    total_unique_json = sum(len(v) for v in json_unique.values())
+
+    print(f"  Archive: {total_unique_archive} students, {archive_total} course entries across {len(archive_schools)} schools")
+    print(f"  JSON:    {total_unique_json} students, {sum(json_total.values())} course entries across {len(json_school_names)} schools")
+
+    if school_errors > 0:
+        errors += school_errors
+    if errors == 0:
+        print(f"  ✓ {len(archive_schools)} schools verified — no errors")
+    else:
+        print(f"  ⚠ {school_errors} discrepancies across {errors} checks")
+
+    return errors, warnings
+
+
 # ========== Verification ==========
 
 def verify_all():
@@ -98,6 +266,15 @@ def verify_all():
 
     for year in YEARS:
         errors, warnings = verify_year(year)
+        total_errors += errors
+        total_warnings += warnings
+
+    # Pre-2017 archive verification
+    print(f"\n{'='*60}")
+    print(" PRE-2017 ARCHIVE INTEGRITY")
+    print(f"{'='*60}")
+    for year in ARCHIVE_YEARS:
+        errors, warnings = verify_archive_year(year)
         total_errors += errors
         total_warnings += warnings
 

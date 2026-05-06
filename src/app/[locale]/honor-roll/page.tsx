@@ -131,7 +131,7 @@ function HonorRollContent() {
     <div className="min-h-screen">
       <section className="border-b border-border">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-4">
-          <h1 className="text-3xl font-bold tracking-tight">
+          <h1 className="text-3xl font-bold tracking-tight text-foreground">
             {!selSchool && !selCourse ? t("defaultTitle") : selSchool && selCourse ? `${selSchool} · ${selCourse.name}` : selSchool || selCourse?.name}
           </h1>
         </div>
@@ -263,7 +263,7 @@ function DefaultView({ schools, courses, onSchool, onCourse }: {
             onClick={() => isSchool ? onSchool(item.name) : onCourse({ code: (item as { code: string }).code, name: item.name })}
             className="w-full text-left grid grid-cols-12 gap-4 px-6 py-3 hover:bg-surface-hover transition-colors">
             <div className="col-span-1 flex items-center"><span className="text-xs text-muted font-mono">{idx + 1}</span></div>
-            <div className={isSchool ? 'col-span-5' : 'col-span-9'}><span className="text-sm font-medium">{item.name}</span></div>
+            <div className={isSchool ? 'col-span-5' : 'col-span-9'}><span className="text-sm font-medium text-foreground">{item.name}</span></div>
             <div className="col-span-2 flex items-center justify-end">
               <span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{item.band6Count.toLocaleString()}</span>
             </div>
@@ -368,7 +368,7 @@ function SchoolView({ detail, name, year, slug, sparoData, onCourse }: {
           const rk = sparoRank.get(c.name);
           return (
             <button key={c.code} onClick={() => onCourse({ code: c.code, name: c.name })} className="w-full text-left grid grid-cols-12 gap-3 px-5 py-3 hover:bg-surface-hover transition-colors">
-              <div className={hasSparo ? 'col-span-3' : 'col-span-6'}><span className="text-sm font-medium">{c.name}</span></div>
+              <div className={hasSparo ? 'col-span-3' : 'col-span-6'}><span className="text-sm font-medium text-foreground">{c.name}</span></div>
               <div className={`${hasSparo ? 'col-span-3' : 'col-span-3'} flex justify-end`}><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{c.band6Count.toLocaleString()}</span></div>
               <div className={`${hasSparo ? 'col-span-2' : 'col-span-3'} flex justify-end gap-1 flex-wrap`}>
                 {c.stateRanks.length > 0 ? c.stateRanks.map((r, i) => <span key={i} className="inline-flex items-center rounded-md bg-accent-dim px-1.5 py-0.5 text-xs font-mono text-muted">#{r}</span>) : <span className="text-sm text-muted/30 font-mono">—</span>}
@@ -465,7 +465,7 @@ function CourseView({ course, stats, year, allDetail, sparoData, onSchool }: {
               <div key={sr.lastName+sr.firstName+sr.rank} className="grid grid-cols-12 gap-3 px-5 py-3">
                 <div className="col-span-1"><span className="text-xs text-muted font-mono">{idx+1}</span></div>
                 <div className="col-span-4"><span className="text-sm font-medium truncate">{sr.lastName}, {sr.firstName}</span></div>
-                <div className="col-span-5"><button onClick={() => onSchool(sr.schoolName)} className="text-sm hover:underline truncate">{sr.schoolName}</button></div>
+                <div className="col-span-5"><button onClick={() => onSchool(sr.schoolName)} className="text-sm text-foreground hover:underline truncate">{sr.schoolName}</button></div>
                 <div className="col-span-2 flex justify-end"><span className={`inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-mono font-medium ${sr.rank===1?'border-green-600 bg-green-600 text-white':'border-blue-600 bg-blue-600 text-white'}`}>{sr.rank}</span></div>
               </div>
             ))}
@@ -535,7 +535,7 @@ function TopSchoolsExpanded({ schools, sparoData, courseName, onSchool }: {
           return (
           <button key={s.slug} onClick={() => onSchool(s.name)} className="w-full text-left grid grid-cols-12 gap-3 px-5 py-3 hover:bg-surface-hover transition-colors">
             <div className="col-span-1"><span className="text-xs text-muted font-mono">{idx+1}</span></div>
-            <div className={sparoData ? 'col-span-4' : 'col-span-9'}><span className="text-sm font-medium">{s.name}</span></div>
+            <div className={sparoData ? 'col-span-4' : 'col-span-9'}><span className="text-sm font-medium text-foreground">{s.name}</span></div>
             <div className={`${sparoData ? 'col-span-2' : 'col-span-2'} flex justify-end`}><span className="inline-flex items-center rounded-md bg-accent-dim px-2 py-0.5 text-xs font-mono font-medium">{s.band6Count.toLocaleString()}</span></div>
             {sparoData && <div className="col-span-5 flex justify-end items-center gap-1">
               {sp ? <><span className="inline-flex items-center rounded-md bg-accent-dim px-1.5 py-0.5 text-xs font-mono font-medium">#{rk}</span><span className="text-xs font-mono text-muted">{sp.school_average.toFixed(1)}<span className="text-muted/40 mx-1">vs</span>{sp.state_average.toFixed(1)}</span></> : <span className="text-xs text-muted/20">—</span>}

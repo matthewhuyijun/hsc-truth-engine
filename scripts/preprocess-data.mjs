@@ -627,7 +627,7 @@ function parseCourseFromField(coursesStr) {
   return codeMatch ? { code: codeMatch[1], name: '' } : null;
 }
 
-function generateSchoolDetail(year, distinguished, topAchievers, allRounders, sparoYearMap) {
+function generateSchoolDetail(year, distinguished, topAchievers, allRounders, sparoYearMap, courseNames) {
   const daYear = distinguished.filter(r => r.year === year);
 
   if (daYear.length === 0) return {};
@@ -655,80 +655,94 @@ function generateSchoolDetail(year, distinguished, topAchievers, allRounders, sp
   const schools = new Map(); // schoolName -> school detail
 
   for (const r of daYear) {
-    const course = parseCourseFromField(r.courses);
-    if (!course) continue;
+    // Pre-2017 archive JSON stores multiple courses as "15240, 15250, 15820".
+    // Each entry in daYear already represents ONE row from the archive, which
+    // may contain multiple comma-separated course codes. Split and process each.
+    // 2017+ CSV has one course per row, so no comma → single-element array below.
+    const courseStrs = r.courses.includes(',')
+      ? r.courses.split(',').map(c => c.trim()).filter(c => c)
+      : [r.courses];
 
-    const name = r.schoolName;
-    if (!schools.has(name)) {
-      schools.set(name, {
-        name,
-        students: new Map(), // "firstName|lastName" -> student
-        courses: new Map(),  // courseCode -> course aggregate
-        stats: { band6Count: 0, uniqueStudents: 0, stateRanks: 0, allRounders: 0 }
-      });
-    }
-    const school = schools.get(name);
+    for (const courseStr of courseStrs) {
+      const course = parseCourseFromField(courseStr);
+      if (!course) continue;
 
-    const studentKey = `${r.firstName}|${r.lastName}`;
-    const isAllRounder = arSet.has(`${r.firstName}|${r.lastName}|${r.schoolName}`);
+      // Resolve course name: parseCourseFromField returns '' for archive JSON entries
+      // where the "code - Name" suffix was stripped. Look up from courseNames.
+      course.name = courseNames[course.code]?.name || course.name || '';
 
-    let student;
-    if (school.students.has(studentKey)) {
-      student = school.students.get(studentKey);
-    } else {
-      student = {
-        firstName: r.firstName,
-        lastName: r.lastName,
-        courses: [],
-        b6Count: 0,
-        stateRankCount: 0,
-        isAllRounder
-      };
-      if (isAllRounder) school.stats.allRounders++;
-      school.students.set(studentKey, student);
-      school.stats.uniqueStudents++;
-    }
-
-    // Look up state rank: prefer matching on school name, then fall back to name-only
-    const nameKey = `${course.code}|${r.firstName}|${r.lastName}`;
-    const candidates = taMapByName.get(nameKey) || [];
-    let rank = 0;
-    for (let i = 0; i < candidates.length; i++) {
-      if (candidates[i].used) continue;
-      if (candidates[i].school === r.schoolName) {
-        rank = candidates[i].place;
-        candidates[i].used = true;
-        break;
+      const name = r.schoolName;
+      if (!schools.has(name)) {
+        schools.set(name, {
+          name,
+          students: new Map(), // "firstName|LastName" -> student
+          courses: new Map(),  // courseCode -> course aggregate
+          stats: { band6Count: 0, uniqueStudents: 0, stateRanks: 0, allRounders: 0 }
+        });
       }
-    }
-    if (rank === 0) {
+      const school = schools.get(name);
+
+      const studentKey = `${r.firstName}|${r.lastName}`;
+      const isAllRounder = arSet.has(`${r.firstName}|${r.lastName}|${r.schoolName}`);
+
+      let student;
+      if (school.students.has(studentKey)) {
+        student = school.students.get(studentKey);
+      } else {
+        student = {
+          firstName: r.firstName,
+          lastName: r.lastName,
+          courses: [],
+          b6Count: 0,
+          stateRankCount: 0,
+          isAllRounder
+        };
+        if (isAllRounder) school.stats.allRounders++;
+        school.students.set(studentKey, student);
+        school.stats.uniqueStudents++;
+      }
+
+      // Look up state rank: prefer matching on school name, then fall back to name-only
+      const nameKey = `${course.code}|${r.firstName}|${r.lastName}`;
+      const candidates = taMapByName.get(nameKey) || [];
+      let rank = 0;
       for (let i = 0; i < candidates.length; i++) {
-        if (!candidates[i].used) {
+        if (candidates[i].used) continue;
+        if (candidates[i].school === r.schoolName) {
           rank = candidates[i].place;
           candidates[i].used = true;
           break;
         }
       }
+      if (rank === 0) {
+        for (let i = 0; i < candidates.length; i++) {
+          if (!candidates[i].used) {
+            rank = candidates[i].place;
+            candidates[i].used = true;
+            break;
+          }
+        }
+      }
+
+      student.courses.push({ code: course.code, name: course.name, rank });
+      student.b6Count++;
+      if (rank > 0) student.stateRankCount++;
+
+      school.stats.band6Count++;
+
+      // Course aggregate
+      if (!school.courses.has(course.code)) {
+        school.courses.set(course.code, {
+          code: course.code,
+          name: course.name,
+          band6Count: 0,
+          stateRanks: []
+        });
+      }
+      const ca = school.courses.get(course.code);
+      ca.band6Count++;
+      if (rank > 0) ca.stateRanks.push(rank);
     }
-
-    student.courses.push({ code: course.code, name: course.name, rank });
-    student.b6Count++;
-    if (rank > 0) student.stateRankCount++;
-
-    school.stats.band6Count++;
-
-    // Course aggregate
-    if (!school.courses.has(course.code)) {
-      school.courses.set(course.code, {
-        code: course.code,
-        name: course.name,
-        band6Count: 0,
-        stateRanks: []
-      });
-    }
-    const ca = school.courses.get(course.code);
-    ca.band6Count++;
-    if (rank > 0) ca.stateRanks.push(rank);
   }
 
   // Finalize: add stateRank count, sort, convert to plain objects
@@ -868,7 +882,22 @@ console.log(`   ${Object.keys(sparoData).length} year files loaded`);
 
 console.log('\n📋 Building course name map...');
 const courseNames = buildCourseNameMap(firstInCourse, topAchievers);
-console.log(`   ${Object.keys(courseNames).length} courses`);
+console.log(`   ${Object.keys(courseNames).length} courses (from 2017+ CSV)`);
+
+// Augment with existing course-names.json (has all years including pre-2017).
+// Entries from CSV take precedence if there's a conflict (shouldn't happen in practice).
+const existingCourseNamesPath = path.join(OUTPUT_DIR, 'course-names.json');
+if (fs.existsSync(existingCourseNamesPath)) {
+  const existing = JSON.parse(fs.readFileSync(existingCourseNamesPath, 'utf-8'));
+  let added = 0;
+  for (const [code, name] of Object.entries(existing)) {
+    if (!courseNames[code]) {
+      courseNames[code] = { name, allNames: [name], years: [] };
+      added++;
+    }
+  }
+  if (added > 0) console.log(`   + ${added} pre-2017 course names loaded from disk`);
+}
 
 console.log('🏫 Aggregating schools...');
 const schools = aggregateSchools(distinguished);
@@ -1053,7 +1082,7 @@ console.log(`   school-stats.json: ${schoolStats.length} schools`);
 console.log('\n🏫 Generating school detail files...');
 for (const year of validYears) {
   const sparoYearMap = sparoData[year] || null;
-  const detail = generateSchoolDetail(year, distinguished, topAchievers, allRounders, sparoYearMap);
+  const detail = generateSchoolDetail(year, distinguished, topAchievers, allRounders, sparoYearMap, courseNames);
   const outPath = path.join(OUTPUT_DIR, `school-detail-${year}.json`);
   fs.writeFileSync(outPath, JSON.stringify(detail));
   console.log(`   school-detail-${year}.json: ${Object.keys(detail).length} schools`);
@@ -1063,7 +1092,7 @@ for (const year of validYears) {
 console.log('\n🎓 Generating students list files...');
 for (const year of validYears) {
   const sparoYearMap = sparoData[year] || null;
-  const detail = generateSchoolDetail(year, distinguished, topAchievers, allRounders, sparoYearMap);
+  const detail = generateSchoolDetail(year, distinguished, topAchievers, allRounders, sparoYearMap, courseNames);
   const students = generateStudentsList(detail);
   const outPath = path.join(OUTPUT_DIR, `students-${year}.json`);
   fs.writeFileSync(outPath, JSON.stringify(students));
