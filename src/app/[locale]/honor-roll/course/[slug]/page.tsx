@@ -1,7 +1,7 @@
 'use client';
 
 import { Suspense, useState, useEffect, useMemo } from 'react';
-import { useSearchParams, useRouter } from "next/navigation";
+import { useSearchParams, useRouter, useParams } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import { ArrowLeft, Search, Info } from 'lucide-react';
 import { getRenameHistory, resolveCourseNumbers, getCodeForYear } from '@/lib/course-aliases';
@@ -130,8 +130,21 @@ function CourseDetailContent({
 }: {
   params: Promise<{ slug: string }>;
 }) {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const [resolvedParams, setResolvedParams] = useState<any>(null);
+  // Read the current slug reactively from the URL. `useParams()` updates
+  // synchronously on client-side navigation (including same-route [slug]
+  // changes triggered by router.replace/push below), whereas the `params`
+  // Promise prop only resolves once on mount and doesn't re-fire for
+  // subsequent slug changes — this was the root cause of renamed courses
+  // (e.g. 15255 → 15240 for 2014) not visibly redirecting.
+  const routeParams = useParams();
+  const slug = typeof routeParams?.slug === 'string' ? routeParams.slug : null;
+  const resolvedParams = useMemo(
+    () => (slug ? { slug } : null),
+    [slug],
+  );
+  // `params` prop kept for API-compatibility with the page signature; not used.
+  void params;
+
   const searchParams = useSearchParams();
   const router = useRouter();
 
@@ -149,12 +162,11 @@ function CourseDetailContent({
   const [activeSection, setActiveSection] = useState<TabId>('state-ranks');
 
   useEffect(() => {
-    params.then(p => setResolvedParams(p));
     fetch('/data/sparo-schools.json')
       .then(r => r.json())
       .then(data => setSparoData(data))
       .catch(() => setSparoData(null));
-  }, [params]);
+  }, []);
 
   // Redirect if the URL has a specific year and the slug doesn't match the code
   // that existed in that year (e.g. /course/15155?year=2015 → /course/15150?year=2015).
