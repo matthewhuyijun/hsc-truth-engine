@@ -4,7 +4,7 @@ import { Suspense, useState, useEffect, useMemo } from 'react';
 import { useSearchParams, useRouter } from "next/navigation";
 import { Link } from "@/i18n/routing";
 import { ArrowLeft, Search, Info } from 'lucide-react';
-import { getRenameHistory, resolveCourseNumbers } from '@/lib/course-aliases';
+import { getRenameHistory, resolveCourseNumbers, getCodeForYear } from '@/lib/course-aliases';
 import {
   useCourseData, useSparoCourseData,
   type SchoolDetail, type StateRankEntry, type SchoolB6Entry,
@@ -156,6 +156,19 @@ function CourseDetailContent({
       .catch(() => setSparoData(null));
   }, [params]);
 
+  // Redirect if the URL has a specific year and the slug doesn't match the code
+  // that existed in that year (e.g. /course/15155?year=2015 → /course/15150?year=2015).
+  // Handles direct navigation and bookmarks.
+  useEffect(() => {
+    if (!resolvedParams || isAllYears) return;
+    const correctSlug = getCodeForYear(resolvedParams.slug, currentYear);
+    if (correctSlug !== resolvedParams.slug) {
+      const params = new URLSearchParams();
+      params.set('year', currentYear);
+      router.replace(`/honor-roll/course/${correctSlug}?${params.toString()}`, { scroll: false });
+    }
+  }, [resolvedParams, currentYear, isAllYears, router]);
+
   /* eslint-disable react-hooks/set-state-in-effect */
   useEffect(() => {
     if (!resolvedParams) return;
@@ -240,8 +253,15 @@ function CourseDetailContent({
   const handleYearSelect = (y: YearValue) => {
     if (!resolvedParams) return;
     const params = new URLSearchParams();
+    // When switching to a specific year, check if the course was renamed and
+    // redirect to the historical code used in that year's data (HSCninja pattern).
+    // school-detail-{year}.json stores the code active in that year, so
+    // /course/15155/year/2010 must redirect to /course/15150/year/2010.
+    const slug = y === ALL_YEARS
+      ? resolvedParams.slug
+      : getCodeForYear(resolvedParams.slug, y);
     params.set('year', y);
-    router.push(`/honor-roll/course/${resolvedParams.slug}?${params.toString()}`, { scroll: false });
+    router.push(`/honor-roll/course/${slug}?${params.toString()}`, { scroll: false });
   };
 
   if (!resolvedParams) return null;

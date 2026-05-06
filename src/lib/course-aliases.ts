@@ -264,3 +264,68 @@ export function getRenameHistory(courseCode: string): { name: string; years: str
   }
   return null;
 }
+
+/**
+ * Given a course code (canonical or alias) and a year, returns the code
+ * that was used in school-detail-{year}.json for that year.
+ *
+ * When a course was renamed (e.g. 15150→15155), school-detail files use the
+ * historical code for pre-rename years. This function mirrors HSCninja's URL
+ * redirect behaviour: /course/15155/year/2010 → redirects to /course/15150/year/2010.
+ *
+ * Handles both directions:
+ *  - canonical code + old year → redirect to historical alias
+ *  - historical alias + new year → redirect to canonical
+ */
+export function getCodeForYear(courseCode: string, year: string): string {
+  // Check if this is a canonical entry (entries are keyed by canonical code)
+  const canonicalEntry = COURSE_ALIASES[courseCode];
+
+  if (canonicalEntry && canonicalEntry.renameHistory.length > 1) {
+    // It's a canonical code — check if the year maps to a historical alias
+    for (const segment of canonicalEntry.renameHistory) {
+      const match = segment.years.match(/^(\d{4})–(.+)$/);
+      if (!match) continue;
+      const segStart = parseInt(match[1], 10);
+      const endStr = match[2];
+      const segEnd = endStr === "present" ? 9999 : parseInt(endStr, 10);
+      const yearNum = parseInt(year, 10);
+      if (yearNum >= segStart && yearNum <= segEnd) {
+        const idx = canonicalEntry.renameHistory.indexOf(segment);
+        if (idx === canonicalEntry.renameHistory.length - 1) {
+          return canonicalEntry.canonical; // current name
+        } else {
+          return canonicalEntry.aliases[idx] ?? courseCode; // historical alias
+        }
+      }
+    }
+  }
+
+  // Not a canonical with rename history — check if it's an alias pointing to a canonical
+  for (const [canonical, entry] of Object.entries(COURSE_ALIASES)) {
+    const aliasIndex = entry.aliases.indexOf(courseCode);
+    if (aliasIndex === -1) continue;
+
+    // Found this code as an alias of `canonical`
+    const historyEntry = entry.renameHistory[aliasIndex];
+    if (!historyEntry) continue;
+
+    const match = historyEntry.years.match(/^(\d{4})–(.+)$/);
+    if (!match) break;
+    const segStart = parseInt(match[1], 10);
+    const endStr = match[2];
+    const segEnd = endStr === "present" ? 9999 : parseInt(endStr, 10);
+    const yearNum = parseInt(year, 10);
+
+    if (yearNum >= segStart && yearNum <= segEnd) {
+      // Year is within the alias's active period — use the alias
+      return courseCode;
+    } else if (yearNum > segEnd) {
+      // Year is after the alias's active period — course was renamed, use canonical
+      return canonical;
+    }
+  }
+
+  // No rename history found — return as-is
+  return courseCode;
+}
