@@ -1,5 +1,5 @@
 import type { MetadataRoute } from "next";
-import fs from "fs";
+import { readFile } from "fs/promises";
 import path from "path";
 
 interface CourseData {
@@ -13,7 +13,7 @@ interface SchoolDetail {
   stats: { band6Count: number };
 }
 
-function getSchoolSlugs(): string[] {
+async function getSchoolSlugs(): Promise<string[]> {
   try {
     const filePath = path.join(
       process.cwd(),
@@ -21,7 +21,7 @@ function getSchoolSlugs(): string[] {
       "data",
       "school-detail-2025.json"
     );
-    const data = JSON.parse(fs.readFileSync(filePath, "utf8")) as Record<
+    const data = JSON.parse(await readFile(filePath, "utf8")) as Record<
       string,
       SchoolDetail
     >;
@@ -31,10 +31,10 @@ function getSchoolSlugs(): string[] {
   }
 }
 
-function getCourseCodes(): string[] {
+async function getCourseCodes(): Promise<string[]> {
   try {
     const filePath = path.join(process.cwd(), "public", "data", "courses.json");
-    const data = JSON.parse(fs.readFileSync(filePath, "utf8")) as CourseData[];
+    const data = JSON.parse(await readFile(filePath, "utf8")) as CourseData[];
     return data.map((c) => c.code);
   } catch {
     return [];
@@ -67,14 +67,14 @@ function entry(
 ): MetadataRoute.Sitemap[number] {
   return {
     url: `${BASE_URL}${path}`,
-    lastModified: new Date(),
+    lastModified: "2025-05-07",
     changeFrequency: opts.changeFrequency ?? "monthly",
     priority: opts.priority ?? 0.5,
     alternates: hreflang(path, path),
   };
 }
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const staticPaths = [
     { path: "", priority: 1, cf: "weekly" as const },
     { path: "/insights", priority: 0.9, cf: "monthly" as const },
@@ -90,13 +90,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     entry(p, { changeFrequency: cf, priority })
   );
 
-  const schoolSlugs = getSchoolSlugs();
+  const schoolSlugs = await getSchoolSlugs();
   const schoolPages = schoolSlugs.map((slug) => {
     const p = `/honor-roll/school/${slug}`;
     return entry(p, { priority: 0.6 });
   });
 
-  const courseCodes = getCourseCodes();
+  const courseCodes = await getCourseCodes();
   const coursePages = courseCodes.map((code) => {
     const p = `/honor-roll/course/${code}`;
     return entry(p, { priority: 0.6 });

@@ -1,6 +1,24 @@
+import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/routing";
 import { ArrowRight, BarChart3, Calculator, Award, TrendingUp, LineChart } from "lucide-react";
+
+export async function generateMetadata(): Promise<Metadata> {
+  return {
+    title: "HSC Data — NSW ATAR Calculator & Scaling Data",
+    description:
+      "Understand how the HSC and ATAR actually work. Free ATAR calculator, interactive scaling graphs, Band 6 honor roll, and data-driven insights. No myths — just mathematics sourced from NESA and UAC reports.",
+    alternates: {
+      canonical: "/",
+    },
+    openGraph: {
+      title: "HSC Data — NSW ATAR Calculator & Scaling Data",
+      description:
+        "Understand how the HSC and ATAR actually work. Free ATAR calculator, interactive scaling graphs, Band 6 honor roll, and data-driven insights.",
+      url: "https://hscdata.org",
+    },
+  };
+}
 
 export default async function HomePage() {
   const t = await getTranslations("Home");

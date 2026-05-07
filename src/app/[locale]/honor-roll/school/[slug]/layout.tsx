@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import fs from "fs";
+import { readFile } from "fs/promises";
 import path from "path";
 import { JsonLd } from "@/components/JsonLd";
 
@@ -16,7 +16,7 @@ async function getSchoolName(slug: string): Promise<string | null> {
       "data",
       "school-detail-2025.json"
     );
-    const data = JSON.parse(fs.readFileSync(filePath, "utf8")) as Record<
+    const data = JSON.parse(await readFile(filePath, "utf8")) as Record<
       string,
       SchoolDetail
     >;

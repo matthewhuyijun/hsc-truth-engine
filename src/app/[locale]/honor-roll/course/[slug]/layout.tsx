@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import fs from "fs";
+import { readFile } from "fs/promises";
 import path from "path";
 import { JsonLd } from "@/components/JsonLd";
 
@@ -11,7 +11,7 @@ interface CourseData {
 async function getCourseName(code: string): Promise<string | null> {
   try {
     const filePath = path.join(process.cwd(), "public", "data", "courses.json");
-    const data = JSON.parse(fs.readFileSync(filePath, "utf8")) as CourseData[];
+    const data = JSON.parse(await readFile(filePath, "utf8")) as CourseData[];
     const found = data.find((c) => c.code === code);
     return found?.name || null;
   } catch {
